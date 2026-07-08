@@ -1,11 +1,13 @@
-# ecommerce_vini_fe
-Fe angular project ecommerce_vini
-Linguaggio: Angular version().
-// struttura cartelle e cosa trovare all'interno
-// componenti riutilizzabili
-// state managment
-State managment: api..
+---
 
-// comandi ex ng serve
+# E-Commerce Vini & Alcolici - Frontend
 
+Questa sezione è dedicata allo sviluppo dell'interfaccia utente (Client-Side) dell'applicazione.
 
+---
+
+## 🛠️ Tecnologie & Strumenti
+* **Framework:** Angular (v17+)
+* **Stato del progetto:** In fase di inizializzazione.
+
+> ⚠️ **Nota:** Ulteriori dettagli su librerie UI (es. Angular Material, Bootstrap), gestione dello stato (es. NgRx) e struttura dei componenti verranno definiti e documentati nelle prossime fasi di sviluppo.
