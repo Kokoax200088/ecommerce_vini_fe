@@ -1,0 +1,98 @@
+<!-- TODO: SISTEMARE TUTTO. cosa deve vedere chi, sistemare colori, icone ecc -->
+<button class="btn btn-primary d-lg-none m-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu">
+  <i class="bi bi-list"></i> Menu
+</button>
+
+<div class="offcanvas-lg offcanvas-start bg-dark text-white vh-100" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel" style="width: 280px;">
+  
+  <div class="offcanvas-header d-lg-none">
+    <h5 class="offcanvas-title text-white" id="sidebarMenuLabel">E-commerce Vini</h5>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" data-bs-target="#sidebarMenu" aria-label="Close"></button>
+  </div>
+
+  <div class="offcanvas-body d-flex flex-column p-3">
+    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none fs-4 d-none d-lg-flex">
+      <span class="fs-4 fw-bold">E-commerce Vini</span>
+    </a>
+    <hr class="d-none d-lg-block">
+    
+    <ul class="nav nav-pills flex-column mb-auto">
+      <li class="nav-item">
+        <a routerLink="/" routerLinkActive="active" class="nav-link text-white">
+          <i class="bi bi-house-door me-2"></i> Home
+        </a>
+      </li>
+      <li>
+        <a routerLink="/vini" routerLinkActive="active" class="nav-link text-white">
+          <i class="bi bi-journal-album me-2"></i> Catalogo Vini
+        </a>
+      </li>
+      <li>
+        <a routerLink="/carrello" routerLinkActive="active" class="nav-link text-white">
+          <i class="bi bi-cart me-2"></i> Catalogo Cantine
+        </a>
+      </li>
+      <li>
+        <a routerLink="/carrello" routerLinkActive="active" class="nav-link text-white">
+          <i class="bi bi-cart me-2"></i> Carrello
+        </a>
+      </li>
+      <li>
+        <a routerLink="/carrello" routerLinkActive="active" class="nav-link text-white">
+          <i class="bi bi-cart me-2"></i> Ordini
+        </a>
+      </li>
+      <li>
+        <a routerLink="/carrello" routerLinkActive="active" class="nav-link text-white">
+          <i class="bi bi-cart me-2"></i> Gestione Venditori
+        </a>
+      </li>
+    </ul>
+    
+    <hr>
+
+    <ul class="nav nav-pills flex-column mb-auto">
+      <li class="nav-item">
+        <a routerLink="/" routerLinkActive="active" class="nav-link text-white">
+          <i class="bi bi-house-door me-2"></i> Home
+        </a>
+      </li>
+      <li>
+        <a routerLink="/vini" routerLinkActive="active" class="nav-link text-white">
+          <i class="bi bi-journal-album me-2"></i> Nuovo Prodotto
+        </a>
+      </li>
+      <li>
+        <a routerLink="/carrello" routerLinkActive="active" class="nav-link text-white">
+          <i class="bi bi-cart me-2"></i> Gestione Spedizioni
+        </a>
+      </li>
+    </ul>
+    
+    <hr>
+    
+    <div class="dropdown">
+      <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+        <strong class="ms-2">Il mio Account</strong>
+      </a>
+      <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+        <li><a class="dropdown-menu-item p-2 text-white text-decoration-none d-block" routerLink="/profile">Profilo</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-menu-item p-2 text-white text-decoration-none d-block" (click)="logout()">Logout <mat-icon>logout</mat-icon></a></li>
+      </ul>
+    </div>
+
+    <ul class="nav nav-pills flex-column mb-auto">
+      <li class="nav-item">
+        <a href="/registration" routerLinkActive="active" class="nav-link text-white">
+          <i class="bi bi-house-door me-2"></i> Registrazione
+        </a>
+      </li>
+      <li>
+        <a href="/login" routerLinkActive="active" class="nav-link text-white">
+          <i class="bi bi-journal-album me-2"></i> Login
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
