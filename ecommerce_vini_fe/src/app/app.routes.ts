@@ -7,7 +7,7 @@ export const routes: Routes = [
   {
     path: '',
     loadComponent: () => import('./ui/pages/homepage/homepage').then((m) => m.Homepage),
-    canActivate: [adminGuard, customerGuard]
+   // canActivate: [adminGuard, customerGuard]
   },
    {
     path: 'registration',
@@ -16,6 +16,6 @@ export const routes: Routes = [
  {
     path: 'gestione-venditori',
     loadComponent: () => import('./ui/pages/gestione-venditori/gestione-venditori').then((m) => m.GestioneVenditori),
-    canActivate: [adminGuard]
+    //canActivate: [adminGuard]
   },
 ];
