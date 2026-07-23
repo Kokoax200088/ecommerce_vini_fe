@@ -2,12 +2,12 @@ import { inject, PLATFORM_ID, Service, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
 import { AppSettings } from '../../setting/config-model';
-//import { APP_SETTING } from '../../setting/token';
+import { APP_SETTING } from '../../setting/token';
 
 @Service()
 export class AuthService {
     private platformId = inject(PLATFORM_ID);
-    //private readonly settings: AppSettings = inject(APP_SETTING);
+    private readonly settings: AppSettings = inject(APP_SETTING);
     private http = inject(HttpClient);
     grant = signal(
         {
@@ -103,7 +103,7 @@ export class AuthService {
     }
 
     registration(body: any) {
-        return this.http.post(`/auth/registration`, body).subscribe( // ${this.settings.apiUrl}
+        return this.http.post(`${this.settings.apiUrl}/auth/registration`, body).subscribe( 
             (response: any) => {
                 if (isPlatformBrowser(this.platformId)) {
                     localStorage.setItem("isLogged", "1");
@@ -123,7 +123,7 @@ export class AuthService {
     }
 
      login(body: any) {
-        return this.http.post(`/auth/login`, body).subscribe( // ${this.settings.apiUrl}
+        return this.http.post(`${this.settings.apiUrl}/auth/login`, body).subscribe( 
             (response: any) => {
                 if (isPlatformBrowser(this.platformId)) {
                     localStorage.setItem("isLogged", "1");
