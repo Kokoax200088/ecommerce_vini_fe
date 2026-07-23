@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {MatIconModule} from "@angular/material/icon";
-import { AuthService } from '../../../core/services/auth';
+import { AuthService } from '../../../core/services/auth-services';
 
 @Component({
   selector: 'app-side-nav',

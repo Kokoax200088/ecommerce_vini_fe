@@ -1,7 +1,7 @@
 import { Component, signal, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, NgForm, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
-import {  AuthService } from '../../../core/services/auth';
+import {  AuthService } from '../../../core/services/auth-services';
 import { Router } from '@angular/router';
 
 @Component({

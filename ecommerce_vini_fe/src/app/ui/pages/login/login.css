@@ -1,0 +1,6 @@
+.form-col{
+    display: flex;
+    flex-direction: column;
+    gap:25px;
+    max-width: 400px;
+}

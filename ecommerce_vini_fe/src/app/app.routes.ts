@@ -18,4 +18,8 @@ export const routes: Routes = [
     loadComponent: () => import('./ui/pages/gestione-venditori/gestione-venditori').then((m) => m.GestioneVenditori),
     //canActivate: [adminGuard]
   },
+  {
+    path: 'login',
+    loadComponent: () => import('./ui/pages/login/login').then((m) => m.Login),
+  },
 ];
