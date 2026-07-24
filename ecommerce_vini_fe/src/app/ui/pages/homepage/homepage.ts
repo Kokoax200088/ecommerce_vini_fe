@@ -28,8 +28,4 @@ export class Homepage {
     this.router.navigate(['/alcolici']); // adatta il path alla tua route
   }
 
-  onImageError(event: Event): void {
-  const target = event.target as HTMLImageElement;
-  target.src = '/image-alcolico.png';
-}
 }
