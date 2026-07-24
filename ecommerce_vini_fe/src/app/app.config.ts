@@ -5,9 +5,10 @@ import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
 import {provideHttpClient, withInterceptors} from "@angular/common/http";
 import { APP_SETTING } from './setting/token';
-import { authInterceptor } from './core/interceptors/authInterceptor';
+//import { authInterceptor } from './core/interceptors/authInterceptor';
 import { firstValueFrom } from 'rxjs';
 import { errorInterceptor } from './core/interceptors/error-interceptor';
+import { TokenServices } from './core/security/token-services';
 
 // aggiungo provider Http Client x richieste http al BE.
 export const appConfig: ApplicationConfig = {
@@ -21,12 +22,11 @@ export const appConfig: ApplicationConfig = {
       }
     }, 
      provideHttpClient(
-      withInterceptors([authInterceptor, errorInterceptor])    // interceptor registration
+      withInterceptors([errorInterceptor])    // interceptor registration, authInterceptor DA INCLUDERE POI
     ),
       provideAppInitializer(() => { // service to execute in startup
-      const refreshService = inject(AutentificazioneServices);
-      return firstValueFrom(refreshService.restoreSession()) // execute refresh in startup
-
+      const refreshService = inject(TokenServices);
+      //return firstValueFrom(refreshService.refreshToken()) // execute refresh in startup
     }),
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes), provideClientHydration(),

@@ -1,7 +1,7 @@
 import { Component, signal, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, NgForm, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
-import {  AuthService } from '../../../core/services/auth-services';
+import {  AuthServices } from '../../../core/services/auth-services';
 import { Router } from '@angular/router';
 
 @Component({
@@ -14,7 +14,7 @@ export class Registration {
   msg = signal('');
   @ViewChild('registrationForm') registrationForm!: NgForm;
 
-  constructor(private routing:Router, private authService:AuthService) {}
+  constructor(private routing:Router, private authService:AuthServices) {}
 
   
 //TODO: Cambiare

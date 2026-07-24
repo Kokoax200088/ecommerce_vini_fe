@@ -2,20 +2,19 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Service, signal } from '@angular/core';
 import { tap } from 'rxjs';
 import { AppSettings } from '../../setting/config-model';
-//import { APP_SETTING } from '../setting/token';
+import { APP_SETTING } from '../../setting/token';
 
 @Service()
 export class UtenteServices {
     url = "http://localhost:9090/rest/api/utente/";
     listUtente = signal<any[]>([]);
 
-//  private readonly settings: AppSettings = inject(APP_SETTING); //
+  private readonly settings: AppSettings = inject(APP_SETTING); //
     private readonly http = inject(HttpClient);
 
         getBaseUrl(): string {
             console.log("trying to call getBaseUrl");
-            return '';
-//        return this.settings.apiUrl + 'utente/';
+        return this.settings.apiUrl + 'utente/';
     }
 
     list(){
@@ -29,6 +28,13 @@ export class UtenteServices {
 
     create(body:{}){
         return this.http.post(this.url + "create", body)
-            .pipe(tap(() => this.list()))  
+            .pipe(tap(() => this.list()));
     }
+
+    update(body: {}){
+        return this.http.patch(this.getBaseUrl() + "update", body)
+            .pipe(tap(() => this.list()));
+    }
+
+
 }

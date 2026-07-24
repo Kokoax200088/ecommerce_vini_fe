@@ -4,18 +4,17 @@ import { HttpClient } from '@angular/common/http';
 import { LoginDTO, LoginReq, MeDTO } from '../models/user';
 import { Observable, switchMap, tap, finalize, shareReplay, catchError, throwError } from 'rxjs';
 import { AuthServices } from '../services/auth-services';
-//import { APP_SETTING } from '../setting/token';
+import { APP_SETTING } from '../../setting/token';
 
 @Service()
 export class TokenServices {
-//    private readonly settings: AppSettings = inject(APP_SETTING);
+    private readonly settings: AppSettings = inject(APP_SETTING);
     private readonly http = inject(HttpClient);
     private readonly authServices = inject(AuthServices);
 
     getBaseUrl(): string {
         console.log('trying to get baseurl in token-services');
-        return '';
-//        retrun this.settings.apiUrl + 'auth/';
+        return this.settings.apiUrl + '/auth/';
     }
 
     login(body: LoginReq): Observable<MeDTO> {
@@ -40,7 +39,7 @@ export class TokenServices {
 
     private refreshRequest$: Observable<LoginDTO> | null = null;
 
-refreshToken(): Observable<LoginDTO> {
+/*refreshToken(): Observable<LoginDTO> {
 
         if (this.refreshRequest$) {  // in cas of refresh laready running
             return this.refreshRequest$;
@@ -50,7 +49,7 @@ refreshToken(): Observable<LoginDTO> {
             .pipe(
                 tap(resp => { this.authServices.setToken(resp.accessToken) }),
                 catchError(error => {  //eccezione tipo
-                    this.authServices.logout(); //NELLA REPO VEICOLI E' RESETALL()
+                    this.authServices.resetAll(); //NELLA REPO VEICOLI E' RESETALL()
                     return throwError(() => error);
                 }),
                 finalize(() => { // onEnd
@@ -61,7 +60,7 @@ refreshToken(): Observable<LoginDTO> {
                     refCount: false
                 })
             )
-
+        
         return this.refreshRequest$;
-    }
+    }*/
 }

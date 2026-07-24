@@ -3,7 +3,7 @@ import { inject } from '@angular/core';
 import { AuthServices } from '../services/auth-services';
 
 export const adminGuard: CanActivateFn = (route, state) => {
-  const authServices = inject(AuthService);
+  const authServices = inject(AuthServices);
 
   return authServices.isAdmin();
 };

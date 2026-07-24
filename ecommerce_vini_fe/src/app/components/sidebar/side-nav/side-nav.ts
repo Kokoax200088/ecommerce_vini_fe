@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {MatIconModule} from "@angular/material/icon";
-import { AuthService } from '../../../core/services/auth-services';
+import { AuthServices } from '../../../core/services/auth-services';
 
 @Component({
   selector: 'app-side-nav',
@@ -10,9 +10,9 @@ import { AuthService } from '../../../core/services/auth-services';
 })
 export class SideNav {
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthServices) {}
   
   logout() {
-    this.authService.logout();
+    this.authService.resetAll(); //CHECK devo fare una funzione di logout o la resetAll svolge la stessa funzione?
   }
 }

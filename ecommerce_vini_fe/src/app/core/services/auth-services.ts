@@ -3,12 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
 import { AppSettings } from '../../setting/config-model';
 import { MeDTO } from '../models/user';
-//import { APP_SETTING } from '../../setting/token';
+import { APP_SETTING } from '../../setting/token';
 
 @Service()
 export class AuthServices {
     private platformId = inject(PLATFORM_ID);
-    //private readonly settings: AppSettings = inject(APP_SETTING);
+    private readonly settings: AppSettings = inject(APP_SETTING);
     private http = inject(HttpClient);
     grant = signal(
         {
@@ -163,7 +163,7 @@ export class AuthServices {
         ); //TODO: aggiungere url corretto
     }
 
-    logout() { // CHECK vale come reset?
+    resetAll() {
         if (isPlatformBrowser(this.platformId)) {
             localStorage.removeItem("token");
             localStorage.removeItem("userId");

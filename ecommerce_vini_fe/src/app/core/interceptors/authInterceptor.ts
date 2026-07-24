@@ -1,12 +1,12 @@
 import { HttpErrorResponse, HttpInterceptorFn } from "@angular/common/http";
 import { inject } from "@angular/core";
-//import { AutentificazioneServices } from "../security/autentificazione-services";
 import { catchError, switchMap, throwError } from "rxjs";
-import { AuthService } from "../services/auth";
+import { TokenServices } from "../security/token-services";
+import { AuthServices } from "../services/auth-services";
 
-export const authInterceptor: HttpInterceptorFn = (req, next) => {
-    //const autentificationServices = inject(AutentificazioneServices);
-    const authService = inject(AuthService);
+/*export const authInterceptor: HttpInterceptorFn = (req, next) => {
+    const autentificationServices = inject(TokenServices);
+    const authService = inject(AuthServices);
     const token = authService.grant().token;
 
     const publicUrls = [
@@ -51,4 +51,4 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
                  }
                 ));
              }));
-};
+};*/
