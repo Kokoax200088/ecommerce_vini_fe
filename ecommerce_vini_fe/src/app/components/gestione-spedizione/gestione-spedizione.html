@@ -1,1 +1,15 @@
-<p>gestione-spedizione works!</p>
+<h3>Elenco spedizioni</h3>
+
+<mat-list>
+  @for (spedizione of spedizioni(); track spedizione.id) {
+    <mat-list-item lines="3">
+      <span matListItemTitle>Ordine #{{ spedizione.id }} - {{spedizione.cliente}} - {{ spedizione.corriere}}</span>
+      <span matListItemLine>Codice tracciamento: {{ spedizione.codice_tracciamento}} - Stato: {{ spedizione.status}}</span>
+      <span matListItemLine>
+        Cantina: {{ spedizione.cantina}} - Ordine: {{ spedizione.ordine_alcolico}}
+      </span>
+    </mat-list-item>
+  } @empty {
+    <mat-list-item>Nessun ordine disponibile</mat-list-item>
+  }
+</mat-list>

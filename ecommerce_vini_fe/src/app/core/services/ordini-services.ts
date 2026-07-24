@@ -3,12 +3,13 @@ import { inject, Injectable, Service, signal } from '@angular/core';
 //import { APP_SETTING } from '../setting/token';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { tap } from 'rxjs/internal/operators/tap';
+import { Ordine } from '../models/ordine';
 
 @Service()
 export class OrdiniServices {
   //  private readonly settings: AppSettings = inject(APP_SETTING);
     private readonly http = inject(HttpClient);
-    ordini = signal<any[]>([]);
+    ordini = signal<Ordine[]>([]);
 
  /*   getBaseUrl(): string {
         return this.settings.apiUrl + 'ordine/';
