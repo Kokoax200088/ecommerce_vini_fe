@@ -1,16 +1,19 @@
-import { inject, Service } from '@angular/core';
+import { inject, PLATFORM_ID, Service } from '@angular/core';
 import { AppSettings } from '../../setting/config-model';
 import { HttpClient } from '@angular/common/http';
 import { LoginDTO, LoginReq, MeDTO } from '../models/user';
-import { Observable, switchMap, tap, finalize, shareReplay, catchError, throwError } from 'rxjs';
+import { Observable, switchMap, tap, finalize, shareReplay, catchError, throwError, map, of } from 'rxjs';
 import { AuthServices } from '../services/auth-services';
 import { APP_SETTING } from '../../setting/token';
+import { isPlatformBrowser } from '@angular/common';
 
 @Service()
 export class TokenServices {
     private readonly settings: AppSettings = inject(APP_SETTING);
+
     private readonly http = inject(HttpClient);
     private readonly authServices = inject(AuthServices);
+    private readonly platformId = inject(PLATFORM_ID);
 
     getBaseUrl(): string {
         console.log('trying to get baseurl in token-services');
@@ -39,17 +42,27 @@ export class TokenServices {
 
     private refreshRequest$: Observable<LoginDTO> | null = null;
 
-/*refreshToken(): Observable<LoginDTO> {
+    refreshToken(): Observable<LoginDTO> {
+        const isBrowser = isPlatformBrowser(this.platformId);
 
-        if (this.refreshRequest$) {  // in cas of refresh laready running
+        if (isBrowser) {
+            return throwError(() => new Error("refreshToken called during SSR"));
+        }
+
+        if (this.refreshRequest$) {  // in caso of refresh already running
+            console.log("refresh already running");
             return this.refreshRequest$;
         }
 
+        console.log("INSIDE REFRESHTOKEN... ... ...");
         this.refreshRequest$ = this.http.post<LoginDTO>(this.getBaseUrl() + "refresh", {}, { withCredentials: true })
             .pipe(
-                tap(resp => { this.authServices.setToken(resp.accessToken) }),
+                tap(resp => {
+                    console.log("init refresh now"); 
+                    this.authServices.setToken(resp.accessToken) 
+                }),
                 catchError(error => {  //eccezione tipo
-                    this.authServices.resetAll(); //NELLA REPO VEICOLI E' RESETALL()
+                    this.authServices.resetAll();
                     return throwError(() => error);
                 }),
                 finalize(() => { // onEnd
@@ -57,10 +70,26 @@ export class TokenServices {
                 }),
                 shareReplay({ // "share response with all request running at same time" CHECK
                     bufferSize: 1,
-                    refCount: false
+                    refCount: true
                 })
             )
         
         return this.refreshRequest$;
-    }*/
+    }
+
+    restoreSession(): Observable<boolean> {
+        return this.refreshToken().pipe(
+            switchMap(() =>
+                this.me()
+            ),
+            tap(user => {
+                this.authServices.setAuthenticated(user);
+            }),
+            map(() => true),
+            catchError(() => {
+                this.authServices.resetAll();
+                return of(false);
+            })
+        )
+    }
 }

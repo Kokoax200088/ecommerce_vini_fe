@@ -165,7 +165,7 @@ export class AuthServices {
 
     resetAll() {
         if (isPlatformBrowser(this.platformId)) {
-            localStorage.removeItem("token");
+            localStorage.removeItem("token"); // TODO DEVI SETTARE E GETTARE IL TOKEN
             localStorage.removeItem("userId");
             localStorage.removeItem("isLogged");
             localStorage.removeItem("isAdmin");

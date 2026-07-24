@@ -15,6 +15,18 @@ export interface Venditore extends User {
     partitaIva: string;
 }
 
+export interface UserReq{
+    nome: string;
+    cognome: string;
+    email: string;
+    password: string;
+    ruolo: number; //integer?
+    dataNascita: string; //date?
+
+    indirizzo: string;
+    partitaIva: string;
+}
+
 export interface LoginReq{
     email: string;
     password: string;

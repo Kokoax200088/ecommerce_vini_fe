@@ -4,7 +4,7 @@ import { catchError, switchMap, throwError } from "rxjs";
 import { TokenServices } from "../security/token-services";
 import { AuthServices } from "../services/auth-services";
 
-/*export const authInterceptor: HttpInterceptorFn = (req, next) => {
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
     const autentificationServices = inject(TokenServices);
     const authService = inject(AuthServices);
     const token = authService.grant().token;
@@ -51,4 +51,4 @@ import { AuthServices } from "../services/auth-services";
                  }
                 ));
              }));
-};*/
+};

@@ -1,4 +1,64 @@
-<div>
+<mat-card>
+  <mat-card-header class="header-center">
+    <mat-card-title>Creazione nuovo utente</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <form [formGroup] = "utenteForm" (ngSubmit)="onSubmit()" class="form-grid">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Nome</mat-label>
+        <input matInput type="text" name="nome" formControlName="nome">
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Cognome</mat-label>
+        <input matInput type="text" name="cognome" formControlName="cognome">
+      </mat-form-field>
+            <mat-form-field appearance="outline" class="full-width">
+        <mat-label>E-mail</mat-label>
+        <input matInput type="text" name="email" formControlName="email">
+      </mat-form-field>
+            <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Password TODO conferma</mat-label>
+        <input matInput type="password" name="password" formControlName="password">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Data di nascita</mat-label>
+        <input matInput [matDatepicker]="picker">
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Scegli ruolo</mat-label>
+          <mat-select formControlName="ruolo">
+          <mat-option [value]="1">Cliente</mat-option>
+          <mat-option [value]="3">Venditore</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      @if (utenteForm.get('ruolo')?.value === 1) {
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Indirizzo</mat-label>
+          <input matInput type="text" name="indirizzo" formControlName="indirizzo">
+        </mat-form-field>
+      }
+      @if (utenteForm.get('ruolo')?.value === 3) {
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Partita IVA</mat-label>
+          <input matInput type="text" name="partitaIva" formControlName="partitaIva">
+        </mat-form-field>
+      }
+
+      <div class="example-button-row">
+        <button matButton="outlined" type="submit">Registrati</button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>
+
+<!--<div>
     <form>
   <div class="mb-3">
     <label for="exampleInputEmail1" class="form-label">Indirizzo Email</label>
@@ -16,4 +76,4 @@
 </select>
   <button type="submit" class="btn btn-primary">Registrati</button>
 </form>
-</div>
+</div>-->

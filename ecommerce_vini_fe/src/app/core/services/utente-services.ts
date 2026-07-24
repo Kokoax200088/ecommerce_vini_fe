@@ -27,6 +27,7 @@ export class UtenteServices {
     }
 
     create(body:{}){
+        console.log("trying to create utente: " + body);
         return this.http.post(this.url + "create", body)
             .pipe(tap(() => this.list()));
     }
@@ -36,5 +37,11 @@ export class UtenteServices {
             .pipe(tap(() => this.list()));
     }
 
+    findByUsername(id?: string){
+        return this.http.get(this.getBaseUrl + "user/getById");
+    }
 
+    changePassword(body: {}){
+        return this.http.put(this.getBaseUrl() + "user/changePassword", body); //TODO non c'è il controller ancora
+    }
 }
