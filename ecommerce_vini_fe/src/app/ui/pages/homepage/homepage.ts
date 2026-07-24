@@ -28,4 +28,8 @@ export class Homepage {
     this.router.navigate(['/alcolici']); // adatta il path alla tua route
   }
 
+  navigateListCantine(): void {
+    this.router.navigate(['/cantine']);
+  }
+
 }
