@@ -1,1 +1,16 @@
-<p>gestione-ordine works!</p>
+<h3>Elenco ordini</h3>
+
+<mat-list>
+  @for ( ordine of ordini(); track ordine.id) {
+    <mat-list-item lines="3">
+      <span matListItemTitle>Ordine #{{ ordine.id }} - {{ ordine.utente}}</span>
+      <span matListItemLine>Stato: {{ ordine.status}}</span>
+      <span matListItemLine>
+        Data: {{ ordine.data_ordine }} - Totale: {{ ordine.totale | currency:'EUR' }} -
+        Consegna: {{ ordine.indirizzo_destinazione }}
+      </span>
+    </mat-list-item>
+  } @empty {
+    <mat-list-item>Nessun ordine disponibile</mat-list-item>
+  }
+</mat-list>
