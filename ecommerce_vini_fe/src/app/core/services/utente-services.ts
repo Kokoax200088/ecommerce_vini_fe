@@ -9,7 +9,7 @@ export class UtenteServices {
     //url = "http://localhost:9090/rest/api/utente/";
     listUtente = signal<any[]>([]);
 
-  private readonly settings: AppSettings = inject(APP_SETTING); //
+  private readonly settings: AppSettings = inject(APP_SETTING);
         private readonly http = inject(HttpClient);
 
         getBaseUrlUtente(): string {

@@ -13,8 +13,8 @@ export const routes: Routes = [
     loadComponent: () => import('./ui/pages/registration/registration').then((m) => m.Registration),
   },
   {
-    path: 'gestione-venditori',
-    loadComponent: () => import('./ui/pages/gestione-venditori/gestione-venditori').then((m) => m.GestioneVenditori),
+    path: 'gestione-utenti',
+    loadComponent: () => import('./ui/pages/gestione-utenti/gestione-venditori').then((m) => m.GestioneVenditori),
   },
   {
     path: 'gestione-ordine',

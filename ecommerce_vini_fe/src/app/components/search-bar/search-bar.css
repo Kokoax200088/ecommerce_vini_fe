@@ -1,0 +1,24 @@
+.search-bar-wrapper {
+  display: flex;
+  align-items: center;
+  border: 1px solid #2D0A11;
+  border-radius: 8px;
+  padding: 0.4rem 0.75rem;
+  background: #fff;
+}
+
+.search-bar-wrapper:focus-within {
+  box-shadow: 0 0 0 2px rgba(45, 10, 17, 0.2);
+}
+
+.search-icon {
+  color: #2D0A11;
+  margin-right: 0.5rem;
+}
+
+.search-input {
+  border: none;
+  outline: none;
+  flex: 1;
+  font-size: 0.95rem;
+}

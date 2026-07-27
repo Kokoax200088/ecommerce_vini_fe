@@ -1,0 +1,27 @@
+<div class="table-generic-wrapper">
+  <h5 *ngIf="titolo" class="table-title mb-3">{{ titolo }}</h5>
+
+  <div class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead>
+        <tr>
+          <th *ngFor="let col of columns">{{ col.label }}</th>
+          <th *ngIf="actionsTpl" class="text-end">Azioni</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of data">
+          <td *ngFor="let col of columns">{{ getValue(row, col.key) }}</td>
+          <td *ngIf="actionsTpl" class="text-end">
+            <ng-container [ngTemplateOutlet]="actionsTpl" [ngTemplateOutletContext]="{ $implicit: row }"></ng-container>
+          </td>
+        </tr>
+        <tr *ngIf="data.length === 0">
+          <td [attr.colspan]="columns.length + (actionsTpl ? 1 : 0)" class="text-center text-muted py-4">
+            Nessun dato disponibile
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

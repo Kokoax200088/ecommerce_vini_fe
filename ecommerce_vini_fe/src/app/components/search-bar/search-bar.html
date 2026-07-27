@@ -1,0 +1,9 @@
+<div class="search-bar-wrapper">
+  <mat-icon class="search-icon">search</mat-icon>
+  <input
+    type="text"
+    class="search-input"
+    placeholder="Cerca..."
+    [(ngModel)]="query"
+    (ngModelChange)="onInput()">
+</div>

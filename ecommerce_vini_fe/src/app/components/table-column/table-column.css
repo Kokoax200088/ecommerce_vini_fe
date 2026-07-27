@@ -1,0 +1,15 @@
+.table-generic-wrapper .table-title {
+  color: #2D0A11;
+  font-weight: 700;
+}
+
+.table-generic-wrapper thead th {
+  background-color: #2D0A11;
+  color: #fff;
+  font-weight: 600;
+  border: none;
+}
+
+.table-generic-wrapper tbody tr:hover {
+  background-color: rgba(45, 10, 17, 0.05);
+}
