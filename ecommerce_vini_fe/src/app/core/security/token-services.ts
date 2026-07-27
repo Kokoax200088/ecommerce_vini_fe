@@ -21,7 +21,7 @@ export class TokenServices {
     }
 
     login(body: LoginReq): Observable<MeDTO> {
-        return this.http.post<LoginDTO>(this.getBaseUrl() + 'login', body, {withCredentials: true})
+        return this.http.post<LoginDTO>(this.getBaseUrl() + "login", body, {withCredentials: true})
             .pipe(
                 tap(resp => {
                     this.authServices.setToken(resp.accessToken)
@@ -31,6 +31,7 @@ export class TokenServices {
     }
 
     me(): Observable<MeDTO> {
+        console.log("DEVO RITORNARE IL MEDTO");
         return this.http.get<MeDTO>(this.getBaseUrl() + "me").pipe(
             tap(user => this.authServices.setAuthenticated(user))
         );
