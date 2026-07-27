@@ -1,10 +1,19 @@
-.icona-vino {
-  font-size: 5rem;
-  width: 5rem;
-  height: 5rem;
-  color: #b5121b;
+.immagine-not-found {
+  max-width: 460px;
+  width: 100%;
+  height: auto;
 }
 
-.numero-404 {
-  color: #b5121b;
+.bottone-home {
+  background-color: #6e0c18;
+  border-color: #6e0c18;
+  color: #ffffff;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.bottone-home:hover {
+  background-color: #58090f;
+  border-color: #58090f;
+  color: #ffffff;
 }
