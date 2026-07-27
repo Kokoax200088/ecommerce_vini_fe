@@ -21,6 +21,10 @@ export const routes: Routes = [
     loadComponent: () => import('./ui/pages/catalogo-cantine/catalogo-cantine').then((m) => m.CatalogoCantine),
   },
   {
+    path: 'cantina-dettaglio/:id',
+    loadComponent: () => import('./ui/pages/cantina-dettaglio/cantina-dettaglio').then((m) => m.CantinaDettaglio),
+  },
+  {
     path: 'gestione-ordine',
     loadComponent: () => import('./components/gestione-ordine/gestione-ordine').then((m) => m.GestioneOrdine),
   },

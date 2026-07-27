@@ -43,6 +43,6 @@ onImageError(event: Event): void {
 }
 
   vaiAlDettaglioCantina(): void {
-    this.router.navigate(['/cantina', this.cantina.id]);
+    this.router.navigate(['/cantina-dettaglio', this.cantina.id]);
   }
 }

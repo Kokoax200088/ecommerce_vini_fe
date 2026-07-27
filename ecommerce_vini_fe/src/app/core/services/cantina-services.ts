@@ -4,16 +4,18 @@ import { tap } from 'rxjs';
 import { Cantina } from '../models/cantina';
 import { AppSettings } from '../../setting/config-model';
 import { APP_SETTING } from '../../setting/token';
+import { AlcolicoModel } from '../models/alcolico';
 @Service()
 export class CantinaServices {
     private readonly http = inject(HttpClient);
     cantine = signal<Cantina[]>([]);
+    alcolici = signal<AlcolicoModel[]>([]);
     private readonly settings: AppSettings = inject(APP_SETTING);
 
     baseUrl: string = this.settings.apiUrl;
     
     getById(id: number) {
-        return this.http.get<Cantina>("/cantina/get/" + id);
+        return this.http.get<Cantina>(this.baseUrl +"/cantina/get/" + id);
     }
 
     list(nomeCantina?: string, idVenditore?: number) {
@@ -25,6 +27,21 @@ export class CantinaServices {
             .subscribe({
                 next: (resp) => {
                      this.cantine.set(resp);
+                },
+                error: (err) => {
+                    console.error('Errore nel caricamento cantine', err);
+                }
+            });
+    }
+
+    listAlcolici(idCantina?: number) {
+        let params = new HttpParams();
+        if (idCantina) params = params.set('idCantina', idCantina);
+
+        this.http.get<AlcolicoModel[]>(this.baseUrl + "/cantina-alcolico/list", { params })
+            .subscribe({
+                next: (resp) => {
+                     this.alcolici.set(resp);
                 },
                 error: (err) => {
                     console.error('Errore nel caricamento cantine', err);

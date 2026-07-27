@@ -1,0 +1,60 @@
+/* Il contenitore principale definisce l'area e la forma */
+.cantina-hero-container {
+  position: relative; /* Necessario per posizionare gli elementi interni */
+  width: 100%;
+  height: 350px;       /* Altezza fissa dell'area Hero, regolala a piacere */
+  border-radius: 16px; /* Coerente con le tue card */
+  overflow: hidden;    /* Taglia l'immagine se esce dai bordi arrotondati */
+  background-color: #f8f9fa; /* Sfondo di fallback */
+}
+
+/* L'immagine deve riempire tutto il contenitore senza distorcersi */
+.cantina-hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;    /* IMPORTANTE: riempie l'area, ritagliando se necessario, senza deformare */
+  object-position: center; /* Centra l'immagine nel ritaglio */
+}
+
+/* L'overlay gradiente per la leggibilità del testo */
+/* Applica un'ombra sfumata solo nell'angolo in basso a destra */
+.cantina-hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to top right,
+    rgba(0, 0, 0, 0) 50%,     /* Trasparente per metà */
+    rgba(0, 0, 0, 0.712) 100%    /* Sfumatura scura nell'angolo in basso a destra */
+  );
+  pointer-events: none; /* Non blocca i clic sull'immagine */
+}
+
+/* Il blocco del titolo posizionato in basso a destra */
+.cantina-hero-title-block {
+  position: absolute;
+  bottom: 2rem;       /* Distanza dal fondo */
+  right: 2rem;        /* Distanza dalla destra */
+  text-align: right;  /* Allinea il testo a destra */
+  z-index: 2;         /* Sopra l'overlay */
+  max-width: 60%;     /* Evita che il titolo diventi troppo lungo */
+}
+
+/* Il Titolo Principale (H1) */
+.cantina-title-overlay {
+  background-color: rgba(255, 255, 255, 0.281); /* Chiaro e semi-trasparente */
+  color: #ffffff;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;  /* Testo bianco per contrasto */
+  font-size: 2.5rem;  /* Più grande e d'impatto */
+  font-weight: 800;   /* Molto spesso */
+  margin: 0;
+  line-height: 1.1;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3); /* Ombra sul testo per ulteriore leggibilità */
+}
+
+.location-icon {
+    color: #6E0C18;
+}
