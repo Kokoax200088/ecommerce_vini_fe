@@ -32,6 +32,16 @@
     </button>
   </div>
 
+   @for (cantina of cantine().slice(0, 8); track cantina.id) {
+      <div class="col-12 col-md-6 mb-3">
+        <app-card-cantina [cantina]="cantina"></app-card-cantina>
+      </div>
+    } @empty {
+      <div class="col-12">
+        <p class="text-muted">Nessuna cantina disponibile al momento.</p>
+      </div>
+    }
+
   <!-- Card Cantina 1 -->
   <div class="card cantina-card mb-2 col-7">
     <div class="row g-0">

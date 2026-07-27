@@ -1,1 +1,35 @@
-<p>card-cantina works!</p>
+<div class="card cantina-card h-100 shadow-sm">
+  <!-- Immagine con altezza gestita e placeholder -->
+  <div class="cantina-img-wrapper">
+    <img
+    [src]="immagineUrl"
+    (error)="onImageError($event)"
+    class="card-img-top img-fluid alcolico-img rounded-top"
+    [alt]="cantina.nome">
+  </div>
+
+  <div class="card-body d-flex flex-column p-3">
+    <!-- Nome Cantina (In Grassetto) -->
+    <h5 class="card-title fw-bold mb-1 cantina-nome text-truncate">
+      {{ cantina.nome }}
+    </h5>
+
+    <!-- Posizione sotto il nome (Città, Regione) con icona -->
+    <p class="card-text text-muted small mb-3 d-flex align-items-center gap-1">
+      <mat-icon class="location-icon">place</mat-icon>
+      <span>{{ cantina.posizione }}</span>
+    </p>
+
+    <!-- Footer con azione Dettaglio -->
+    <div class="d-flex justify-content-between align-items-center mt-auto pt-2 border-top">
+      <span class="text-muted extra-small">Scopri i vini</span>
+      
+      <button mat-icon-button
+              color="primary"
+              (click)="vaiAlDettaglioCantina(cantina.id)"
+              aria-label="Vai al dettaglio cantina">
+        <mat-icon>arrow_forward</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>
