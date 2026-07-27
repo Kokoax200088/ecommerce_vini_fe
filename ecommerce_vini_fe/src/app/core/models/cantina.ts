@@ -5,6 +5,7 @@ export interface Cantina {
     nome: string;
     idVenditore: number;
     posizione: string;
+    descrizione:string;
 
     listCantinaAlcolico?: any[];
     listRatingCantina?: any[];

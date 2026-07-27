@@ -35,3 +35,10 @@
 .extra-small {
   font-size: 0.75rem;
 }
+
+.text-description {
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Numero massimo di righe da mostrare */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

@@ -4,13 +4,9 @@ import { Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { CardAlcolico } from '../../../components/card-alcolico/card-alcolico';
-import { AlcolicoModel } from '../../../core/models/alcolico';
 import { AlcolicoServices } from '../../../core/services/alcolico-services';
 import { CardCantina } from "../../../components/card-cantina/card-cantina";
 import { CantinaServices } from '../../../core/services/cantina-services';
-// import del tuo service per recuperare gli alcolici, es:
-// import { AlcolicoService } from '../services/alcolico.service';
-
 @Component({
   selector: 'app-homepage',
   imports: [CommonModule, MatIconModule, MatButtonModule, CardAlcolico, CardCantina],
