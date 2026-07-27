@@ -24,7 +24,7 @@
 
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Data di nascita</mat-label>
-        <input matInput [matDatepicker]="picker">
+        <input matInput [matDatepicker]="picker"  formControlName="dataNascita">
         <mat-hint>MM/DD/YYYY</mat-hint>
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
@@ -52,7 +52,7 @@
       }
 
       <div class="example-button-row">
-        <button matButton="outlined" type="submit">Registrati</button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="!utenteForm.valid">Registrati</button>
       </div>
     </form>
   </mat-card-content>
