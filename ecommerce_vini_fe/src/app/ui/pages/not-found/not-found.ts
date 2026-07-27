@@ -3,9 +3,9 @@ import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
-  selector: 'app-componente-not-found',
+  selector: 'app-not-found',
   imports: [RouterLink, MatIconModule],
-  templateUrl: './componente-not-found.html',
-  styleUrl: './componente-not-found.css',
+  templateUrl: './not-found.html',
+  styleUrl: './not-found.css',
 })
-export class ComponenteNotFound {}
+export class NotFound {}

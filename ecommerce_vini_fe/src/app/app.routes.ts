@@ -30,7 +30,7 @@ export const routes: Routes = [
   },
   {
     path: 'not-found',
-    loadComponent: () => import('./ui/pages/componente-not-found/componente-not-found').then((m) => m.ComponenteNotFound),
+    loadComponent: () => import('./ui/pages/not-found/not-found').then((m) => m.NotFound),
   },
   {
     path: '**',
