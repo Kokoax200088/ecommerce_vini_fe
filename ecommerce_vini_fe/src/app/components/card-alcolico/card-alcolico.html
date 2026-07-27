@@ -1,35 +1,23 @@
-<div class="card alcolico-card mb-3">
-  <div class="row g-0">
-    <div class="col-4">
-      <div class="col-4">
+<div class="card alcolico-card mb-4 shadow-sm col-4"  (click)="vaiAlDettaglio()">
   <img
     [src]="immagineUrl"
     (error)="onImageError($event)"
-    class="img-fluid rounded-start alcolico-img"
+    class="card-img-top img-fluid alcolico-img rounded-top"
     [alt]="alcolico.nome">
-</div>
-    </div>
-    <div class="col-8">
-      <div class="card-body d-flex flex-column h-100">
-        <div class="d-flex justify-content-between align-items-start">
-          <h5 class="card-title fw-bold mb-1">{{ alcolico.nome }}</h5>
-          <button mat-icon-button
-                  color="primary"
-                  (click)="vaiAlDettaglio()"
-                  aria-label="Vai al dettaglio">
-            <mat-icon>arrow_forward</mat-icon>
-          </button>
-        </div>
-        <p class="card-text mb-1">
-          <span class="text-muted">Tipologia:</span> {{ alcolico.tipologiaAlcolico?.nome }}
-        </p>
-        <p class="card-text mb-1">
-          <span class="text-muted">Gradazione:</span> {{ alcolico.gradazione }}%
-        </p>
-        <p class="card-text mt-auto fw-bold prezzo">
-          {{ alcolico.prezzo | currency:'EUR' }}
-        </p>
-      </div>
+
+  <div class="card-body d-flex flex-column p-3">
+    <h5 class="card-title fw-bold mb-1 alcolico-nome text-truncate">
+      {{ alcolico.nome }}
+    </h5>
+
+    <p class="card-text mb-2 text-muted alcolico-meta small">
+      {{ alcolico.tipologiaAlcolico?.nome }}  {{alcolico.colore?.nome}}• {{ alcolico.gradazione }}% vol
+    </p>
+
+    <div class="d-flex justify-content-between align-items-center mt-auto alcolico-footer">
+      <p class="card-text m-0 fw-bold prezzo">
+        {{ alcolico.prezzo | currency:'EUR' }}
+      </p>
     </div>
   </div>
 </div>
