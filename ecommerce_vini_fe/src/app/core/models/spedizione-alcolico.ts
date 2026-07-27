@@ -1,4 +1,4 @@
-export interface spedizione {
+export interface spedizioneAlcolico {
     id: number;
 	corriere: string;
 	codice_tracciamento: string;
