@@ -35,4 +35,22 @@ export class UtilitiesServices {
             ...config   // per sovrascrivere qualcosa di specifico
         });
     }
+
+    //funzione di conversione da datePicker a date nel nostro controller
+    formatDateToDDMMYYYY(input: string | Date | null | undefined): string {
+    if (!input) {
+      throw new Error('Missing date');
+    }
+
+    const d = input instanceof Date ? input : new Date(input);
+    if (isNaN(d.getTime())) {
+      throw new Error('Invalid date');
+    }
+
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = d.getFullYear();
+
+    return `${day}/${month}/${year}`;
+  }
 }
