@@ -9,7 +9,7 @@
     </button>
   </div>
 
-    @for (alcolico of alcolici().slice(0, 3); track alcolico.id) {
+    @for (alcolico of alcolici().slice(0, 8); track alcolico.id) {
       <div class="col-12 col-md-6 mb-3">
         <app-card-alcolico [alcolico]="alcolico"></app-card-alcolico>
       </div>
