@@ -10,6 +10,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { User } from '../../../core/models/user';
 import { UtenteServices } from '../../../core/services/utente-services';
+import { UtilitiesServices } from '../../../core/services/utilities-services';
 
 @Component({
   selector: 'app-registration',
@@ -21,7 +22,7 @@ export class Registration {
   // initialize signal with null to satisfy expected arguments
   account = signal<User | null>(null);
   msg = signal('');
-  @ViewChild('registrationForm') registrationForm!: NgForm;
+  //@ViewChild('registrationForm') registrationForm!: NgForm;
 
   utenteForm: FormGroup = new FormGroup({
     nome: new FormControl(null, Validators.required),
@@ -31,11 +32,11 @@ export class Registration {
     ruolo: new FormControl(1, Validators.required),
     dataNascita: new FormControl(null, Validators.required),
     
-    indirizzo: new FormControl(null, Validators.required),
-    partitaIva: new FormControl(null, Validators.required)
+    indirizzo: new FormControl(null, null), //il check si fa dopo se no li chiede entrambi
+    partitaIva: new FormControl(null, null)
   })
 
-  constructor(private routing:Router, private utenteService:UtenteServices) {}
+  constructor(private routing:Router, private utenteService:UtenteServices, private utilities:UtilitiesServices) {}
   
   ngOnInit(): void{
     //qui nella repo c'era il codice se dovessi aggiornare il profilo
@@ -43,17 +44,51 @@ export class Registration {
   }
   
   onSubmit() {
+    console.log("trying to register user with role ", this.utenteForm.value.ruolo);
     this.msg.set("");
 
+    if (this.utenteForm.value.ruolo === 1){
+      this.createClienteForm(this.utenteForm);
+    } else {
+      this.createVenditoreForm(this.utenteForm);
+    }
+  }
+  
+  createClienteForm(form: FormGroup){
+    console.log("creating cliente data: " + this.utilities.formatDateToDDMMYYYY(this.utenteForm.value.dataNascita));
     if (this.utenteForm.valid) {
-      this.utenteService.create({
+      this.utenteService.createCliente({
         nome: this.utenteForm.value.nome,
         cognome: this.utenteForm.value.cognome,
         email: this.utenteForm.value.email,
         password: this.utenteForm.value.password,
-        ruolo: this.utenteForm.value.ruolo,
-        dataNascita: this.utenteForm.value.dataNascita,
+        dataNascita: this.utilities.formatDateToDDMMYYYY(this.utenteForm.value.dataNascita),
+        idRuolo: this.utenteForm.value.ruolo,
+
         indirizzo: this.utenteForm.value.indirizzo,
+      }).subscribe({
+        next: ((resp:any) => {
+          console.log("QUESTA E' LA RESP: " + resp);
+        }),
+        error: ((resp:any) => {
+          console.log(resp.error.msg);
+          this.msg.set(resp.error.msg);
+          })
+      });
+    }
+  }
+
+  createVenditoreForm(form: FormGroup){
+    console.log("creating venditore");
+    if (this.utenteForm.valid) {
+      this.utenteService.createVenditore({
+        nome: this.utenteForm.value.nome,
+        cognome: this.utenteForm.value.cognome,
+        email: this.utenteForm.value.email,
+        password: this.utenteForm.value.password,
+        dataNascita: this.utilities.formatDateToDDMMYYYY(this.utenteForm.value.dataNascita),
+        idRuolo: this.utenteForm.value.ruolo,
+
         partitaIva: this.utenteForm.value.partitaIva,
       }).subscribe({
         next: ((resp:any) => {
@@ -64,8 +99,7 @@ export class Registration {
           this.msg.set(resp.error.msg);
           })
       });
-    } else {
-      this.msg.set('Per favore, compila tutti i campi richiesti.');
     }
   }
+
 }
