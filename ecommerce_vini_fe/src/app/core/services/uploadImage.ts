@@ -14,7 +14,7 @@ export class UploadImageService {
     private readonly http = inject(HttpClient);
 
     private baseUrlFor(entity: string): string {
-        return this.settings.apiUrl + `rest/api/immagine-${entity}/`;
+        return this.settings.apiUrl + `/immagine-${entity}/`;
     }
 
     create(entity: string, file: File, idParamName: string, idValue: number) {
