@@ -29,6 +29,10 @@ export const routes: Routes = [
     loadComponent: () => import('./ui/pages/login/login').then((m) => m.Login),
   },
   {
+    path: 'not-found',
+    loadComponent: () => import('./ui/pages/componente-not-found/componente-not-found').then((m) => m.ComponenteNotFound),
+  },
+  {
     path: '**',
     redirectTo: '',
     pathMatch: 'full',
