@@ -33,7 +33,7 @@ export class Homepage {
   }
 
   navigateListCantine(): void {
-    this.router.navigate(['/cantine']);
+    this.router.navigate(['/catalogo-cantine']);
   }
 
 }

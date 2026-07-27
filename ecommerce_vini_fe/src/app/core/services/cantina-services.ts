@@ -13,8 +13,7 @@ export class CantinaServices {
     baseUrl: string = this.settings.apiUrl;
     
     getById(id: number) {
-        //@GetMapping("/get/{id}") BE
-        return this.http.get<Cantina>("/rest/api/cantina/get/" + id);
+        return this.http.get<Cantina>("/cantina/get/" + id);
     }
 
     list(nomeCantina?: string, idVenditore?: number) {
@@ -35,19 +34,19 @@ export class CantinaServices {
 
     create(body: {}) {
         //@PostMapping("/create") BE
-        return this.http.post("/rest/api/cantina/create", body)
+        return this.http.post(this.baseUrl + "/cantina/create", body)
             .pipe(tap(() => this.list()));
     }
 
     update(body: {}) {
         //@PutMapping("/update") BE
-        return this.http.put("/rest/api/cantina/update", body)
+        return this.http.put(this.baseUrl + "/cantina/update", body)
             .pipe(tap(() => this.list()));
     }
 
     delete(id: number) {
         //@DeleteMapping("/remove/{id}") BE
-        return this.http.delete("/rest/api/cantina/remove/" + id)
+        return this.http.delete(this.baseUrl + "/cantina/remove/" + id)
             .pipe(tap(() => this.list()));
     }
 }

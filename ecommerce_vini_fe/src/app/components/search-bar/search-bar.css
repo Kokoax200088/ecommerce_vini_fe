@@ -1,24 +1,81 @@
 .search-bar-wrapper {
   display: flex;
   align-items: center;
-  border: 1px solid #2D0A11;
-  border-radius: 8px;
-  padding: 0.4rem 0.75rem;
-  background: #fff;
+  background: #ffffff;
+  border: 1px solid rgba(45, 10, 17, 0.12); /* Bordo molto sfumato invece che solido */
+  border-radius: 24px;                      /* Design a pillola perfettamente in linea con l'UI */
+  padding: 0.5rem 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);/* Ombra morbida coerente con le card */
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  max-width: 320px;                         /* Dimensionamento contenuto */
+  width: 100%;
 }
 
+/* Effetto al passaggio del mouse */
+.search-bar-wrapper:hover {
+  border-color: rgba(45, 10, 17, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Effetto al focus dell'input */
 .search-bar-wrapper:focus-within {
-  box-shadow: 0 0 0 2px rgba(45, 10, 17, 0.2);
+  border-color: #2D0A11;
+  box-shadow: 0 0 0 3px rgba(45, 10, 17, 0.12), 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
+/* Icona Lente */
 .search-icon {
   color: #2D0A11;
-  margin-right: 0.5rem;
+  opacity: 0.6;
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  margin-right: 0.6rem;
+  transition: opacity 0.2s ease;
 }
 
+.search-bar-wrapper:focus-within .search-icon {
+  opacity: 1;
+}
+
+/* Input di testo */
 .search-input {
   border: none;
   outline: none;
+  background: transparent;
   flex: 1;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
+  color: #2D0A11;
+  font-family: inherit;
+}
+
+.search-input::placeholder {
+  color: #8c8587;
+  font-weight: 400;
+}
+
+/* Pulsante Clear (X) */
+.clear-button {
+  background: none;
+  border: none;
+  padding: 0;
+  margin-left: 0.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8c8587;
+  border-radius: 50%;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.clear-button:hover {
+  color: #2D0A11;
+  background-color: rgba(45, 10, 17, 0.08);
+}
+
+.clear-button mat-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
 }
