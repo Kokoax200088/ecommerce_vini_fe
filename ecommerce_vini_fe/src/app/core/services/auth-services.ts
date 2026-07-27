@@ -24,6 +24,8 @@ export class AuthServices {
     constructor() {
         if(isPlatformBrowser(this.platformId)){
             console.log("Restore------");
+            const userId = localStorage.getItem("userId");
+            const token = localStorage.getItem("token");
             const isLogged = localStorage.getItem("isLogged");
             const isAdmin = localStorage.getItem("isAdmin");
             const isSeller = localStorage.getItem("isSeller");
@@ -32,6 +34,7 @@ export class AuthServices {
     }
 
     setToken(token: string){
+        console.log("setToken=" + token);
         this.grant.update(grant => ({
             ...grant,
             token: token
@@ -45,7 +48,7 @@ export class AuthServices {
             ...grant,
             isLogged: true,
             isAdmin: admin,
-            userId: user.id
+            userId: user.id //sarebbe l'email
         }));
     }
 
@@ -77,6 +80,15 @@ export class AuthServices {
                 isCustomer: true
             }));
         }
+    }
+
+    getToken(){
+        if(isPlatformBrowser(this.platformId)){
+            console.log("TOKEN: " + localStorage.getItem("token"));
+            return localStorage.getItem("token");
+        }
+        else
+            return null;
     }
 
     isAdmin(): boolean {
@@ -164,6 +176,7 @@ export class AuthServices {
     }
 
     resetAll() {
+        console.log("logout, resetAll in auth-services.ts");
         if (isPlatformBrowser(this.platformId)) {
             localStorage.removeItem("token"); // TODO DEVI SETTARE E GETTARE IL TOKEN
             localStorage.removeItem("userId");

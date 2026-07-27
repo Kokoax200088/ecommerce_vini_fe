@@ -47,6 +47,7 @@ export class Login {
           console.log("QUESTA E' LA RESP:" + resp);
 
           this.auth.setAuthenticated(resp);
+          this.routing.navigate(['']);
           //stuff about the dialog here, not useful for now
         },
         error: (resp:any) => {
