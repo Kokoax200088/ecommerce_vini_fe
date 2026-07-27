@@ -71,7 +71,7 @@
 
 .clear-button:hover {
   color: #2D0A11;
-  background-color: rgba(45, 10, 17, 0.08);
+  background-color: #2D0A11;
 }
 
 .clear-button mat-icon {
