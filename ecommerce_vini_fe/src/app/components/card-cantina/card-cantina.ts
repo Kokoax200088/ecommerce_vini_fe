@@ -1,10 +1,14 @@
 import { Component, Input } from '@angular/core';
 import { UploadImageService } from '../../core/services/uploadImage';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { Cantina } from '../../core/models/cantina';
+import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-card-cantina',
-  imports: [],
+  imports: [CommonModule, RouterModule, MatIconModule, MatButtonModule],
   templateUrl: './card-cantina.html',
   styleUrl: './card-cantina.css',
 })
@@ -38,7 +42,7 @@ onImageError(event: Event): void {
   target.src = '/image-cantina.png';
 }
 
-  vaiAlDettaglio(): void {
+  vaiAlDettaglioCantina(): void {
     this.router.navigate(['/cantina', this.cantina.id]);
   }
 }

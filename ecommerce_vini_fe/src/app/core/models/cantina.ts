@@ -10,5 +10,6 @@ export interface Cantina {
     listRatingCantina?: any[];
     listBox?: any[];
     listDegustazione?: any[];
+    immagineUrl: string;
     listImmagineCantina?: ImmagineCantinaModel[];
 }

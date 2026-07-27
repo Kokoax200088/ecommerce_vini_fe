@@ -7,6 +7,7 @@ import { CardAlcolico } from '../../../components/card-alcolico/card-alcolico';
 import { AlcolicoModel } from '../../../core/models/alcolico';
 import { AlcolicoServices } from '../../../core/services/alcolico-services';
 import { CardCantina } from "../../../components/card-cantina/card-cantina";
+import { CantinaServices } from '../../../core/services/cantina-services';
 // import del tuo service per recuperare gli alcolici, es:
 // import { AlcolicoService } from '../services/alcolico.service';
 
@@ -20,12 +21,14 @@ export class Homepage {
   alcolici: any; 
   cantine : any;
 
-  constructor(private router: Router, private alcolicoService: AlcolicoServices) {
+  constructor(private router: Router, private alcolicoService: AlcolicoServices, private cantinaService: CantinaServices) {
     this.alcolici = this.alcolicoService.alcolici;
+    this.cantine = this.cantinaService.cantine;
   }
 
   ngOnInit(): void {
     this.alcolicoService.list(); 
+    this.cantinaService.list();
   }
 
 
