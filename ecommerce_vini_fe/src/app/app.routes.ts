@@ -33,6 +33,10 @@ export const routes: Routes = [
     loadComponent: () => import('./ui/pages/login/login').then((m) => m.Login),
   },
   {
+    path: 'profile',
+    loadComponent: () => import('./ui/pages/profile/profile').then((m) => m.Profile),
+  },
+  {
     path: 'not-found',
     loadComponent: () => import('./ui/pages/not-found/not-found').then((m) => m.NotFound),
   },
