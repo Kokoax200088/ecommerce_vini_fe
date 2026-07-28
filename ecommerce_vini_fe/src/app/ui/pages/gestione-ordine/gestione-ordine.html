@@ -1,8 +1,13 @@
 <h3>Elenco ordini</h3>
 
+<button mat-raised-button color="primary" (click)="onCreateOrdine()">
+  <mat-icon>add</mat-icon>
+  Nuovo ordine
+</button>
+
 <mat-list>
   @for ( ordine of ordini(); track ordine.id) {
-    <mat-list-item lines="3">
+    <mat-list-item lines="3" (click)="onSelected(ordine)">
       <span matListItemTitle>Ordine #{{ ordine.id }} - {{ ordine.utente}}</span>
       <span matListItemLine>Stato: {{ ordine.status}}</span>
       <span matListItemLine>

@@ -30,11 +30,15 @@ export const routes: Routes = [
   },
   {
     path: 'gestione-ordine',
-    loadComponent: () => import('./components/gestione-ordine/gestione-ordine').then((m) => m.GestioneOrdine),
+    loadComponent: () => import('./ui/pages/gestione-ordine/gestione-ordine').then((m) => m.GestioneOrdine),
   },
   {
     path: 'gestione-spedizione',
-    loadComponent: () => import('./components/gestione-spedizione/gestione-spedizione').then((m) => m.GestioneSpedizione),
+    loadComponent: () => import('./ui/pages/gestione-spedizione/gestione-spedizione').then((m) => m.GestioneSpedizione),
+  },
+  {
+    path: 'gestione-spedizione-box',
+    loadComponent: () => import('./ui/pages/gestione-spedizione-box/gestione-spedizione-box').then((m) => m.GestioneSpedizioneBox),
   },
   {
     path: 'login',
