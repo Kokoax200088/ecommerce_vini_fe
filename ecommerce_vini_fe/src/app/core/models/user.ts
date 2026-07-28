@@ -1,10 +1,15 @@
 export interface User {
+    id: number;
     nome: string;
     cognome: string;
 //    email: string;
 //    password: string;
     ruolo: string; //non integer?
     dataNascita: string; //date?
+
+    //TEST per vedere se funziona loggedUSer
+    indirizzo: string;
+    partitaIva: string;
 }
 
 export interface Cliente extends User {

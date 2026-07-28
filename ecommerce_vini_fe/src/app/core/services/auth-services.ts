@@ -21,7 +21,7 @@ export class AuthServices {
         }
     );
 
-    constructor() {
+    /*constructor() {
         if(isPlatformBrowser(this.platformId)){
             console.log("Restore------");
             const userId = localStorage.getItem("userId");
@@ -30,8 +30,10 @@ export class AuthServices {
             const isAdmin = localStorage.getItem("isAdmin");
             const isSeller = localStorage.getItem("isSeller");
             const isCustomer = localStorage.getItem("isCustomer");
+
+
         }
-    }
+    }*/
 
     setToken(token: string){
         console.log("setToken=" + token);
@@ -142,13 +144,13 @@ export class AuthServices {
                 if (isPlatformBrowser(this.platformId)) {
                     localStorage.setItem("isLogged", "1");
                     // TODO: aggiungere casi admin, venditore e cliente e reindirizzamento alle rispettive pagine (chiama set admin ecc);
-                    if (response.role === 'ADMIN') {
+                    if (response.role === 'admin') {
                         this.setAdmin();
                     }
-                    if (response.role === 'SELLER') {
+                    if (response.role === 'venditore') {
                         this.setSeller();
                     }
-                    if (response.role === 'CUSTOMER') {
+                    if (response.role === 'cliente') {
                         this.setCustomer();
                     }
                 }
@@ -178,7 +180,7 @@ export class AuthServices {
     resetAll() {
         console.log("logout, resetAll in auth-services.ts");
         if (isPlatformBrowser(this.platformId)) {
-            localStorage.removeItem("token"); // TODO DEVI SETTARE E GETTARE IL TOKEN
+            localStorage.removeItem("token");
             localStorage.removeItem("userId");
             localStorage.removeItem("isLogged");
             localStorage.removeItem("isAdmin");

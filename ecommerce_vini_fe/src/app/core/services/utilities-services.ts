@@ -37,9 +37,9 @@ export class UtilitiesServices {
     }
 
     //funzione di conversione da datePicker a date nel nostro controller
-    formatDateToDDMMYYYY(input: string | Date | null | undefined): string {
+    formatDateToDDMMYYYY(input: string | Date | null | undefined): string | null {
     if (!input) {
-      throw new Error('Missing date');
+        return null;
     }
 
     const d = input instanceof Date ? input : new Date(input);

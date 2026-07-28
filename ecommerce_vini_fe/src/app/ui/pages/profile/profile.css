@@ -1,0 +1,19 @@
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* two columns */
+  gap: 14px; /* small gap between inputs */
+  align-items: start;
+}
+
+.form-grid mat-form-field {
+  width: 100%;
+}
+
+/* Optional: make the full-width fields span both columns */
+.form-grid .full-width {
+  grid-column: 1 / -1;
+}
+
+.text-fix{
+  width: 250px;
+}

@@ -1,25 +1,56 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, computed, effect, OnInit, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterModule } from "@angular/router";
+import { ReactiveFormsModule } from '@angular/forms';
 import { UtenteServices } from '../../../core/services/utente-services';
 import { TokenServices } from '../../../core/security/token-services';
 import { Cliente, MeDTO } from '../../../core/models/user';
 import { AuthServices } from '../../../core/services/auth-services';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatCardContent } from "@angular/material/card";
+import { MatFormField, MatLabel, MatHint, MatSelect, MatOption } from "@angular/material/select";
+import {  MatDatepickerModule, MatDatepickerToggle, MatDatepicker } from "@angular/material/datepicker";
+import { MatInputModule } from '@angular/material/input';
+import { MatNativeDateModule } from '@angular/material/core';
+import { UtilitiesServices } from '../../../core/services/utilities-services';
 
 @Component({
   selector: 'app-profile',
-  imports: [RouterModule],
+  imports: [
+  RouterModule,
+  ReactiveFormsModule,
+  MatCardContent,
+  MatFormField,
+  MatLabel,
+  MatDatepickerModule,
+  MatDatepickerToggle,
+  MatDatepicker,
+  MatInputModule,
+  MatNativeDateModule
+],
   templateUrl: './profile.html',
   styleUrl: './profile.css',
 })
 export class Profile implements OnInit {
+  id = signal('');
   email = signal('');
-  cliente: Cliente | undefined;
+  loggedUtente = computed(() => this.utenteService.loggedUtente()); //sto provando a prendere le info in questo modo
+  //cliente = signal<Cliente[]>([]);
+
+  utenteForm: FormGroup = new FormGroup({
+      nome: new FormControl(),
+      cognome: new FormControl(),
+      dataNascita: new FormControl(),
+      
+      indirizzo: new FormControl(), //il check si fa dopo se no li chiede entrambi
+      partitaIva: new FormControl()
+    })
 
   constructor(
     private routing:Router, 
     private utenteService:UtenteServices,
     private authService:AuthServices,
-    private tokenService:TokenServices
+    private tokenService:TokenServices,
+    private utilities:UtilitiesServices
     ){}
 
   ngOnInit(): void {
@@ -29,8 +60,8 @@ export class Profile implements OnInit {
         const userId = this.authService.grant().userId;
         if (userId) {
           this.email.set(userId);
-          this.initCliente(userId);
-          console.log("nome=" + (this.cliente?.nome ?? 'undefined'));
+          this.utenteService.findLoggedInfos(userId);
+          console.log("nome=" + (this.loggedUtente()?.nome));
         }
       },
       error: (resp:any) => {
@@ -39,25 +70,21 @@ export class Profile implements OnInit {
     });
   }
 
-  initCliente(email: string) { //FIXME da rivedere tutta questa parte
-    // assume list returns an Observable<Cliente[]> or Observable<Cliente>
-    const result: any = this.utenteService.list(undefined, undefined, email, undefined, undefined);
-    if (result && typeof result.subscribe === 'function') {
-      result.subscribe({
-        next: (res: any) => {
-          if (Array.isArray(res)) {
-            this.cliente = res.length ? res[0] : undefined; // prende solo il primo result, email è univoca anyways
-          } else {
-            this.cliente = res as Cliente;
-          }
-        },
-        error: (err: any) => console.log('errore initCliente', err)
-      });
-    } else if (result) {
-      // synchronous return
-      this.cliente = result as Cliente;
-      console.log("INIT nome=" + this.cliente.nome);
-    }
-  }
+  onSubmit() {
+    console.log("submit in profile");
 
+    this.utenteService.update({
+      id: this.loggedUtente()?.id,
+      nome: this.utenteForm.value.nome,
+      cognome: this.utenteForm.value.cognome,
+      dataNascita: this.utilities.formatDateToDDMMYYYY(this.utenteForm.value.dataNascita)
+    }).subscribe({
+      next: ((resp:any) => {
+        console.log("response post modifica profilo utente: " + resp);
+      }),
+      error: ((resp:any) => {
+        console.log(resp.error.msg);
+      })
+    })
+  }
 }
