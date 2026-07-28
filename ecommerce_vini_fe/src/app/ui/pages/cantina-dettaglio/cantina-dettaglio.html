@@ -1,35 +1,33 @@
 <div class="container mt-4">
-  <div class="cantina-hero-container shadow-sm">
-    
-    <img
-      [src]="immagineUrl"
-      (error)="onImageError($event)"
-      class="cantina-hero-img"
-      [alt]="cantina?.nome">
-
-    <div class="cantina-hero-overlay"></div>
-
-    <div class="cantina-hero-title-block">
-      <h1 class="cantina-title-overlay">{{ cantina?.nome }}</h1>
+<!--
+    <div class="text-center py-5">
+      <div class="spinner-border text-danger" role="status">
+        <span class="visually-hidden">Caricamento...</span>
+      </div>
+    </div>
+    -->
+    <div class="cantina-hero-container shadow-sm">
+      <img [src]="immagineUrl" (error)="onImageError($event)" class="cantina-hero-img" [alt]="cantina?.nome">
+      <div class="cantina-hero-overlay"></div>
+      <div class="cantina-hero-title-block">
+        <h1 class="cantina-title-overlay">{{ cantina?.nome }}</h1>
+      </div>
     </div>
 
-  </div>
-
-  <div class="mt-4 d-flex align-items-center gap-2">
-  <mat-icon class="location-icon">place</mat-icon>
-  <p class="mb-0">{{ cantina?.posizione }}</p>
-   </div>
-
-
-   <div class="row g-3">
-    @for (cantinaAlcolico of listCantinaALcolico; track cantinaAlcolico.id) {
-      <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-        <app-card-alcolico [alcolico]="cantinaAlcolico.alcolico"></app-card-alcolico>
-      </div>
-    } @empty {
-      <div class="col-12">
-        <p class="text-muted">Nessun alcolico disponibile al momento.</p>
-      </div>
+    <div class="mt-4 d-flex align-items-center gap-2">
+      <mat-icon class="location-icon">place</mat-icon>
+      <p class="mb-0">{{ cantina?.posizione }}</p>
+    </div>
+    @if(cantina?.listCantinaAlcolico && cantina?.listCantinaAlcolico.length > 0) {
+    <app-alcolici-cantina [idCantina]="cantina?.id"></app-alcolici-cantina>
     }
-  </div>
+
+    @if(cantina?.listBox && cantina?.listBox.length > 0) {
+    <app-box-cantina></app-box-cantina>
+    }
+    @if(cantina?.listDegustazione && cantina?.listDegustazione.length > 0) {
+    <app-degustazioni-cantina></app-degustazioni-cantina>
+    }
+
+
 </div>

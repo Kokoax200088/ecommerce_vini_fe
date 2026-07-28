@@ -1,58 +1,65 @@
 /* Il contenitore principale definisce l'area e la forma */
 .cantina-hero-container {
-  position: relative; /* Necessario per posizionare gli elementi interni */
+  position: relative;
   width: 100%;
-  height: 350px;       /* Altezza fissa dell'area Hero, regolala a piacere */
-  border-radius: 16px; /* Coerente con le tue card */
-  overflow: hidden;    /* Taglia l'immagine se esce dai bordi arrotondati */
+  height: 350px;
+  border-radius: 16px;
+  overflow: hidden;
   background-color: #f8f9fa; /* Sfondo di fallback */
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Ombra opzionale per il contenitore stesso, simile a shadow-sm */
 }
 
 /* L'immagine deve riempire tutto il contenitore senza distorcersi */
 .cantina-hero-img {
   width: 100%;
   height: 100%;
-  object-fit: cover;    /* IMPORTANTE: riempie l'area, ritagliando se necessario, senza deformare */
-  object-position: center; /* Centra l'immagine nel ritaglio */
+  object-fit: cover;
+  object-position: center;
 }
 
-/* L'overlay gradiente per la leggibilità del testo */
-/* Applica un'ombra sfumata solo nell'angolo in basso a destra */
+/* L'overlay gradiente per la leggibilità del testo.
+   MIGLIORATO: Estendiamo l'oscuramento per una maggiore affidabilità. */
 .cantina-hero-overlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+  /* Gradiente radiale o lineare che copre un'area più ampia */
+  /* Esempio lineare: scuro in basso, sfuma verso l'alto */
   background: linear-gradient(
-    to top right,
-    rgba(0, 0, 0, 0) 50%,     /* Trasparente per metà */
-    rgba(0, 0, 0, 0.712) 100%    /* Sfumatura scura nell'angolo in basso a destra */
+    to bottom,
+    rgba(0, 0, 0, 0.1) 0%,   /* Quasi trasparente in alto */
+    rgba(0, 0, 0, 0.5) 50%,  /* Mezza oscurità al centro */
+    rgba(0, 0, 0, 0.8) 100%  /* Molto scuro in basso */
   );
-  pointer-events: none; /* Non blocca i clic sull'immagine */
+  pointer-events: none;
+  z-index: 1; /* Sopra l'immagine */
 }
 
 /* Il blocco del titolo posizionato in basso a destra */
 .cantina-hero-title-block {
   position: absolute;
-  bottom: 2rem;       /* Distanza dal fondo */
-  right: 2rem;        /* Distanza dalla destra */
-  text-align: right;  /* Allinea il testo a destra */
-  z-index: 2;         /* Sopra l'overlay */
-  max-width: 60%;     /* Evita che il titolo diventi troppo lungo */
+  bottom: 2rem;
+  right: 2rem;
+  text-align: right;
+  z-index: 2; /* Sopra l'overlay */
+  max-width: 70%; /* Un po' più di spazio per titoli lunghi */
 }
 
-/* Il Titolo Principale (H1) */
+/* Il Titolo Principale (H1).
+   MIGLIORATO: Più pulito, ombra più forte. */
 .cantina-title-overlay {
-  background-color: rgba(255, 255, 255, 0.281); /* Chiaro e semi-trasparente */
-  color: #ffffff;
-  padding: 0.25rem 0.75rem;
-  border-radius: 20px;  /* Testo bianco per contrasto */
-  font-size: 2.5rem;  /* Più grande e d'impatto */
-  font-weight: 800;   /* Molto spesso */
+  /* Rimosso background-color per un look più pulito, affidandosi all'overlay generale */
+  color: #ffffff; /* Bianco puro per il massimo contrasto */
+  padding: 0;     /* Rimosso padding */
+  border-radius: 0; /* Rimosso border-radius */
+  font-size: 2.5rem;
+  font-weight: 800;
   margin: 0;
   line-height: 1.1;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.3); /* Ombra sul testo per ulteriore leggibilità */
+  /* MIGLIORATO: Ombra del testo più forte e diffusa per "staccare" il testo */
+  text-shadow: 0 4px 8px rgba(0,0,0,0.5), 0 0 4px rgba(0,0,0,0.3);
 }
 
 .location-icon {

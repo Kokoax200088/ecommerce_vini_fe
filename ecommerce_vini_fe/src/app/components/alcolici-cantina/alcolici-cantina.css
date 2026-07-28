@@ -1,0 +1,57 @@
+.section-title-underlined {
+  color: #2b0c13;
+  font-size: 1.6rem;
+  font-weight: 600;
+  position: relative;
+  display: inline-block;
+  padding-bottom: 8px;
+  margin-bottom: 1rem;
+}
+
+/* Linea decorativa bordeaux sottostante */
+.section-title-underlined::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, #800020 0%, rgba(128, 0, 32, 0.1) 100%);
+  border-radius: 2px;
+}
+
+/* Contenitore di riferimento */
+.card-badge-wrapper {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
+/* Badge Quantità Elegante */
+.badge-quantita {
+  position: absolute;
+  top: 10px;           /* Distanza dal bordo superiore */
+  right: 10px;         /* Distanza dal bordo destro */
+  z-index: 10;          /* Rimane sempre sopra l'immagine */
+  
+  /* Stile visivo */
+  background-color: #6E0C18; /* Bordeaux coerente con la tua palette */
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.85rem;
+  
+  /* Forma e Spaziatura */
+  padding: 0.35rem 0.65rem;
+  border-radius: 50rem; /* Pill-shape super morbida */
+  
+  /* Dettagli e Leggibilità */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  border: 2px solid #ffffff; /* Bordino bianco che stacca dall'immagine */
+  
+  /* Layout interno */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  pointer-events: none; /* Evita che il badge blocchi i click sulla card */
+}

@@ -1,0 +1,66 @@
+<h2 mat-dialog-title>
+  {{ mod() === 'C' ? 'Nuova Spedizione Box' : 'Modifica Spedizione Box' }}
+</h2>
+
+<form [formGroup]="updateForm" (ngSubmit)="onSubmit()">
+  <div mat-dialog-content>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Corriere</mat-label>
+      <input matInput formControlName="corriere">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Codice Tracciamento</mat-label>
+      <input matInput formControlName="codice_tracciamento">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Cantina</mat-label>
+      <mat-select formControlName="cantina">
+        @for (c of cantineList(); track c.id) {
+          <mat-option [value]="c.id">{{ c.nome }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Cliente</mat-label>
+      <mat-select formControlName="cliente">
+        @for (c of clientiList(); track c.id) {
+          <mat-option [value]="c.id">{{ c.nome }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Status</mat-label>
+      <mat-select formControlName="status">
+        @for (s of statusList(); track s.id) {
+          <mat-option [value]="s.id">{{ s.nome }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Ordine Box</mat-label>
+      <mat-select formControlName="ordine_box">
+        @for (o of ordiniBoxList(); track o.id) {
+          <mat-option [value]="o.id">{{ o.id }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    @if (msg()) {
+      <p class="error-msg">{{ msg() }}</p>
+    }
+
+  </div>
+
+  <div mat-dialog-actions align="end">
+    <button mat-button type="button" mat-dialog-close>Annulla</button>
+    <button mat-raised-button color="primary" type="submit" [disabled]="updateForm.invalid">
+      {{ mod() === 'C' ? 'Crea' : 'Salva' }}
+    </button>
+  </div>
+</form>

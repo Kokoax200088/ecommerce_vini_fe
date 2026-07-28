@@ -6,39 +6,39 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { SpedizioneServices } from '../../core/services/spedizione-alcolico-services';
-import { spedizioneAlcolico } from '../../core/models/spedizione-alcolico';
+import { SpedizioneBoxServices } from '../../core/services/spedizione-box-services';
+import { spedizioneBox } from '../../core/models/spedizione-box';
 // import { CantinaServices } from '../../services/cantina-services';
 // import { ClienteServices } from '../../services/cliente-services';
 // import { StatusServices } from '../../services/status-services';
-// import { OrdineAlcolicoServices } from '../../services/ordine-alcolico-services';
+// import { OrdineBoxServices } from '../../services/ordine-box-services';
 
 @Component({
-  selector: 'app-spedizione-details',
+  selector: 'app-spedizione-box-details',
   imports: [MatButtonModule, MatIconModule, MatDialogModule, FormsModule, ReactiveFormsModule, MatFormFieldModule,
     MatInputModule, MatSelectModule],
-  templateUrl: './spedizione-details.html',
-  styleUrl: './spedizione-details.css',
+  templateUrl: './spedizione-box-details.html',
+  styleUrl: './spedizione-box-details.css',
 })
-export class SpedizioneDetails implements OnInit {
+export class SpedizioneBoxDetails implements OnInit {
 
   private readonly data = inject(MAT_DIALOG_DATA);
-  private readonly dialogRef = inject(MatDialogRef<SpedizioneDetails>);
-  private readonly spedizioneS = inject(SpedizioneServices);
+  private readonly dialogRef = inject(MatDialogRef<SpedizioneBoxDetails>);
+  private readonly spedizioneBoxS = inject(SpedizioneBoxServices);
   // private readonly cantinaS = inject(CantinaServices);
   // private readonly clienteS = inject(ClienteServices);
   // private readonly statusS = inject(StatusServices);
-  // private readonly ordineAlcolicoS = inject(OrdineAlcolicoServices);
+  // private readonly ordineBoxS = inject(OrdineBoxServices);
 
   mod: any = signal("");
-  spedizionealc = signal<spedizioneAlcolico | null>(null);
+  spedizionebox = signal<spedizioneBox | null>(null);
   readonly dialog = inject(MatDialog);
 
   // Liste per popolare le mat-select (per ora vuote, in attesa dei service reali)
   cantineList = signal<any[]>([]);
   clientiList = signal<any[]>([]);
   statusList = signal<any[]>([]);
-  ordiniAlcoliciList = signal<any[]>([]);
+  ordiniBoxList = signal<any[]>([]);
 
   msg = signal("");
 
@@ -48,13 +48,13 @@ export class SpedizioneDetails implements OnInit {
     cantina: new FormControl(null, Validators.required),
     cliente: new FormControl(null, Validators.required),
     status: new FormControl(null, Validators.required),
-    ordine_alcolico: new FormControl(null, Validators.required),
+    ordine_box: new FormControl(null, Validators.required),
   })
 
   constructor() {
     if (this.data) {
       this.mod.set(this.data.mod);
-      this.spedizionealc.set(this.data.spedizione);
+      this.spedizionebox.set(this.data.spedizione);
     }
   }
 
@@ -72,19 +72,19 @@ export class SpedizioneDetails implements OnInit {
     //   next: ((r: any) => this.statusList.set(r)),
     //   error: ((r: any) => console.log(r.error.msg))
     // });
-    // this.ordineAlcolicoS.list().subscribe({
-    //   next: ((r: any) => this.ordiniAlcoliciList.set(r)),
+    // this.ordineBoxS.list().subscribe({
+    //   next: ((r: any) => this.ordiniBoxList.set(r)),
     //   error: ((r: any) => console.log(r.error.msg))
     // });
 
     if (this.mod() == 'U') {
       this.updateForm.patchValue({
-        corriere: this.spedizionealc()!.corriere,
-        codice_tracciamento: this.spedizionealc()!.codice_tracciamento,
-        cantina: this.spedizionealc()!.cantina?.id,
-        cliente: this.spedizionealc()!.cliente?.id,
-        status: this.spedizionealc()!.status?.id,
-        ordine_alcolico: this.spedizionealc()!.ordine_alcolico?.id,
+        corriere: this.spedizionebox()!.corriere,
+        codice_tracciamento: this.spedizionebox()!.codice_tracciamento,
+        cantina: this.spedizionebox()!.cantina?.id,
+        cliente: this.spedizionebox()!.cliente?.id,
+        status: this.spedizionebox()!.status?.id,
+        ordine_box: this.spedizionebox()!.ordBox?.id,
       })
     }
   }
@@ -95,13 +95,13 @@ export class SpedizioneDetails implements OnInit {
   }
 
   onCreate() {
-    this.spedizioneS.create({
+    this.spedizioneBoxS.create({
       corriere: this.updateForm.value.corriere,
       codice_tracciamento: this.updateForm.value.codice_tracciamento,
       cantina: this.updateForm.value.cantina,
       cliente: this.updateForm.value.cliente,
       status: this.updateForm.value.status,
-      ordine_alcolico: this.updateForm.value.ordine_alcolico,
+      ordBox: this.updateForm.value.ordine_box,
     }).subscribe({
       next: ((r: any) => {
         this.dialogRef.close()
@@ -113,7 +113,7 @@ export class SpedizioneDetails implements OnInit {
   }
 
   onUpdate() {
-    const updateBody: any = { id: this.spedizionealc()!.id }
+    const updateBody: any = { id: this.spedizionebox()!.id }
     if (this.updateForm.controls['corriere'].dirty)
       updateBody.corriere = this.updateForm.value.corriere;
     if (this.updateForm.controls['codice_tracciamento'].dirty)
@@ -124,10 +124,10 @@ export class SpedizioneDetails implements OnInit {
       updateBody.cliente = this.updateForm.value.cliente;
     if (this.updateForm.controls['status'].dirty)
       updateBody.status = this.updateForm.value.status;
-    if (this.updateForm.controls['ordine_alcolico'].dirty)
-      updateBody.ordine_alcolico = this.updateForm.value.ordine_alcolico;
+    if (this.updateForm.controls['ordine_box'].dirty)
+      updateBody.ordBox = this.updateForm.value.ordine_box;
 
-    this.spedizioneS.update(updateBody)
+    this.spedizioneBoxS.update(updateBody)
       .subscribe({
         next: ((r: any) => {
           this.dialogRef.close()

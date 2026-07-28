@@ -1,0 +1,100 @@
+@if (mod() === 'U') {
+  <h2 mat-dialog-title>
+    Dettaglio {{ ordine()?.id ?? '' }}
+  </h2>
+} @else {
+  <h2 mat-dialog-title>
+    Creazione nuova macchina
+  </h2>
+}
+
+<button
+  mat-icon-button
+  mat-dialog-close
+  type="button"
+  class="dialog-close-btn"
+  aria-label="Chiudi dialog">
+  <mat-icon>close</mat-icon>
+</button>
+
+<mat-dialog-content>
+  <form
+    [formGroup]="updateForm"
+    (ngSubmit)="onSubmit()"
+    class="form-container">
+
+    <div class="row-fields">
+      <mat-form-field appearance="fill" class="small-field">
+        <mat-label>Data ordine</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="data_ordine">
+      </mat-form-field>
+    </div>
+
+    <div class="row-fields">
+      <mat-form-field appearance="fill" class="small-field">
+        <mat-label>Totale</mat-label>
+        <input
+          matInput
+          type="number"
+          formControlName="totale">
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="small-field">
+        <mat-label>Indirizzo destinazione</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="indirizzo_destinazione">
+      </mat-form-field>
+    </div>
+
+    <div class="row-fields">
+      <mat-form-field appearance="fill" class="small-field">
+        <mat-label>Utente</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="utente">
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="small-field">
+        <mat-label>Status</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="status">
+      </mat-form-field>
+    </div>
+
+    @if (msg()) {
+      <div class="msg-error">
+        {{ msg() }}
+      </div>
+    }
+
+    <div class="button-group">
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="updateForm.invalid">
+        {{ mod() === 'U' ? 'Aggiornamento' : 'Registrazione' }}
+      </button>
+
+      @if (mod() === 'U') {
+        <button
+          mat-raised-button
+          color="warn"
+          type="button"
+          (click)="remove()">
+          Cancellazione
+        </button>
+      }
+    </div>
+
+  </form>
+</mat-dialog-content>
+```

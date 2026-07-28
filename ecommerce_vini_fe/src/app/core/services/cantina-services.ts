@@ -1,7 +1,7 @@
 import { inject, Service, signal } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { tap } from 'rxjs';
-import { Cantina } from '../models/cantina';
+import { Cantina, CantinaALcolico } from '../models/cantina';
 import { AppSettings } from '../../setting/config-model';
 import { APP_SETTING } from '../../setting/token';
 import { AlcolicoModel } from '../models/alcolico';
@@ -9,7 +9,7 @@ import { AlcolicoModel } from '../models/alcolico';
 export class CantinaServices {
     private readonly http = inject(HttpClient);
     cantine = signal<Cantina[]>([]);
-    alcolici = signal<AlcolicoModel[]>([]);
+    alcolici = signal<CantinaALcolico[]>([]);
     private readonly settings: AppSettings = inject(APP_SETTING);
 
     baseUrl: string = this.settings.apiUrl;
@@ -38,7 +38,7 @@ export class CantinaServices {
         let params = new HttpParams();
         if (idCantina) params = params.set('idCantina', idCantina);
 
-        this.http.get<AlcolicoModel[]>(this.baseUrl + "/cantina-alcolico/list", { params })
+        this.http.get<CantinaALcolico[]>(this.baseUrl + "/cantina-alcolico/list", { params })
             .subscribe({
                 next: (resp) => {
                      this.alcolici.set(resp);
