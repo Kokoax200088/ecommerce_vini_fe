@@ -14,9 +14,18 @@
 
     <hr class="mt-0 mb-2">
 
-    <p class="card-text text-muted small text-description">
-      {{ cantina.descrizione || 'Nessuna descrizione' }}
-    </p>
+    <div class="d-flex align-items-center gap-1 text-description">
+  @if (numeroRecensioni > 0) {
+    @for (stella of stelle; track stella) {
+      <mat-icon class="star-icon">
+        {{ stella <= mediaValutazione ? 'star' : (stella - 0.5 <= mediaValutazione ? 'star_half' : 'star_border') }}
+      </mat-icon>
+    }
+    <span class="small text-muted ms-1">({{ numeroRecensioni }})</span>
+  } @else {
+    <span class="small text-muted">Nessuna recensione</span>
+  }
+</div>
 
     <div class="d-flex align-items-center mt-auto pt-2">
       <p class="card-text text-muted small mb-0 d-flex align-items-center gap-1 text-truncate">

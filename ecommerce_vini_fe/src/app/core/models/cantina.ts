@@ -8,6 +8,14 @@ export interface CantinaALcolico{
     quantita: number;
 }
 
+export interface CantinaRating {
+    id: number;
+    commento: string;
+    idCantina: number;
+    idCliente: number;
+    valutazione: number;
+}
+
 
 export interface Cantina {
     id: number;
@@ -17,7 +25,7 @@ export interface Cantina {
     descrizione:string;
 
     listCantinaAlcolico?: CantinaALcolico[];
-    listRatingCantina?: any[];
+    listRatingCantina?: CantinaRating[];
     listBox?: any[];
     listDegustazione?: any[];
     immagineUrl: string;

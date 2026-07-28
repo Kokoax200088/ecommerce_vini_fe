@@ -11,10 +11,11 @@ import { MatInputModule } from "@angular/material/input";
 import { User } from '../../../core/models/user';
 import { UtenteServices } from '../../../core/services/utente-services';
 import { UtilitiesServices } from '../../../core/services/utilities-services';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-registration',
-  imports: [MatSelectModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, MatCardModule, FormsModule, ReactiveFormsModule],
+  imports: [MatSelectModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, MatCardModule, MatIcon, FormsModule, ReactiveFormsModule],
   templateUrl: './registration.html',
   styleUrl: './registration.css',
 })
