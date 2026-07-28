@@ -1,15 +1,96 @@
+.register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+  min-height: 85vh;
+}
+
+.register-card {
+  width: 100%;
+  max-width: 600px; /* Un po' più larga del login per ospitare la griglia a 2 colonne */
+  padding: 30px 24px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08) !important;
+  background-color: #ffffff;
+}
+
+.register-header {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+
+  mat-card-title {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #3d0c11; /* Bordeaux coerente */
+    letter-spacing: 0.5px;
+  }
+}
+
 .form-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr; /* two columns */
-  gap: 14px; /* small gap between inputs */
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
   align-items: start;
 }
 
-.form-grid mat-form-field {
-  width: 100%;
+/* Gestione colonne */
+.full-width {
+  grid-column: 1 / -1;
 }
 
-/* Optional: make the full-width fields span both columns */
-.form-grid .full-width {
-  grid-column: 1 / -1;
+.col-half {
+  grid-column: span 1;
+}
+
+/* Responsiveness per schermi piccoli (es. Mobile) */
+@media (max-width: 600px) {
+  .col-half {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Override colori Angular Material (Bordeaux) */
+::ng-deep {
+  .mdc-text-field--focused:not(.mdc-text-field--disabled) .mdc-floating-label {
+    color: #3d0c11 !important;
+  }
+
+  .mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline__leading,
+  .mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline__notch,
+  .mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline__trailing {
+    border-color: #3d0c11 !important;
+    border-width: 2px !important;
+  }
+
+  .mat-mdc-select-panel .mdc-list-item--selected .mdc-list-item__primary-text {
+    color: #3d0c11 !important;
+  }
+}
+
+/* Pulsante principale Bordeaux */
+.form-actions {
+  margin-top: 12px;
+
+  .btn-submit {
+    width: 100%;
+    padding: 22px 0 !important;
+    background-color: #3d0c11 !important;
+    color: #ffffff !important;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 8px !important;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: #58131a !important;
+      box-shadow: 0 4px 12px rgba(61, 12, 17, 0.3);
+    }
+
+    &:disabled {
+      background-color: #e0e0e0 !important;
+      color: #9e9e9e !important;
+    }
+  }
 }
