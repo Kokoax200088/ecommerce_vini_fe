@@ -1,21 +1,55 @@
-<h3>Elenco ordini</h3>
+<header class="page-header">
+  <div class="heading">
+    <span class="eyebrow">Amministrazione</span>
+    <h1>Elenco ordini</h1>
+  </div>
 
-<button mat-raised-button color="primary" (click)="onCreateOrdine()">
-  <mat-icon>add</mat-icon>
-  Nuovo ordine
-</button>
+  <button class="btn-new" type="button" (click)="onCreateOrdine()">
+    <mat-icon>add</mat-icon>
+    Nuovo ordine
+  </button>
+</header>
 
-<mat-list>
-  @for ( ordine of ordini(); track ordine.id) {
-    <mat-list-item lines="3" (click)="onSelected(ordine)">
-      <span matListItemTitle>Ordine #{{ ordine.id }} - {{ ordine.utente}}</span>
-      <span matListItemLine>Stato: {{ ordine.status}}</span>
-      <span matListItemLine>
-        Data: {{ ordine.data_ordine }} - Totale: {{ ordine.totale | currency:'EUR' }} -
-        Consegna: {{ ordine.indirizzo_destinazione }}
-      </span>
-    </mat-list-item>
+<div class="order-list">
+  @for (ordine of ordini(); track ordine.id) {
+    <article class="order-card" [attr.data-status]="statusSlug(ordine.status)" (click)="onSelected(ordine)">
+      <div class="order-id">
+        <span class="hash">N°</span>
+        <span class="number">{{ ordine.id }}</span>
+      </div>
+
+      <div class="order-body">
+        <div class="order-primary">
+          <span class="customer">{{ customerName(ordine.utente) }}</span>
+          <span class="seal" [attr.data-status]="statusSlug(ordine.status)">
+            <span class="seal-dot"></span>
+            {{ ordine.status?.nome ?? 'Senza stato' }}
+          </span>
+        </div>
+
+        <div class="order-meta">
+          <span class="meta-item">
+            <span class="meta-label">Data</span>
+            {{ ordine.data_ordine | date:'dd MMM yyyy' }}
+          </span>
+          <span class="meta-divider">·</span>
+          <span class="meta-item">
+            <span class="meta-label">Consegna</span>
+            {{ ordine.indirizzo_destinazione || '—' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="order-total">
+        <span class="meta-label">Totale</span>
+        <span class="amount">{{ ordine.totale | currency:'EUR' }}</span>
+      </div>
+    </article>
   } @empty {
-    <mat-list-item>Nessun ordine disponibile</mat-list-item>
+    <div class="empty-state">
+      <span class="empty-glyph">🍷</span>
+      <p>Nessun ordine registrato.</p>
+      <span class="empty-hint">I nuovi ordini compariranno qui.</span>
+    </div>
   }
-</mat-list>
+</div>
