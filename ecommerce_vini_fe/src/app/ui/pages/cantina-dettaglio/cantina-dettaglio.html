@@ -18,14 +18,14 @@
       <mat-icon class="location-icon">place</mat-icon>
       <p class="mb-0">{{ cantina?.posizione }}</p>
     </div>
-    @if(cantina.listCantinaAlcolico) {
-    <app-alcolici-cantina></app-alcolici-cantina>
+    @if(cantina?.listCantinaAlcolico && cantina?.listCantinaAlcolico.length > 0) {
+    <app-alcolici-cantina [idCantina]="cantina?.id"></app-alcolici-cantina>
     }
 
-    @if(cantina.listBox) {
+    @if(cantina?.listBox && cantina?.listBox.length > 0) {
     <app-box-cantina></app-box-cantina>
     }
-    @if(cantina.listDegustazione) {
+    @if(cantina?.listDegustazione && cantina?.listDegustazione.length > 0) {
     <app-degustazioni-cantina></app-degustazioni-cantina>
     }
 

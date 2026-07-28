@@ -20,7 +20,6 @@ import { BoxCantina } from "../../../components/box-cantina/box-cantina";
 export class CantinaDettaglio implements OnInit {
   id: number = 0;
   cantina!: Cantina;
-  listCantinaALcolico?: CantinaALcolico[];
   alcolici: any;
   immagineUrl: string = '/image-cantina.png';
 
@@ -40,8 +39,6 @@ export class CantinaDettaglio implements OnInit {
     this.cantinaService.getById(this.id).subscribe({
       next: (resp) => {
         this.cantina = resp;
-        this.listCantinaALcolico = resp.listCantinaAlcolico;
-        console.log(this.cantina, this.listCantinaALcolico)
         this.isLoading = false; 
          console.log('isLoading impostato a false', this.isLoading); 
         this.caricaImmagine();
