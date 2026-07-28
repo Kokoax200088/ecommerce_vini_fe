@@ -45,6 +45,9 @@ export class UtenteServices {
             .subscribe({
                 next: (resp) => {
                     this.listUtente.set(resp);
+                },
+                error: (resp) =>{
+                    console.log("should not be reachable, resp error:" + resp);
                 }
             });
     }

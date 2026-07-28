@@ -1,6 +1,6 @@
 import { inject, PLATFORM_ID, Service } from '@angular/core';
 import { AppSettings } from '../../setting/config-model';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { LoginDTO, LoginReq, MeDTO } from '../models/user';
 import { Observable, switchMap, tap, finalize, shareReplay, catchError, throwError, map, of } from 'rxjs';
 import { AuthServices } from '../services/auth-services';
@@ -21,7 +21,7 @@ export class TokenServices {
     }
 
     login(body: LoginReq): Observable<MeDTO> {
-        return this.http.post<LoginDTO>(this.getBaseUrl() + 'login', body, {withCredentials: true})
+        return this.http.post<LoginDTO>(this.getBaseUrl() + "login", body, {withCredentials: true})
             .pipe(
                 tap(resp => {
                     this.authServices.setToken(resp.accessToken)
@@ -31,7 +31,13 @@ export class TokenServices {
     }
 
     me(): Observable<MeDTO> {
-        return this.http.get<MeDTO>(this.getBaseUrl() + "me").pipe(
+        const token = this.authServices.grant().token;
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${token}`
+        })
+
+        console.log("sono dentro il me(), token=" + token);
+        return this.http.get<MeDTO>(this.getBaseUrl() + "me", { headers }).pipe(
             tap(user => this.authServices.setAuthenticated(user))
         );
     }
