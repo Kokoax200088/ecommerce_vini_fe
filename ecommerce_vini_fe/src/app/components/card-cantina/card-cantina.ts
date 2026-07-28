@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, Input } from '@angular/core';
 import { UploadImageService } from '../../core/services/uploadImage';
 import { Router, RouterModule } from '@angular/router';
 import { Cantina } from '../../core/models/cantina';
@@ -15,6 +15,7 @@ import { MatButtonModule } from '@angular/material/button';
 export class CardCantina {
  @Input() cantina!: Cantina;
   immagineUrl: any;
+  private cdr = inject(ChangeDetectorRef); // per quando ho le img forzo angular: ho dei componenti cambiati
 
   constructor(
     private router: Router,
@@ -30,9 +31,11 @@ caricaImmagine(): void {
   this.uploadImageCantinaService.getById('cantina', this.cantina.id).subscribe({
     next: (immagine: any) => {
       this.immagineUrl = immagine?.url ?? immagine?.path ?? immagine?.nomeFile ?? '/image-cantina.png';
+      this.cdr.markForCheck(); 
     },
     error: () => {
       this.immagineUrl = '/image-cantina.png';
+      this.cdr.markForCheck(); 
     }
   });
 }
