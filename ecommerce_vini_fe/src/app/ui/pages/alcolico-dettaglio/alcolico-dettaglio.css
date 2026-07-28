@@ -1,0 +1,41 @@
+.dettaglio-img-container {
+  width: 100%;
+  height: 340px;
+  border-radius: 16px;
+  overflow: hidden;
+  background-color: #f8f9fa;
+}
+
+.dettaglio-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.dettaglio-nome {
+  font-size: 2rem;
+}
+
+.dettaglio-prezzo {
+  font-size: 1.6rem;
+  color: #b5121b;
+}
+
+.link-catalogo {
+  color: #6e0c18;
+}
+
+.icona-indietro {
+  font-size: 1.2rem;
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.badge-caratteristica {
+  background-color: #f7e9ea;
+  color: #6e0c18;
+  font-size: 0.85rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+}

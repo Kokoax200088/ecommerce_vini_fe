@@ -29,6 +29,10 @@ export const routes: Routes = [
     loadComponent: () => import('./ui/pages/lista-alcolici/lista-alcolici').then((m) => m.ListaAlcolici),
   },
   {
+    path: 'alcolico/:id',
+    loadComponent: () => import('./ui/pages/alcolico-dettaglio/alcolico-dettaglio').then((m) => m.AlcolicoDettaglio),
+  },
+  {
     path: 'gestione-ordine',
     loadComponent: () => import('./ui/pages/gestione-ordine/gestione-ordine').then((m) => m.GestioneOrdine),
   },

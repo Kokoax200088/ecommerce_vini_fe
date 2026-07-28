@@ -13,6 +13,10 @@ export class AlcolicoServices {
 
     baseUrl: string = this.settings.apiUrl;
 
+    getById(id: number) {
+        return this.http.get<AlcolicoModel>(this.baseUrl + '/alcolico/get/' + id);
+    }
+
     list(idColore?: number, idTipologia?: number, nome?: string, gradazione?: number, annata?: number){
   let params = new HttpParams();
 
