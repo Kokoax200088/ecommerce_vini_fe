@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
@@ -15,6 +15,7 @@ import { AlcolicoModel } from '../../core/models/alcolico';
 export class CardAlcolico {
    @Input() alcolico!: AlcolicoModel;
   immagineUrl: any;
+  private cdr = inject(ChangeDetectorRef); // per quando ho le img forzo angular: ho dei componenti cambiati
 
   constructor(
     private router: Router,
@@ -28,9 +29,11 @@ caricaImmagine(): void {
   this.uploadImageAlcolicoService.getById('alcolico', this.alcolico.id).subscribe({
     next: (immagine: any) => {
       this.immagineUrl = immagine?.url ?? immagine?.path ?? immagine?.nomeFile ?? '/image-alcolico.png';
+      this.cdr.markForCheck(); 
     },
     error: () => {
       this.immagineUrl = '/image-alcolico.png';
+      this.cdr.markForCheck(); 
     }
   });
 }

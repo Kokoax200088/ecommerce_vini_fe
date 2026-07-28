@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CantinaServices } from '../../../core/services/cantina-services';
 import { UploadImageService } from '../../../core/services/uploadImage';
@@ -22,9 +22,7 @@ export class CantinaDettaglio implements OnInit {
   cantina!: Cantina;
   alcolici: any;
   immagineUrl: string = '/image-cantina.png';
-
-  isLoading: boolean = true;  
-  hasError: boolean = false;   
+  private cdr = inject(ChangeDetectorRef);
 
   constructor(
     private route: ActivatedRoute,
@@ -35,18 +33,13 @@ export class CantinaDettaglio implements OnInit {
 
   ngOnInit(): void {
     this.id = Number(this.route.snapshot.paramMap.get('id'));
-     this.isLoading = true;
     this.cantinaService.getById(this.id).subscribe({
       next: (resp) => {
         this.cantina = resp;
-        this.isLoading = false; 
-         console.log('isLoading impostato a false', this.isLoading); 
         this.caricaImmagine();
       },
       error: (err) => {
         console.error('Errore nel caricamento cantina', err);
-        this.isLoading = false; 
-        this.hasError = true;
       }
     });
     
@@ -56,9 +49,11 @@ export class CantinaDettaglio implements OnInit {
     this.uploadImageCantinaService.getById('cantina', this.cantina.id).subscribe({
       next: (immagine: any) => {
         this.immagineUrl = immagine?.url ?? immagine?.path ?? immagine?.nomeFile ?? '/image-cantina.png';
+        this.cdr.markForCheck(); 
       },
       error: () => {
         this.immagineUrl = '/image-cantina.png';
+        this.cdr.markForCheck(); 
       }
     });
   }
