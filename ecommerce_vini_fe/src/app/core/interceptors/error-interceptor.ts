@@ -13,8 +13,9 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
       switch (error.status) {
         case 401:
-          authService.logout();
-          router.navigate(['/login']);
+          //authService.logout();
+          //router.navigate(['/login']);
+          console.log("ma mica sto uscendo AO");
           break;
 
         case 403:

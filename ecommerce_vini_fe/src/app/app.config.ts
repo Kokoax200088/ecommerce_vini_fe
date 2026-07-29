@@ -34,7 +34,7 @@ export const appConfig: ApplicationConfig = {
     ),
       provideAppInitializer(() => { // service to execute in startup
       const refreshService = inject(TokenServices);
-      //return firstValueFrom(refreshService.restoreSession()) // restore in startup FIXME per ora messo a commento lavoro su altro
+      return firstValueFrom(refreshService.restoreSession()) //FIXME perchè fa fare solo login?
     }),
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes), provideClientHydration(),

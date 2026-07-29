@@ -52,7 +52,7 @@ export class TokenServices {
         console.log("refreshToken ... ... ...");
         const isBrowser = isPlatformBrowser(this.platformId);
 
-        if (isBrowser) {
+        if (!isBrowser) {
             return throwError(() => new Error("refreshToken called during SSR"));
         }
 

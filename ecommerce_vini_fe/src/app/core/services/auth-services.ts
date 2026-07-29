@@ -21,22 +21,35 @@ export class AuthServices {
         }
     );
 
-    /*constructor() {
+    constructor() {
         if(isPlatformBrowser(this.platformId)){
             console.log("Restore------");
-            const userId = localStorage.getItem("userId");
+            const savedUserId = localStorage.getItem("userId");
             const token = localStorage.getItem("token");
-            const isLogged = localStorage.getItem("isLogged");
-            const isAdmin = localStorage.getItem("isAdmin");
-            const isSeller = localStorage.getItem("isSeller");
-            const isCustomer = localStorage.getItem("isCustomer");
+            const isLogged = localStorage.getItem("isLogged") === "1";
+            const isAdmin = localStorage.getItem("isAdmin") === "1";
+            const isSeller = localStorage.getItem("isSeller") === "1";
+            const isCustomer = localStorage.getItem("isCustomer") === "1";
 
+            this.grant.set({
+                userId: savedUserId,
+                token, //si salva uguale in questo modo?
+                isLogged,
+                isAdmin,
+                isSeller,
+                isCustomer
+            });
 
         }
-    }*/
+    }
 
     setToken(token: string){
         console.log("setToken=" + token);
+
+        if (isPlatformBrowser(this.platformId)) {
+            localStorage.setItem("token", token);
+        }
+
         this.grant.update(grant => ({
             ...grant,
             token: token
