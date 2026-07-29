@@ -45,6 +45,10 @@ export const routes: Routes = [
     loadComponent: () => import('./ui/pages/gestione-spedizione-box/gestione-spedizione-box').then((m) => m.GestioneSpedizioneBox),
   },
   {
+    path: 'carrello',
+    loadComponent: () => import('./ui/pages/carrello/carrello').then((m) => m.Carrello),
+  },
+  {
     path: 'login',
     loadComponent: () => import('./ui/pages/login/login').then((m) => m.Login),
   },

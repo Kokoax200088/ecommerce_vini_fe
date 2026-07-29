@@ -49,6 +49,11 @@ export class CantinaServices {
             });
     }
 
+     updateCantinaAlcolico(body: {}) {
+        return this.http.put<CantinaALcolico>(this.baseUrl + "/cantina-alcolico/update", body)
+            .pipe(tap(() => this.list()));
+    }
+
     create(body: {}) {
         //@PostMapping("/create") BE
         return this.http.post(this.baseUrl + "/cantina/create", body)

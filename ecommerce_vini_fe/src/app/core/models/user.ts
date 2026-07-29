@@ -10,6 +10,7 @@ export interface User {
     //TEST per vedere se funziona loggedUSer
     indirizzo: string;
     partitaIva: string;
+    idCarrello: number;
 }
 
 export interface Cliente extends User {
