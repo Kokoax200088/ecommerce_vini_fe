@@ -31,7 +31,7 @@ export class AlcoliciCantina {
   onAggiungiCarrello(alcolicoCantina: any, quantita: number): void {
    const body: Omit<ProdottoAlcolico, 'id'> = {
     idCarrello: this.loggedUtente()!.idCarrello,
-    idAlcolico: alcolicoCantina.alcolico.id,
+    alcolico: alcolicoCantina.alcolico,
     idCantina: alcolicoCantina.idCantina,
     quantita: quantita
   };
