@@ -18,6 +18,9 @@
       <mat-icon class="location-icon">place</mat-icon>
       <p class="mb-0">{{ cantina?.posizione }}</p>
     </div>
+    <div class="mt-4 d-flex align-items-center gap-2">
+      <p class="mb-0">{{ cantina?.descrizione }}</p>
+    </div>
     @if(cantina?.listCantinaAlcolico && cantina?.listCantinaAlcolico.length > 0) {
     <app-alcolici-cantina [idCantina]="cantina?.id"></app-alcolici-cantina>
     }
