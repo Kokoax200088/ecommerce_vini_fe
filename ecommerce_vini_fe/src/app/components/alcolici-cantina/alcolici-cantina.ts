@@ -5,6 +5,7 @@ import { CardAlcolico } from "../card-alcolico/card-alcolico";
 import { QuantitaSelector } from "../quantita-selector/quantita-selector";
 import { ProdottoAlcolico } from '../../core/models/carrello';
 import { CarrelloService } from '../../core/services/carrello-services';
+import { UtenteServices } from '../../core/services/utente-services';
 
 @Component({
   selector: 'app-alcolici-cantina',
@@ -16,7 +17,7 @@ export class AlcoliciCantina {
   @Input() idCantina!: number;
   listCantinaALcolico: any;
 
-  constructor(private cantinaService: CantinaServices, private carrelloService: CarrelloService) {
+  constructor(private cantinaService: CantinaServices, private carrelloService: CarrelloService, private utenteService: UtenteServices) {
     this.listCantinaALcolico = this.cantinaService.alcolici;
   }
 
