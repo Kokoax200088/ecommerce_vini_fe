@@ -1,2 +1,59 @@
-<p>profile works! - {{email()}} - </p>
+<div align="right" >
+   @if (loggedUtente(); as u) {
+  <h3>{{ u.nome }} {{ u.cognome }}</h3>
+  <p>Email: {{ email() }}</p>
+  <p>Ruolo: {{ u.ruolo }}</p>
+  <p>Data nascita: {{ u.dataNascita }}</p>
+  @if (u.ruolo === 'cliente'){
+    <p>Indirizzo: {{u.indirizzo}}</p>
+  }
+  @if (u.ruolo === 'venditore'){
+    <p>Partita IVA: {{u.partitaIva}}</p>
+  }
+
+} @else {
+  <p>Caricamento...</p>
+}
+</div>
+
+<div align="right" >
+<mat-card-content>
+    <form [formGroup]="utenteForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Nome</mat-label>
+        <input matInput type="text" name="nome" formControlName="nome">
+      </mat-form-field>
+        <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Cognome</mat-label>
+        <input matInput type="text" name="cognome" formControlName="cognome">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Data di nascita</mat-label>
+        <input matInput [matDatepicker]="picker"  formControlName="dataNascita">
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+      @if (utenteForm.get('ruolo')?.value === 'cliente') {
+        <p>
+          <label>Indirizzo</label>
+          <input matInput formControlName="indirizzo">
+        </p>
+      }
+
+      @if (utenteForm.get('ruolo')?.value === 'venditore') {
+        <p>
+          <label>Partita IVA</label>
+          <input matInput formControlName="partitaIva">
+        </p>
+      }
+
+      <button mat-raised-button color="primary" type="submit">
+        Modifica
+      </button>
+    </form>
+  </mat-card-content>
+</div>
 <router-outlet></router-outlet>

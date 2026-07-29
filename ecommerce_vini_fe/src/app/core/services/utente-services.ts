@@ -1,13 +1,16 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Service, signal } from '@angular/core';
-import { tap } from 'rxjs';
+import { first, tap } from 'rxjs';
 import { AppSettings } from '../../setting/config-model';
 import { APP_SETTING } from '../../setting/token';
+import { Cliente, User } from '../models/user';
+import { log } from 'console';
 
 @Service()
 export class UtenteServices {
     //url = "http://localhost:9090/rest/api/utente/";
-    listUtente = signal<any[]>([]);
+    listUtente = signal<User[]>([]);
+    loggedUtente = signal<User | undefined>(undefined);
 
   private readonly settings: AppSettings = inject(APP_SETTING);
         private readonly http = inject(HttpClient);
@@ -26,6 +29,27 @@ export class UtenteServices {
             console.log("trying to call getBaseUrlVenditore");
         return this.settings.apiUrl + '/venditore/';
         }
+
+    findLoggedInfos(email?:string){
+        let params = new HttpParams();
+        if (email) params = params.set('email', email);
+         this.http.get<any[]>(this.getBaseUrlUtente() + 'listWithParameters', {params})
+            .subscribe({
+                next: (resp) => {
+                    const result = resp?.[0];
+                    console.log('loggedUtente response:', resp?.[0]);
+                    this.loggedUtente.set({
+                        ...resp[0],
+                        id: result.id, //dovrebbe settarlo in automatico ma per sicurezza lo esplicito
+                        indirizzo: result.clienteDTO?.indirizzo ?? result.indirizzo,
+                        partitaIva: result.venditoreDTO?.partitaIva ?? result.partitaIva
+                    });
+                },
+                error: (resp) =>{
+                    console.log("should not be reachable, resp error:" + resp);
+                }
+            });
+    }
 
     list(
         nome?: string, 
@@ -71,6 +95,7 @@ export class UtenteServices {
     }
 
     update(body: {}){
+        console.log("update utente, body=" + body);
         return this.http.patch(this.getBaseUrlUtente() + "update", body)
             .pipe(tap(() => this.list()));
     }

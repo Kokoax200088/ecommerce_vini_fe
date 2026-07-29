@@ -5,50 +5,55 @@ import { TokenServices } from "../security/token-services";
 import { AuthServices } from "../services/auth-services";
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-    const autentificationServices = inject(TokenServices);
-    const authService = inject(AuthServices);
-    const token = authService.grant().token;
+  const tokenServices = inject(TokenServices);
+  const authService = inject(AuthServices);
 
-    const publicUrls = [
-        '/rest/api/auth/login',
-        '/rest/api/auth/refresh',
-        '/images/'
-    ];
+  const token = authService.grant().token;
 
-    let requestToSend = req.clone({
-        withCredentials: true
-    });
+  const publicUrls = [
+    '/rest/api/auth/login',
+    '/rest/api/auth/registration',
+    '/rest/api/auth/refresh',
+    '/images/'
+  ];
 
-    if (token) { 
-        requestToSend = requestToSend.clone({ 
-            setHeaders: 
-            { 
-                Authorization: 'Bearer ' + token 
-            } 
-        });
-    }
-    return next(requestToSend).pipe(
-        catchError((error: HttpErrorResponse) => { 
+  // 1) Skip interception for public endpoints
+  const shouldSkip = publicUrls.some(url => req.url.includes(url));
+  if (shouldSkip) {
+    return next(req);
+  }
 
-            if (error.status !== 401 ) { 
-                    return throwError(() => error); 
-                }
-                
-            console.log('Refresh.....')
-            return autentificationServices.refreshToken().pipe(
-                switchMap(response => { 
-                    authService.setToken(response.accessToken); // save new token 
-                   const repeatedRequest = req.clone({     // resend ol request with new token
-                    withCredentials: true, 
-                    setHeaders: { 
-                        Authorization: 'Bearer ' + response.accessToken 
-                    } }); 
-                    return next(repeatedRequest); 
-                }), 
-                catchError(refreshError => { 
-                    authService.resetAll(); 
-                    return throwError(() => refreshError);
-                 }
-                ));
-             }));
+  // 2) Attach token (only if present)
+  const requestToSend = token
+    ? req.clone({ // costrutto if
+        withCredentials: true,
+        setHeaders: { Authorization: `Bearer ${token}` }
+      })
+    : req.clone({ withCredentials: true }); //costrutto else
+
+  return next(requestToSend).pipe(
+    catchError((error: HttpErrorResponse) => {
+      if (error.status !== 401) {
+        return throwError(() => error);
+      }
+
+      return tokenServices.refreshToken().pipe(
+        switchMap(response => {
+          authService.setToken(response.accessToken);
+
+          // 3) Repeat the original request (not the raw req) in a consistent way
+          const repeatedRequest = requestToSend.clone({
+            setHeaders: { Authorization: `Bearer ${response.accessToken}` }
+          });
+
+          return next(repeatedRequest);
+        }),
+        catchError(refreshError => {
+            console.log("dovrei resettare sono in authInterceptor");
+            //authService.resetAll();
+            return throwError(() => refreshError);
+        })
+      );
+    })
+  );
 };

@@ -49,9 +49,10 @@ export class TokenServices {
     private refreshRequest$: Observable<LoginDTO> | null = null;
 
     refreshToken(): Observable<LoginDTO> {
+        console.log("refreshToken ... ... ...");
         const isBrowser = isPlatformBrowser(this.platformId);
 
-        if (isBrowser) {
+        if (!isBrowser) {
             return throwError(() => new Error("refreshToken called during SSR"));
         }
 
@@ -60,7 +61,7 @@ export class TokenServices {
             return this.refreshRequest$;
         }
 
-        console.log("INSIDE REFRESHTOKEN... ... ...");
+        
         this.refreshRequest$ = this.http.post<LoginDTO>(this.getBaseUrl() + "refresh", {}, { withCredentials: true })
             .pipe(
                 tap(resp => {
@@ -68,7 +69,8 @@ export class TokenServices {
                     this.authServices.setToken(resp.accessToken) 
                 }),
                 catchError(error => {  //eccezione tipo
-                    this.authServices.resetAll();
+                    console.log("dovrei resettare sono in refreshToken di tokenService");
+                    //this.authServices.resetAll();
                     return throwError(() => error);
                 }),
                 finalize(() => { // onEnd
@@ -84,6 +86,7 @@ export class TokenServices {
     }
 
     restoreSession(): Observable<boolean> {
+        console.log("restoreSession...")
         return this.refreshToken().pipe(
             switchMap(() =>
                 this.me()
@@ -93,7 +96,8 @@ export class TokenServices {
             }),
             map(() => true),
             catchError(() => {
-                this.authServices.resetAll();
+                console.log("dovrei resettare sono in restoreSession di tokenService");
+                //this.authServices.resetAll();
                 return of(false);
             })
         )
