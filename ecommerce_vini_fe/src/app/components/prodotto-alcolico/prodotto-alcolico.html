@@ -1,0 +1,41 @@
+<div class="mt-4">
+  <h3 class="section-title-underlined">Alcolici</h3>
+
+  <div class="mt-4 row g-3">
+    @for (prodottoAlcolico of listProdottoAlcolico; track prodottoAlcolico.id) {
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="card-badge-wrapper">
+
+          <div class="badge-quantita">
+            x{{ prodottoAlcolico['quantità'] }}
+          </div>
+
+          <app-card-alcolico [alcolico]="prodottoAlcolico.alcolico"></app-card-alcolico>
+
+          <div class="quantity-picker-custom mt-3">
+            <button 
+              type="button" 
+              class="btn-qty"
+              (click)="diminuisciQuantita(prodottoAlcolico)"
+            >
+              -
+            </button>
+            
+            <span class="qty-number">
+              {{ prodottoAlcolico['quantità'] }}
+            </span>
+            
+            <button 
+              type="button" 
+              class="btn-qty"
+              (click)="aumentaQuantita(prodottoAlcolico)"
+            >
+              +
+            </button>
+          </div>
+
+        </div>
+      </div>
+    }
+  </div>
+</div>

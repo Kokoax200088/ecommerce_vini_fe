@@ -5,7 +5,7 @@ export interface ProdottoAlcolico {
     idCarrello: number;
     alcolico: AlcolicoModel;
     idCantina: number;
-    quantita: number;
+    quantità: number;
 }
 
 export interface ProdottoDegustazione {
@@ -13,7 +13,7 @@ export interface ProdottoDegustazione {
     idCarrello: number;
     degustazione: any;
     idCantina: number;
-    quantita: number;
+    quantità: number;
 }
 
 export interface ProdottoBox {
@@ -21,15 +21,15 @@ export interface ProdottoBox {
     idCarrello: number;
     box: any;
     idCantina: number;
-    quantita: number;
+    quantità: number;
 }
 
 export interface CarrelloModel {
 id: number;
 idCliente: number;
 totale: number;
-listaProdotti: ProdottoAlcolico[];
-listaDegustazione: ProdottoDegustazione[];
 listaBox: ProdottoBox[];
-quantita: number;
+listaDegustazione: ProdottoDegustazione[];
+listaProdotti: ProdottoAlcolico[];
+quantità: number;
 }

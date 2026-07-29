@@ -1,0 +1,22 @@
+.btn-checkout {
+  background-color: #2b0b13; /* Tinta bordeaux scuro abbinata al menu laterale */
+  color: #ffffff;
+  border: none;
+  padding: 12px 36px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(43, 11, 19, 0.25);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.btn-checkout:hover {
+  background-color: #42121e;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(43, 11, 19, 0.35);
+}
+
+.btn-checkout:active {
+  transform: translateY(0);
+}

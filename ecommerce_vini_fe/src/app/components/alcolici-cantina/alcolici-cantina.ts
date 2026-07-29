@@ -33,7 +33,7 @@ export class AlcoliciCantina {
     idCarrello: this.loggedUtente()!.idCarrello,
     alcolico: alcolicoCantina.alcolico,
     idCantina: alcolicoCantina.idCantina,
-    quantita: quantita
+    quantità: quantita
   };
 
  this.carrelloService.createProdAlcolico(body).subscribe({

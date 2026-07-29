@@ -14,6 +14,16 @@ export class CarrelloService {
     return this.http.post<ProdottoAlcolico>(this.baseUrl + '/prodotto-alcolico/create', body);
   }
 
+  updateProdottoAlcolico(body: ProdottoAlcolico) {
+    return this.http.patch<ProdottoAlcolico>(`/prodotto-alcolico/update`, body);
+  }
+
+  deleteProdottoAlcolico(id:number) {
+    return this.http.delete(this.baseUrl + '/cart/delete', {
+            params: { id }
+        });
+  }
+
   getCartById(id:number) {
     return this.http.get<CarrelloModel>(this.baseUrl + '/cart/getById', {
             params: { id }
