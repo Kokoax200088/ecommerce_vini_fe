@@ -23,7 +23,7 @@
           <i class="bi bi-cart me-2"></i> Catalogo Cantine
         </a>
       </li>
-      @if (auth.grant().isCustomer || auth.grant().isAdmin) {
+      @if (auth.grant().isCustomer) {
 <li>
         <a href="/carrello" routerLinkActive="active" class="nav-link text-white">
           <i class="bi bi-cart me-2"></i> Carrello

@@ -47,7 +47,7 @@ export class Login {
       }).subscribe({
         next: (resp:MeDTO) => {
           this.msg.set("");
-          console.log("QUESTA E' LA RESP:" + resp);
+          console.log("QUESTA E' LA RESP:" +  JSON.stringify(resp, null, 2));
 
           this.auth.setAuthenticated(resp);
           this.routing.navigate(['']);

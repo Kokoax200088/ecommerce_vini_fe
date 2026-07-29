@@ -40,6 +40,7 @@ export class AuthServices {
                 isCustomer
             });
 
+
         }
     }
 
@@ -94,6 +95,7 @@ export class AuthServices {
                 ...grant,
                 isCustomer: true
             }));
+            
         }
     }
 
@@ -109,7 +111,7 @@ export class AuthServices {
     isAdmin(): boolean {
         if(isPlatformBrowser(this.platformId)){
             const isAdmin = localStorage.getItem("isAdmin");
-            if(isAdmin === null && isAdmin === "1") {
+            if(isAdmin === "1") {
                 return true;
             }
             return false;
@@ -121,7 +123,7 @@ export class AuthServices {
     isSeller(): boolean {
         if(isPlatformBrowser(this.platformId)){
             const isSeller = localStorage.getItem("isSeller");
-            if(isSeller === null && isSeller === "1") {
+            if(isSeller === "1") {
                 return true;
             }
             return false;
@@ -132,7 +134,7 @@ export class AuthServices {
     isCustomer(): boolean {
         if(isPlatformBrowser(this.platformId)){
             const isCustomer = localStorage.getItem("isCustomer");
-            if(isCustomer === null && isCustomer === "1") {
+            if(isCustomer === "1") {
                 return true;
             }
             return false;
@@ -143,7 +145,7 @@ export class AuthServices {
     isLogged(): boolean {
         if(isPlatformBrowser(this.platformId)){
             const isLogged = localStorage.getItem("isLogged");
-            if(isLogged === null && isLogged === "1") {
+            if(isLogged === "1") {
                 return true;
             }
             return false;
@@ -176,13 +178,13 @@ export class AuthServices {
             (response: any) => {
                 if (isPlatformBrowser(this.platformId)) {
                     localStorage.setItem("isLogged", "1");
-                     if (response.role === 'ADMIN') {
+                     if (response.role === 'admin') {
                         this.setAdmin();
                     }
-                    if (response.role === 'SELLER') {
+                    if (response.role === 'venditore') {
                         this.setSeller();
                     }
-                    if (response.role === 'CUSTOMER') {
+                    if (response.role === 'cliente') {
                         this.setCustomer();
                     }
                 }

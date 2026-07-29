@@ -1,7 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import {MatIconModule} from "@angular/material/icon";
 import { AuthServices } from '../../../core/services/auth-services';
 import { Router } from '@angular/router';
+import { UtenteServices } from '../../../core/services/utente-services';
 
 @Component({
   selector: 'app-side-nav',
@@ -12,7 +13,9 @@ import { Router } from '@angular/router';
 export class SideNav {
 
   public readonly auth = inject(AuthServices);
-  constructor(private routing: Router) {}
+  loggedUtente = computed(() => this.utenteService.loggedUtente());
+  constructor(private routing: Router, private utenteService: UtenteServices) {
+  }
   
   profile(){
     console.log("access to profile");
@@ -21,6 +24,6 @@ export class SideNav {
 
   logout() {
     this.auth.resetAll();
-    //TODO aggiungi il routing alla home dopo il logout
+    this.routing.navigate(['/']);
   }
 }
