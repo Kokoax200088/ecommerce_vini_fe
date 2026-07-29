@@ -13,8 +13,7 @@ import { UtenteServices } from '../../../core/services/utente-services';
 export class SideNav {
 
   public readonly auth = inject(AuthServices);
-  loggedUtente = computed(() => this.utenteService.loggedUtente());
-  constructor(private routing: Router, private utenteService: UtenteServices) {
+  constructor(private routing: Router, private authService: AuthServices) {
   }
   
   profile(){

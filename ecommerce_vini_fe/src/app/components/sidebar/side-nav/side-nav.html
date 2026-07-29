@@ -5,9 +5,12 @@
     <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none fs-4 d-none d-lg-flex">
       <img src="/logo_ecommerce.png" alt="Logo E-commerce Vini" class="logo">
     </a>
+     @if (!auth.grant().isSeller) {
     <hr class="d-none d-lg-block">
+     }
     
     <ul class="nav nav-pills flex-column mb-auto">
+       @if (!auth.grant().isSeller) {
       <li class="nav-item">
         <a href="/" routerLinkActive="active" class="nav-link text-white">
           <i class="bi bi-house-door me-2"></i> Home
@@ -23,6 +26,9 @@
           <i class="bi bi-cart me-2"></i> Catalogo Cantine
         </a>
       </li>
+      }
+
+
       @if (auth.grant().isCustomer) {
 <li>
         <a href="/carrello" routerLinkActive="active" class="nav-link text-white">

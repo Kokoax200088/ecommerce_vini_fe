@@ -58,12 +58,17 @@ export class AuthServices {
     }
 
     setAuthenticated(user: MeDTO){
-        let admin = user.role === 'ADMIN' ? true : false;
+        let admin = user.role === 'admin' ? true : false;
+        let cliente = user.role === 'cliente' ? true : false;
+        let venditore = user.role === 'venditore' ? true : false;
+
 
         this.grant.update(grant => ({
             ...grant,
             isLogged: true,
             isAdmin: admin,
+            isCustomer: cliente,
+            isSeller: venditore,
             userId: user.id //sarebbe l'email
         }));
     }
