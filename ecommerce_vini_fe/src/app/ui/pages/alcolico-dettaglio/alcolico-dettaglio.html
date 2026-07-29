@@ -1,0 +1,60 @@
+<div class="container mt-4">
+  <a routerLink="/alcolici" class="d-inline-flex align-items-center gap-1 mb-3 text-decoration-none link-catalogo">
+    <mat-icon class="icona-indietro">arrow_back</mat-icon>
+    Torna al catalogo
+  </a>
+
+  <div class="row g-4">
+    <div class="col-12 col-md-5">
+      <div class="dettaglio-img-container shadow-sm">
+        <img
+          [src]="immagineUrl()"
+          (error)="onImageError($event)"
+          class="dettaglio-img"
+          [alt]="alcolico()?.nome">
+      </div>
+    </div>
+
+    <div class="col-12 col-md-7">
+      <h1 class="fw-bold mb-1 dettaglio-nome">{{ alcolico()?.nome }}</h1>
+
+      <p class="text-muted mb-3">
+        {{ alcolico()?.tipologiaAlcolico?.nome }} · {{ alcolico()?.colore?.nome }} · {{ alcolico()?.gradazione }}% vol
+      </p>
+
+      <p class="fw-bold mb-3 dettaglio-prezzo">{{ alcolico()?.prezzo | currency:'EUR' }}</p>
+
+      <p class="mb-4">{{ alcolico()?.descrizione }}</p>
+
+      <div class="border-top pt-3">
+        <div class="d-flex justify-content-between py-1">
+          <span class="text-muted">Annata</span>
+          <span>{{ alcolico()?.annata }}</span>
+        </div>
+        <div class="d-flex justify-content-between py-1">
+          <span class="text-muted">Provenienza</span>
+          <span>{{ alcolico()?.provenienza }}</span>
+        </div>
+        <div class="d-flex justify-content-between py-1">
+          <span class="text-muted">Gradazione</span>
+          <span>{{ alcolico()?.gradazione }}% vol</span>
+        </div>
+        <div class="d-flex justify-content-between py-1">
+          <span class="text-muted">Tipologia</span>
+          <span>{{ alcolico()?.tipologiaAlcolico?.nome }}</span>
+        </div>
+      </div>
+
+      @if (alcolico()?.caratteristiche?.length) {
+        <div class="mt-4">
+          <p class="text-muted mb-2">Caratteristiche</p>
+          <div class="d-flex flex-wrap gap-2">
+            @for (caratteristica of alcolico()?.caratteristiche; track caratteristica.id) {
+              <span class="badge-caratteristica">{{ caratteristica.nome }}</span>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>
