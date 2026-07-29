@@ -1,0 +1,29 @@
+<div class="quantita-selector">
+  <div class="quantita-controls">
+    <button
+      type="button"
+      class="btn-quantita"
+      (click)="decrementa()"
+      [disabled]="count() === 0">
+      -
+    </button>
+
+    <span class="quantita-valore">{{ count() }}</span>
+
+    <button
+      type="button"
+      class="btn-quantita"
+      (click)="incrementa()"
+      [disabled]="count() >= quantitaMassima">
+      +
+    </button>
+  </div>
+
+  <button
+    type="button"
+    class="btn-aggiungi-carrello"
+    [disabled]="count() === 0"
+    (click)="onAggiungiCarrello()">
+    Aggiungi al carrello
+  </button>
+</div>

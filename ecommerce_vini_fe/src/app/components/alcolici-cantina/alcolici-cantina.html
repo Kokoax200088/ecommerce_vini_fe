@@ -11,6 +11,11 @@
     </div>
 
     <app-card-alcolico [alcolico]="alcolicoCantina?.alcolico"></app-card-alcolico>
+
+    <app-quantita-selector
+              [quantitaMassima]="alcolicoCantina?.quantita ?? 99"
+              (aggiungiCarrello)="onAggiungiCarrello(alcolicoCantina, $event)">
+            </app-quantita-selector>
     
         </div>
         </div>
