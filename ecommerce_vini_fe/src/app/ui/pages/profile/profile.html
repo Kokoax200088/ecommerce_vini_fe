@@ -1,59 +1,113 @@
-<div align="right" >
-   @if (loggedUtente(); as u) {
-  <h3>{{ u.nome }} {{ u.cognome }}</h3>
-  <p>Email: {{ email() }}</p>
-  <p>Ruolo: {{ u.ruolo }}</p>
-  <p>Data nascita: {{ u.dataNascita }}</p>
-  @if (u.ruolo === 'cliente'){
-    <p>Indirizzo: {{u.indirizzo}}</p>
-  }
-  @if (u.ruolo === 'venditore'){
-    <p>Partita IVA: {{u.partitaIva}}</p>
-  }
+<div class="profile-container container py-4">
+  <mat-card class="profile-card shadow-sm border-0">
+    
+    <!-- Intestazione Card -->
+    <mat-card-header class="profile-header">
+      <mat-card-title class="fs-3 font-weight-bold">Il mio Profilo</mat-card-title>
+      <mat-card-subtitle>Gestisci le tue informazioni personali</mat-card-subtitle>
+    </mat-card-header>
 
-} @else {
-  <p>Caricamento...</p>
-}
+    <mat-card-content class="pt-4">
+      <div class="row g-4">
+        
+        <!-- Colonna Sinistra: Dettagli Utente Attuali -->
+        <div class="col-12 col-md-5 profile-info-col border-end-md">
+          @if (loggedUtente(); as u) {
+            <div class="user-details">
+              <h3 class="user-name mb-3">{{ u.nome }} {{ u.cognome }}</h3>
+              
+              <div class="detail-item mb-2">
+                <span class="detail-label">Email:</span>
+                <span class="detail-value">{{ email() }}</span>
+              </div>
+
+              <div class="detail-item mb-2">
+                <span class="detail-label">Ruolo:</span>
+                <span class="badge bg-burgundy text-capitalize">{{ u.ruolo }}</span>
+              </div>
+
+              <div class="detail-item mb-2">
+                <span class="detail-label">Data di nascita:</span>
+                <span class="detail-value">{{ u.dataNascita }}</span>
+              </div>
+
+              @if (u.ruolo === 'cliente') {
+                <div class="detail-item mb-2">
+                  <span class="detail-label">Indirizzo:</span>
+                  <span class="detail-value">{{ u.indirizzo }}</span>
+                </div>
+              }
+
+              @if (u.ruolo === 'venditore') {
+                <div class="detail-item mb-2">
+                  <span class="detail-label">Partita IVA:</span>
+                  <span class="detail-value">{{ u.partitaIva }}</span>
+                </div>
+              }
+            </div>
+          } @else {
+            <div class="d-flex align-items-center gap-2">
+              <p class="text-muted m-0">Caricamento...</p>
+            </div>
+          }
+        </div>
+
+        <!-- Colonna Destra: Form di Modifica -->
+        <div class="col-12 col-md-7">
+          <h5 class="mb-3 text-secondary">Modifica Dati</h5>
+          
+          <form [formGroup]="utenteForm" (ngSubmit)="onSubmit()" class="d-flex flex-column gap-3">
+            
+            <div class="row g-3">
+              <div class="col-12 col-sm-6">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Nome</mat-label>
+                  <input matInput type="text" name="nome" formControlName="nome">
+                </mat-form-field>
+              </div>
+
+              <div class="col-12 col-sm-6">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Cognome</mat-label>
+                  <input matInput type="text" name="cognome" formControlName="cognome">
+                </mat-form-field>
+              </div>
+            </div>
+
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Data di nascita</mat-label>
+              <input matInput [matDatepicker]="picker" formControlName="dataNascita">
+              <mat-hint>MM/DD/YYYY</mat-hint>
+              <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+
+            @if (utenteForm.get('ruolo')?.value === 'cliente') {
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Indirizzo</mat-label>
+                <input matInput formControlName="indirizzo">
+              </mat-form-field>
+            }
+
+            @if (utenteForm.get('ruolo')?.value === 'venditore') {
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Partita IVA</mat-label>
+                <input matInput formControlName="partitaIva">
+              </mat-form-field>
+            }
+
+            <div class="d-flex justify-content-end mt-2">
+              <button mat-flat-button class="btn-burgundy" type="submit">
+                Modifica Dati
+              </button>
+            </div>
+
+          </form>
+        </div>
+
+      </div>
+    </mat-card-content>
+  </mat-card>
 </div>
 
-<div align="right" >
-<mat-card-content>
-    <form [formGroup]="utenteForm" (ngSubmit)="onSubmit()">
-        <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Nome</mat-label>
-        <input matInput type="text" name="nome" formControlName="nome">
-      </mat-form-field>
-        <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Cognome</mat-label>
-        <input matInput type="text" name="cognome" formControlName="cognome">
-      </mat-form-field>
-
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Data di nascita</mat-label>
-        <input matInput [matDatepicker]="picker"  formControlName="dataNascita">
-        <mat-hint>MM/DD/YYYY</mat-hint>
-        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-      </mat-form-field>
-
-      @if (utenteForm.get('ruolo')?.value === 'cliente') {
-        <p>
-          <label>Indirizzo</label>
-          <input matInput formControlName="indirizzo">
-        </p>
-      }
-
-      @if (utenteForm.get('ruolo')?.value === 'venditore') {
-        <p>
-          <label>Partita IVA</label>
-          <input matInput formControlName="partitaIva">
-        </p>
-      }
-
-      <button mat-raised-button color="primary" type="submit">
-        Modifica
-      </button>
-    </form>
-  </mat-card-content>
-</div>
 <router-outlet></router-outlet>

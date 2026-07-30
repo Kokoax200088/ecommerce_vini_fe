@@ -124,4 +124,8 @@ export class UtenteServices {
     return this.http.delete(this.getBaseUrlVenditore() + "delete/" + id)
         .pipe(tap(() => this.list()));
 }
+
+clearUserState() {
+  this.loggedUtente.set(undefined);
+}
 }

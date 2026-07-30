@@ -23,6 +23,6 @@ export class SideNav {
 
   logout() {
     this.auth.resetAll();
-    this.routing.navigate(['/']);
+    this.routing.navigate(['/login']);
   }
 }

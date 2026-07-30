@@ -4,12 +4,16 @@ import { isPlatformBrowser } from '@angular/common';
 import { AppSettings } from '../../setting/config-model';
 import { MeDTO } from '../models/user';
 import { APP_SETTING } from '../../setting/token';
+import { UtenteServices } from './utente-services';
+import { CarrelloService } from './carrello-services';
 
 @Service()
 export class AuthServices {
     private platformId = inject(PLATFORM_ID);
     private readonly settings: AppSettings = inject(APP_SETTING);
     private http = inject(HttpClient);
+    private utenteService = inject(UtenteServices);
+    private carrelloService = inject(CarrelloService);
     grant = signal(
         {
             userId: null as string | null,
@@ -214,6 +218,8 @@ export class AuthServices {
                 isSeller: false,
                 isCustomer: false
             });
+            this.utenteService.clearUserState();
+            this.carrelloService.clearCartState();
         }
     }
      

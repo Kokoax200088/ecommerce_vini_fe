@@ -83,19 +83,22 @@
       <li class="nav-item">
       <a
         class="nav-link text-white"
+        style="cursor: pointer;"
         (click)="profile()"
       >
         Profilo
       </a>
       </li>
       <li class="nav-item">
-      <a
-        class="nav-link text-white"
-        (click)="logout()"
-      >
-        Logout <mat-icon>logout</mat-icon>
-      </a>
-      </li>
+  <a
+    class="nav-link text-white d-inline-flex align-items-center gap-2"
+    style="cursor: pointer;"
+    (click)="logout()"
+  >
+    <span>Logout</span>
+    <mat-icon class="align-middle">logout</mat-icon>
+  </a>
+</li>
       </ul>
     }
     

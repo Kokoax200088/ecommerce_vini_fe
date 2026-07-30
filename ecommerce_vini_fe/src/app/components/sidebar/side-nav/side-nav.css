@@ -5,3 +5,9 @@
 .logo {
   width: 100%;
 }
+
+.nav-link mat-icon {
+  font-size: 1.2rem;
+  width: 1.2rem;
+  height: 1.2rem;
+}

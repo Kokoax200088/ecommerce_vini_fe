@@ -1,19 +1,55 @@
-.form-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr; /* two columns */
-  gap: 14px; /* small gap between inputs */
-  align-items: start;
+.profile-container {
+  max-width: 900px;
+  margin: 0 auto;
 }
 
-.form-grid mat-form-field {
-  width: 100%;
+.profile-card {
+  border-radius: 12px;
+  padding: 16px;
+  background-color: #ffffff;
 }
 
-/* Optional: make the full-width fields span both columns */
-.form-grid .full-width {
-  grid-column: 1 / -1;
+.profile-header {
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 12px;
 }
 
-.text-fix{
-  width: 250px;
+.user-name {
+  color: #3b0d18;
+  font-weight: 700;
+}
+
+.detail-label {
+  font-weight: 600;
+  color: #6c757d;
+  display: inline-block;
+  min-width: 110px;
+}
+
+.detail-value {
+  color: #212529;
+  font-weight: 500;
+}
+
+/* Colore bordeaux per il tema dell'app */
+.bg-burgundy {
+  background-color: #3b0d18;
+  color: #ffffff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+}
+
+.btn-burgundy {
+  background-color: #3b0d18 !important;
+  color: #ffffff !important;
+  padding: 8px 24px !important;
+  border-radius: 6px !important;
+}
+
+/* Separatore verticale per schermi desktop */
+@media (min-width: 768px) {
+  .border-end-md {
+    border-right: 1px solid #e9ecef;
+  }
 }

@@ -44,4 +44,8 @@ export class CarrelloService {
       tap(cart => this.cart.set(cart))
     );
   }
+
+  clearCartState() {
+  this.cart.set(undefined);
+}
 }

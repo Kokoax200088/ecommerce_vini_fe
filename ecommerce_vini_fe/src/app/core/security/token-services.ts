@@ -42,9 +42,13 @@ export class TokenServices {
         );
     }
 
-    logout(){
-        return this.http.post(this.getBaseUrl() + 'logout', {}, {withCredentials: true})
-    }
+    logout(): Observable<any> {
+    return this.http.post(this.getBaseUrl() + 'logout', {}, { withCredentials: true }).pipe(
+        finalize(() => {
+            this.authServices.resetAll();
+        })
+    );
+}
 
     private refreshRequest$: Observable<LoginDTO> | null = null;
 
@@ -85,21 +89,34 @@ export class TokenServices {
         return this.refreshRequest$;
     }
 
-    restoreSession(): Observable<boolean> {
-        console.log("restoreSession...")
-        return this.refreshToken().pipe(
-            switchMap(() =>
-                this.me()
-            ),
-            tap(user => {
-                this.authServices.setAuthenticated(user);
-            }),
-            map(() => true),
-            catchError(() => {
-                console.log("dovrei resettare sono in restoreSession di tokenService");
-                //this.authServices.resetAll();
-                return of(false);
-            })
-        )
+   restoreSession(): Observable<boolean> {
+    console.log("restoreSession...");
+    
+    const isBrowser = isPlatformBrowser(this.platformId);
+    if (!isBrowser) {
+        return of(false);
     }
+
+    // Se non abbiamo neanche un token salvato non facciamo il refresh
+    const currentToken = this.authServices.grant().token || localStorage.getItem('token');
+    if (!currentToken) {
+        console.log("Nessun token presente, utente anonimo.");
+        this.authServices.resetAll();
+        return of(false);
+    }
+
+    // Prova il refresh solo se avevamo una sessione precedente
+    return this.refreshToken().pipe(
+        switchMap(() => this.me()),
+        tap(user => {
+            this.authServices.setAuthenticated(user);
+        }),
+        map(() => true),
+        catchError((err) => {
+            console.log("Sessione non ripristinabile (refresh fallito o cookie scaduto). Reset in corso...");
+            this.authServices.resetAll();
+            return of(false);
+        })
+    );
+}
 }

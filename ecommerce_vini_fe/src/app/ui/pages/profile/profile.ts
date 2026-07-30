@@ -6,7 +6,7 @@ import { TokenServices } from '../../../core/security/token-services';
 import { Cliente, MeDTO } from '../../../core/models/user';
 import { AuthServices } from '../../../core/services/auth-services';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatCardContent } from "@angular/material/card";
+import { MatCardContent, MatCardHeader, MatCardTitle, MatCardModule } from "@angular/material/card";
 import { MatFormField, MatLabel, MatHint, MatSelect, MatOption } from "@angular/material/select";
 import {  MatDatepickerModule, MatDatepickerToggle, MatDatepicker } from "@angular/material/datepicker";
 import { MatInputModule } from '@angular/material/input';
@@ -16,16 +16,19 @@ import { UtilitiesServices } from '../../../core/services/utilities-services';
 @Component({
   selector: 'app-profile',
   imports: [
-  RouterModule,
-  ReactiveFormsModule,
-  MatCardContent,
-  MatFormField,
-  MatLabel,
-  MatDatepickerModule,
-  MatDatepickerToggle,
-  MatDatepicker,
-  MatInputModule,
-  MatNativeDateModule
+    RouterModule,
+    ReactiveFormsModule,
+    MatCardContent,
+    MatFormField,
+    MatLabel,
+    MatDatepickerModule,
+    MatDatepickerToggle,
+    MatDatepicker,
+    MatInputModule,
+    MatNativeDateModule,
+    MatCardHeader,
+    MatCardTitle,
+    MatCardModule
 ],
   templateUrl: './profile.html',
   styleUrl: './profile.css',
