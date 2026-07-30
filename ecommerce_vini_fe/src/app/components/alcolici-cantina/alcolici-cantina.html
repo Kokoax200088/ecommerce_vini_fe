@@ -5,10 +5,17 @@
      @for (alcolicoCantina of listCantinaALcolico(); track alcolicoCantina.id) {
         <div class="col-12 col-sm-6 col-md-4 col-lg-3">
        <div class="card-badge-wrapper">
-    
+        @if(alcolicoCantina?.quantita > 0) {
     <div class="badge-quantita">
-      x{{ alcolicoCantina?.quantita }}
-    </div>
+            x{{ alcolicoCantina?.quantita }}
+          </div>
+        }
+
+          @if (alcolicoCantina?.quantita === 0) {
+            <div class="overlay-esaurito d-flex align-items-center justify-content-center">
+              <span>PRODOTTO ESAURITO</span>
+            </div>
+          }
 
     <app-card-alcolico [alcolico]="alcolicoCantina?.alcolico"></app-card-alcolico>
 @if(auth.grant().isCustomer) {

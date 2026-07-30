@@ -2,9 +2,9 @@ import { AlcolicoModel } from "./alcolico";
 
 export interface ProdottoAlcolico {
     id: number;
-    idCarrello: number;
-    alcolico: AlcolicoModel;
-    idCantina: number;
+    id_carrello: number;
+    id_alcolico: AlcolicoModel;
+    id_cantina: number;
     quantità: number;
 }
 
@@ -28,8 +28,8 @@ export interface CarrelloModel {
 id: number;
 idCliente: number;
 totale: number;
-listaBox: ProdottoBox[];
-listaDegustazione: ProdottoDegustazione[];
-listaProdotti: ProdottoAlcolico[];
+listaBox: any[];
+listaDegustazione: any[];
+listaProdotti: any[];
 quantità: number;
 }

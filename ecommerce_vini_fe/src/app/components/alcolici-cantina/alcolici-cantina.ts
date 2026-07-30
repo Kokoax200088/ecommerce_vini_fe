@@ -7,6 +7,7 @@ import { ProdottoAlcolico } from '../../core/models/carrello';
 import { CarrelloService } from '../../core/services/carrello-services';
 import { UtenteServices } from '../../core/services/utente-services';
 import { AuthServices } from '../../core/services/auth-services';
+import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-alcolici-cantina',
@@ -17,8 +18,10 @@ import { AuthServices } from '../../core/services/auth-services';
 export class AlcoliciCantina {
   @Input() idCantina!: number;
   listCantinaALcolico: any;
-  loggedUtente = computed(() => this.utenteService.loggedUtente());
   public readonly auth = inject(AuthServices);
+
+  
+  loggedUtente = computed(() => this.utenteService.loggedUtente());
 
   constructor(private cantinaService: CantinaServices, private carrelloService: CarrelloService, private utenteService: UtenteServices) {
     this.listCantinaALcolico = this.cantinaService.alcolici;
@@ -26,36 +29,31 @@ export class AlcoliciCantina {
 
    ngOnInit(): void {
     this.cantinaService.listAlcolici(this.idCantina);
+    const userId = this.auth.grant()?.userId ?? undefined;
+    this.utenteService.findLoggedInfos(userId);
   }
 
   onAggiungiCarrello(alcolicoCantina: any, quantita: number): void {
-   const body: Omit<ProdottoAlcolico, 'id'> = {
-    idCarrello: this.loggedUtente()!.idCarrello,
-    alcolico: alcolicoCantina.alcolico,
-    idCantina: alcolicoCantina.idCantina,
+  const body: Omit<ProdottoAlcolico, 'id'> = {
+    id_carrello: this.loggedUtente()!.idCarrello,
+    id_alcolico: alcolicoCantina.alcolico.id,
+    id_cantina: alcolicoCantina.idCantina,
     quantità: quantita
   };
 
- this.carrelloService.createProdAlcolico(body).subscribe({
-    next: () => {
-      // aggiorna il signal in locale, senza rifare una fetch completa
-      this.cantinaService.alcolici.update(lista =>
-      lista.map(item =>
-        item.id === alcolicoCantina.id
-          ? { ...item, quantita: item.quantita - quantita }
-          : item
-      )
-    );
-
-    // 2. persisti la modifica sul backend (se serve, vedi nota sotto)
-    this.cantinaService.updateCantinaAlcolico({
+  this.carrelloService.createProdAlcolico(body).pipe(
+    switchMap(() => this.cantinaService.updateCantinaAlcolico({
       id: alcolicoCantina.id,
-      quantita: alcolicoCantina.quantita - quantita
-    }).subscribe();
-  },
-  error: (err) => console.error('Errore aggiunta carrello', err)
+      quantita: alcolicoCantina.quantita - quantita,
+      cantinaId: body.id_cantina,
+      alcolicoId: body.id_alcolico
+    }))
+  ).subscribe({
+    next: () => {
+      this.cantinaService.listAlcolici(body.id_cantina);
+    },
+    error: (err) => console.error('Errore aggiunta carrello', err)
   });
-  console.log(`Aggiunti ${quantita} pezzi di ${alcolicoCantina.alcolico.nome}`);
 }
   
 
