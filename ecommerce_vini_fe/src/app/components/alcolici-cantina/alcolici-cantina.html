@@ -18,7 +18,7 @@
           }
 
     <app-card-alcolico [alcolico]="alcolicoCantina?.alcolico"></app-card-alcolico>
-@if(auth.grant().isCustomer) {
+@if(auth.grant().isCustomer && alcolicoCantina?.quantita > 0) {
 <app-quantita-selector
               [quantitaMassima]="alcolicoCantina?.quantita ?? 1"
               (aggiungiCarrello)="onAggiungiCarrello(alcolicoCantina, $event)">

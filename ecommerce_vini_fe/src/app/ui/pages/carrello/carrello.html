@@ -10,7 +10,7 @@
           <span class="badge-quantita">{{ quantitaTotale() }} {{ quantitaTotale() === 1 ? 'articolo' : 'articoli' }}</span>
         </div>
 
-        <app-prodotto-alcolico [listProdottoAlcolico]="cart()?.listaProdotti ?? []"></app-prodotto-alcolico>
+        <app-prodotto-alcolico [listProdottoAlcolico]="cart()?.listaProdotti ?? []" [idCart]="cart()!.id"></app-prodotto-alcolico>
 
         <div class="riepilogo-prezzo">
           <span class="riepilogo-label">Totale</span>

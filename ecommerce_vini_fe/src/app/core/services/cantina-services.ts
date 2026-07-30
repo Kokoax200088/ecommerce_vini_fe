@@ -54,6 +54,18 @@ export class CantinaServices {
             .pipe(tap(() => this.list()));
     }
 
+    getIdCantinaALcolico(id: number) {
+    return this.http.get<CantinaALcolico>(this.baseUrl + "/cantina-alcolico/get/" + id);
+}
+
+getCantinaAlcolicoByFilter(idCantina: number, idAlcolico: number) {
+    let params = new HttpParams()
+        .set('idCantina', idCantina)
+        .set('idAlcolico', idAlcolico);
+
+    return this.http.get<CantinaALcolico[]>(this.baseUrl + "/cantina-alcolico/list", { params });
+}
+
     create(body: {}) {
         //@PostMapping("/create") BE
         return this.http.post(this.baseUrl + "/cantina/create", body)

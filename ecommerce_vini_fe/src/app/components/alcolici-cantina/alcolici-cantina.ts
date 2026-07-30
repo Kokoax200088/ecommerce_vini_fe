@@ -34,25 +34,51 @@ export class AlcoliciCantina {
   }
 
   onAggiungiCarrello(alcolicoCantina: any, quantita: number): void {
-  const body: Omit<ProdottoAlcolico, 'id'> = {
-    id_carrello: this.loggedUtente()!.idCarrello,
-    id_alcolico: alcolicoCantina.alcolico.id,
-    id_cantina: alcolicoCantina.idCantina,
-    quantità: quantita
-  };
+  const idCarrello = this.loggedUtente()!.idCarrello;
+  const idAlcolico = alcolicoCantina.alcolico.id;
+  const idCantina = alcolicoCantina.idCantina;
 
-  this.carrelloService.createProdAlcolico(body).pipe(
-    switchMap(() => this.cantinaService.updateCantinaAlcolico({
-      id: alcolicoCantina.id,
-      quantita: alcolicoCantina.quantita - quantita,
-      cantinaId: body.id_cantina,
-      alcolicoId: body.id_alcolico
-    }))
+  this.carrelloService.getByAlcolico(idAlcolico, idCarrello).pipe(
+    switchMap((listaProdotti: ProdottoAlcolico[]) => {
+      
+      let operazioneCarrello$;
+
+      if (listaProdotti && listaProdotti.length > 0) {
+        const prodottoEsistente = listaProdotti[0];
+        
+        const quantitaAttuale = prodottoEsistente.quantità ?? prodottoEsistente['quantità'] ?? 0;
+        const itemAggiornato: ProdottoAlcolico = {
+          ...prodottoEsistente,
+          quantità: quantitaAttuale + quantita
+        };
+
+        operazioneCarrello$ = this.carrelloService.updateProdottoAlcolico(itemAggiornato);
+
+      } else {
+        const body: Omit<ProdottoAlcolico, 'id'> = {
+          id_carrello: idCarrello,
+          id_alcolico: idAlcolico,
+          id_cantina: idCantina,
+          quantità: quantita
+        };
+
+        operazioneCarrello$ = this.carrelloService.createProdAlcolico(body);
+      }
+
+      return operazioneCarrello$.pipe(
+        switchMap(() => this.cantinaService.updateCantinaAlcolico({
+          id: alcolicoCantina.id,
+          quantita: alcolicoCantina.quantita - quantita,
+          cantinaId: idCantina,
+          alcolicoId: idAlcolico
+        }))
+      );
+    })
   ).subscribe({
     next: () => {
-      this.cantinaService.listAlcolici(body.id_cantina);
+      this.cantinaService.listAlcolici(idCantina);
     },
-    error: (err) => console.error('Errore aggiunta carrello', err)
+    error: (err) => console.error('Errore durante l\'aggiunta al carrello:', err)
   });
 }
   

@@ -26,6 +26,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     '/rest/api/immagine-cantina/getById',
     '/rest/api/immagine-box/getById',
     '/rest/api/immagine-degustazione/getById',
+    '/rest/api/cantina-alcolico/list',
     '/images/'
   ];
 
