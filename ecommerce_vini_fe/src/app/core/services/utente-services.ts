@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Service, signal } from '@angular/core';
-import { first, tap } from 'rxjs';
+import { first, forkJoin, tap } from 'rxjs';
 import { AppSettings } from '../../setting/config-model';
 import { APP_SETTING } from '../../setting/token';
 import { Cliente, User } from '../models/user';
@@ -77,6 +77,7 @@ export class UtenteServices {
             });
     }
 
+
     create(body:{}){
         console.log("trying to create utente: " + body);
         return this.http.post<Text>(this.getBaseUrlUtente() + "create", body)
@@ -108,4 +109,19 @@ export class UtenteServices {
     changePassword(body: {}){
         return this.http.put(this.getBaseUrlUtente() + "user/changePassword", body); //TODO non c'è il controller ancora
     }
+
+    deleteUtente(id: number) {
+    return this.http.delete(this.getBaseUrlUtente() + "delete/" + id)
+        .pipe(tap(() => this.list()));
+}
+
+ deleteCliente(id: number) {
+    return this.http.delete(this.getBaseUrlCliente() + "delete/" + id)
+        .pipe(tap(() => this.list()));
+}
+
+ deleteVenditore(id: number) {
+    return this.http.delete(this.getBaseUrlVenditore() + "delete/" + id)
+        .pipe(tap(() => this.list()));
+}
 }

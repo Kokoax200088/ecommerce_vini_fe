@@ -16,7 +16,6 @@ export interface TableColumn {
 export class TableGeneric {
   @Input() columns: TableColumn[] = [];
   @Input() data: any[] = [];
-  @Input() titolo: string = '';
 
   @ContentChild('actionsTpl') actionsTpl?: TemplateRef<any>;
 

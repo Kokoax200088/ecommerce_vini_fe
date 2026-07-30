@@ -3,6 +3,7 @@ import { UtenteServices } from '../../../core/services/utente-services';
 import { TableColumn, TableGeneric } from '../../../components/table-column/table-column';
 import { MatIcon } from "@angular/material/icon";
 import { SearchBar } from "../../../components/search-bar/search-bar";
+import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-gestione-venditori',
@@ -24,16 +25,7 @@ export class GestioneVenditori {
   { key: 'nome', label: 'Nome' },
   { key: 'cognome', label: 'Cognome' },
   { key: 'dataNascita', label: 'Data di nascita' },
-  { key: 'email', label: 'Email' },
-  { key: 'indirizzo', label: 'Indirizzo' },
-];
-
-colonneVenditori: TableColumn[] = [
-  { key: 'nome', label: 'Nome' },
-  { key: 'cognome', label: 'Cognome' },
-  { key: 'dataNascita', label: 'Data di nascita' },
-  { key: 'email', label: 'Email' },
-  { key: 'partitaIva', label: 'Partita IVA' },
+  { key: 'ruolo', label: 'Ruolo' },
 ];
 
 
@@ -41,8 +33,28 @@ colonneVenditori: TableColumn[] = [
     this.utenteService.list();
   }
 
-onSearch(query: string): void {
-  this.utenteService.list(query);
+onSearch(nome: string): void {
+  this.utenteService.list(nome);
+}
+
+onDelete(row: any, role: string) {
+  let deleteRoleSpecifico$;
+
+  if (role === 'cliente') {
+    deleteRoleSpecifico$ = this.utenteService.deleteCliente(row.clienteDTO.id);
+  } else if (role === 'venditore') {
+    deleteRoleSpecifico$ = this.utenteService.deleteVenditore(row.venditoreDTO.id);
+  } else {
+     this.utenteService.deleteUtente(row.id);
+     return;
+  }
+
+  deleteRoleSpecifico$.pipe(
+    switchMap(() => this.utenteService.deleteUtente(row.id))
+  ).subscribe({
+    next: () => console.log("utente eliminato correttamente"),
+    error: (err) => console.log("errore durante la cancellazione:", err)
+  });
 }
 
 }

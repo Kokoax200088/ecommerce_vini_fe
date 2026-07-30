@@ -5,27 +5,12 @@
   </div>
 
   <app-table-generic
-    titolo="Utenti"
     [columns]="colonneUtenti"
     [data]="utenti()">
     <ng-template #actionsTpl let-row>
-      <button class="btn btn-sm btn-outline-danger">
+      <button class="btn btn-sm btn-outline-danger" (click)="onDelete(row, row.ruolo)">
         <mat-icon>delete</mat-icon>
       </button>
     </ng-template>
   </app-table-generic>
-
-  <!--
-  <app-table-generic
-    titolo="Venditori"
-    [columns]="colonneVenditori"
-    [data]="venditori()"
-    class="mt-4">
-    <ng-template #actionsTpl let-row>
-      <button class="btn btn-sm btn-outline-danger">
-        <mat-icon>delete</mat-icon>
-      </button>
-    </ng-template>
-  </app-table-generic>
-  -->
 </div>
