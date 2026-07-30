@@ -1,18 +1,27 @@
-@if ((cart?.listaProdotti?.length ?? 0) > 0 || 
-     (cart?.listaBox?.length ?? 0) > 0 || 
-     (cart?.listaDegustazione?.length ?? 0) > 0) {
+@if ((cart()?.listaProdotti?.length ?? 0) > 0 || 
+     (cart()?.listaBox?.length ?? 0) > 0 || 
+     (cart()?.listaDegustazione?.length ?? 0) > 0) {
 
   <div class="container mt-4">
     <div class="row mb-4">
       <div class="col">
-        <h1>Il mio carrello</h1>
-        <app-prodotto-alcolico [listProdottoAlcolico]="cart!.listaProdotti ?? []"></app-prodotto-alcolico>
+        <div class="carrello-header">
+          <h1>Il mio carrello</h1>
+          <span class="badge-quantita">{{ quantitaTotale() }} {{ quantitaTotale() === 1 ? 'articolo' : 'articoli' }}</span>
+        </div>
 
-        <div class="text-center mt-5 mb-4">
-    <button type="button" class="btn-checkout" (click)="procediOrdine()">
-      Procedi con l'ordine
-    </button>
-  </div>
+        <app-prodotto-alcolico [listProdottoAlcolico]="cart()?.listaProdotti ?? []"></app-prodotto-alcolico>
+
+        <div class="riepilogo-prezzo">
+          <span class="riepilogo-label">Totale</span>
+          <span class="riepilogo-prezzo-valore">{{ prezzoTotale() | currency:'EUR' }}</span>
+        </div>
+
+        <div class="text-center mt-4 mb-4">
+          <button type="button" class="btn-checkout" (click)="procediOrdine()">
+            Procedi con l'ordine
+          </button>
+        </div>
       </div>
     </div>
   </div>

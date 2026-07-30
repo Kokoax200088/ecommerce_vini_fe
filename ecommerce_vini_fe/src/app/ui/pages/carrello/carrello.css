@@ -20,3 +20,44 @@
 .btn-checkout:active {
   transform: translateY(0);
 }
+
+.carrello-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.carrello-header h1 {
+  margin: 0;
+}
+
+.badge-quantita {
+  background-color: #6d1b2f;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+}
+
+.riepilogo-prezzo {
+  display: flex;
+  justify-content: flex-end;
+  align-items: baseline;
+  gap: 0.75rem;
+  border-top: 1px solid #e5e5e5;
+  padding-top: 1rem;
+  margin-top: 1.5rem;
+}
+
+.riepilogo-label {
+  font-size: 1rem;
+  color: #555;
+}
+
+.riepilogo-prezzo-valore {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #6d1b2f;
+}

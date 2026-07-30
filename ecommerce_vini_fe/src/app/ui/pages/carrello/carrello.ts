@@ -1,36 +1,51 @@
-import { ChangeDetectorRef, Component, computed, inject } from '@angular/core';
-import { CarrelloModel } from '../../../core/models/carrello';
+import { ChangeDetectorRef, Component, computed, effect, inject } from '@angular/core';
 import { CarrelloService } from '../../../core/services/carrello-services';
 import { UtenteServices } from '../../../core/services/utente-services';
 import { ProdottoAlcolicoComponent } from "../../../components/prodotto-alcolico/prodotto-alcolico";
+import { AuthServices } from '../../../core/services/auth-services';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-carrello',
-  imports: [ProdottoAlcolicoComponent],
+  imports: [ProdottoAlcolicoComponent, CommonModule],
   templateUrl: './carrello.html',
   styleUrl: './carrello.css',
 })
 export class Carrello {
-  cart?: CarrelloModel;
-  private cdr = inject(ChangeDetectorRef); // capire se si può usare anche in sto caso
-  constructor(private cartService: CarrelloService, private utenteService: UtenteServices) {}
+  private cartService = inject(CarrelloService);
+  private utenteService = inject(UtenteServices);
+  private authService = inject(AuthServices);
+
+  loggedUtente = computed(() => this.utenteService.loggedUtente());
+  cart = this.cartService.cart;
+
+ constructor() {
+  effect(() => {
+    const utente = this.utenteService.loggedUtente();
+    if (utente?.idCarrello) {
+      this.cartService.getCartById(utente.idCarrello).subscribe();
+    }
+  });
+}
+
+ngOnInit(): void {
+  const userId = this.authService.grant()?.userId ?? undefined;
+  this.utenteService.findLoggedInfos(userId);
+}
 
   quantitaTotale = computed(() => {
-    if(this.cart != null) {
-    const c = this.cart;
+    const c = this.cart();
     if (!c) return 0;
 
     const qtaAlcolici = c.listaProdotti.reduce((acc, p) => acc + p.quantità, 0);
     const qtaDegustazioni = c.listaDegustazione.reduce((acc, d) => acc + d.quantità, 0);
+    const qtaBox = c.listaDegustazione.reduce((acc, b) => acc + b.quantità, 0);
 
     return qtaAlcolici + qtaDegustazioni;
-    }
-    return 0;
   });
 
   prezzoTotale = computed(() => {
-    if(this.cart != null) {
-    const c = this.cart;
+    const c = this.cart();
     if (!c) return 0;
 
     const prezzoAlcolici = c.listaProdotti.reduce(
@@ -41,21 +56,8 @@ export class Carrello {
     );
 
     return prezzoAlcolici + prezzoDegustazioni;
-  }
-  return 0;
   });
 
-   ngOnInit(): void {
-    this.cartService.getCartById(4).subscribe({
-      next: (resp) => {
-        this.cart = resp;
-      },
-      error: (err) => {
-        console.error('Errore nel caricamento carrello', err);
-      }
-    });
-    
-  }
 
   procediOrdine() {}
 
