@@ -143,5 +143,13 @@
     }
   </div>
   }
+
+@if(auth.grant().isCustomer) {
+  <app-add-rating 
+    [idAlcolico]="alcolico()!.id" 
+    [idCantina]="idCantina()!"
+    (ratingCreated)="reloadRating()">
+  </app-add-rating>
+}
   </div>
 </div>

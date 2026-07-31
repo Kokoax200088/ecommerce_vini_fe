@@ -11,11 +11,13 @@ import { DegustazioniCantina } from "../../../components/degustazioni-cantina/de
 import { BoxCantina } from "../../../components/box-cantina/box-cantina";
 import { ViewRating } from "../../../components/view-rating/view-rating";
 import { AlcolicoNuovo } from "../../../components/alcolico-nuovo/alcolico-nuovo";
+import { AddRatingCantina } from "../../../components/add-rating-cantina/add-rating-cantina";
+import { AuthServices } from '../../../core/services/auth-services';
 
 @Component({
   selector: 'app-cantina-dettaglio',
   standalone: true,
-  imports: [MatIcon, AlcoliciCantina, DegustazioniCantina, BoxCantina, ViewRating, AlcolicoNuovo],
+  imports: [MatIcon, AlcoliciCantina, DegustazioniCantina, BoxCantina, ViewRating, AlcolicoNuovo, AddRatingCantina],
   templateUrl: './cantina-dettaglio.html',
   styleUrl: './cantina-dettaglio.css',
 })
@@ -25,6 +27,8 @@ export class CantinaDettaglio implements OnInit {
   alcolici: any;
   immagineUrl: string = '/image-cantina.png';
   private cdr = inject(ChangeDetectorRef);
+  
+  public readonly auth = inject(AuthServices);
 
   constructor(
     private route: ActivatedRoute,
@@ -62,5 +66,17 @@ export class CantinaDettaglio implements OnInit {
 onImageError(event: Event): void {
   const target = event.target as HTMLImageElement;
   target.src = '/image-cantina.png';
+}
+
+reloadCantina() {
+ this.cantinaService.getById(this.id).subscribe({
+      next: (resp) => {
+        this.cantina = resp;
+        this.caricaImmagine();
+      },
+      error: (err) => {
+        console.error('Errore nel caricamento cantina', err);
+      }
+    });
 }
 }

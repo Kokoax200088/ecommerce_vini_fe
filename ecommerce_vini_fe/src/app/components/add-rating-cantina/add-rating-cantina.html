@@ -1,1 +1,34 @@
-<p>add-rating-cantina works!</p>
+<mat-card class="add-rating-card">
+    <mat-card-title class="card-title">Aggiungi la tua recensione</mat-card-title>
+
+  <form [formGroup]="ratingForm" (ngSubmit)="onSubmit()" class="rating-form">
+    
+    <div class="rating-input-container">
+      <p class="rating-label">La tua valutazione:</p>
+      <div class="stars-row">
+        @for (star of [1, 2, 3, 4, 5]; track star) {
+          <mat-icon 
+            class="star-icon clickable"
+            (click)="setRating(star)"
+            (mouseenter)="setHoveredRating(star)"
+            (mouseleave)="setHoveredRating(0)"
+            >
+            {{ isStarSelected(star) ? 'star' : 'star_border' }}
+          </mat-icon>
+        }
+      </div>
+      <input type="number" formControlName="valutazione" class="hidden-rating-input">
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Descrivi la tua esperienza...</mat-label>
+      <textarea matInput formControlName="commento" rows="4"></textarea>
+    </mat-form-field>
+
+    <div class="action-row">
+      <button mat-raised-button color="primary" type="submit" class="submit-button" [disabled]="ratingForm.invalid">
+        Invia recensione
+      </button>
+    </div>
+  </form>
+</mat-card>

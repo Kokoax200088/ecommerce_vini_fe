@@ -15,7 +15,7 @@ import { ViewRating } from "../../../components/view-rating/view-rating";
 @Component({
   selector: 'app-alcolico-dettaglio',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatIcon, ViewRating],
+  imports: [CommonModule, ReactiveFormsModule, MatIcon, ViewRating, AddRating],
   templateUrl: './alcolico-dettaglio.html',
   styleUrl: './alcolico-dettaglio.css',
 })
@@ -191,6 +191,11 @@ export class AlcolicoDettaglio implements OnInit {
     target.src = '/image-alcolico.png';
   }
 
+
+  reloadRating() {
+  
+        this.caricaAlcolico();
+  }
 
   
 }

@@ -46,5 +46,10 @@
   </div>
   } 
 
+  @if(auth.grant().isCustomer) {
+<app-add-rating-cantina [idCantina]="cantina?.id" (ratingCreated)="reloadCantina()"></app-add-rating-cantina>
+  }
+  
+
 
 </div>

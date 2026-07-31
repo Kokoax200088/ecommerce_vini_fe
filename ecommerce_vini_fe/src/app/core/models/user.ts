@@ -11,6 +11,7 @@ export interface User {
     indirizzo: string;
     partitaIva: string;
     idCarrello: number;
+    clienteDTO: any;
 }
 
 export interface Cliente extends User {
