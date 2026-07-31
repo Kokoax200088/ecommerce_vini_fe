@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, computed, effect, inject } from '@angular/core';
 import { UtenteServices } from '../../../core/services/utente-services';
 import { TableColumn, TableGeneric } from '../../../components/table-column/table-column';
 import { MatIcon } from "@angular/material/icon";
 import { SearchBar } from "../../../components/search-bar/search-bar";
 import { switchMap } from 'rxjs';
+import { AuthServices } from '../../../core/services/auth-services';
 
 @Component({
   selector: 'app-gestione-venditori',
@@ -14,12 +15,16 @@ import { switchMap } from 'rxjs';
 export class GestioneVenditori {
   utenti: any;
 
+  
+  private utenteService = inject(UtenteServices);
+  private authService = inject(AuthServices);
+
+  loggedUtente = computed(() => this.utenteService.loggedUtente());
+
   constructor(
-    private utenteService: UtenteServices,
   ) {
     this.utenti = this.utenteService.listUtente;
   }
-  
 
   colonneUtenti: TableColumn[] = [
   { key: 'nome', label: 'Nome' },
@@ -30,6 +35,8 @@ export class GestioneVenditori {
 
 
   ngOnInit(): void {
+     const userId = this.authService.grant()?.userId ?? undefined;
+  this.utenteService.findLoggedInfos(userId);
     this.utenteService.list();
   }
 
