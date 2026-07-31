@@ -46,4 +46,19 @@ onImageError(event: Event): void {
   vaiAlDettaglio(): void {
     this.router.navigate(['/alcolico', this.alcolico.id]);
   }
+
+    get mediaValutazione(): number {
+  const ratings = this.alcolico.listRatingAlcolico;
+  if (!ratings || ratings.length === 0) {
+    return 0;
+  }
+  const somma = ratings.reduce((acc, r) => acc + r.valutazione, 0);
+  return somma / ratings.length;
+}
+
+get numeroRecensioni(): number {
+  return this.alcolico.listRatingAlcolico?.length ?? 0;
+}
+
+readonly stelle = [1, 2, 3, 4, 5];
 }

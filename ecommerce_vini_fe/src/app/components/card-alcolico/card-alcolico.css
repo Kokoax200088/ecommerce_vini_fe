@@ -23,3 +23,11 @@
   font-size: 1.1rem;
   color: #6E0C18;
 }
+
+
+.star-icon {
+  color: #6E0C18; /* stesso colore del location-icon, per coerenza */
+  font-size: 1.1rem;
+  width: 1.1rem;
+  height: 1.1rem;
+}
