@@ -1,4 +1,4 @@
-import { Component, computed, effect, OnInit, signal } from '@angular/core';
+import { Component, computed, effect, inject, OnInit, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterModule } from "@angular/router";
 import { ReactiveFormsModule } from '@angular/forms';
 import { UtenteServices } from '../../../core/services/utente-services';
@@ -12,6 +12,7 @@ import {  MatDatepickerModule, MatDatepickerToggle, MatDatepicker } from "@angul
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
 import { UtilitiesServices } from '../../../core/services/utilities-services';
+import { NotificationServices } from '../../../core/services/notification-services';
 
 @Component({
   selector: 'app-profile',
@@ -38,6 +39,8 @@ export class Profile implements OnInit {
   email = signal('');
   loggedUtente = computed(() => this.utenteService.loggedUtente()); //sto provando a prendere le info in questo modo
   //cliente = signal<Cliente[]>([]);
+  
+  private notification = inject(NotificationServices);
 
   utenteForm: FormGroup = new FormGroup({
       nome: new FormControl(),
@@ -84,9 +87,13 @@ export class Profile implements OnInit {
     }).subscribe({
       next: ((resp:any) => {
         console.log("response post modifica profilo utente: " + resp);
+        this.utenteForm.clearValidators;
+        this.notification.success("Utente aggiornato correttamente");
+        this.utenteService.findLoggedInfos(this.email());
       }),
       error: ((resp:any) => {
         console.log(resp.error.msg);
+        this.notification.error("Errore aggiornamento");
       })
     })
   }

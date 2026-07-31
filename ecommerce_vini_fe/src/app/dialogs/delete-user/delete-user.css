@@ -3,17 +3,15 @@
   max-width: 440px;
 }
 
-/* Titolo con il colore della tua Sidebar / Intestazione Tabella */
 .dialog-title {
   display: flex;
   align-items: center;
   font-size: 1.25rem !important;
   font-weight: 600;
-  color: #1a0509; /* Bordeaux scuro del tuo tema */
+  color: #1a0509;
   margin-bottom: 0.75rem !important;
 }
 
-/* Icona di avviso rossa */
 .icon-danger {
   color: #dc3545;
 }
@@ -30,14 +28,12 @@
   border-top: 1px solid #f0f0f0;
 }
 
-/* Icona dentro il bottone di conferma */
 .icon-sm {
   font-size: 18px;
   width: 18px;
   height: 18px;
 }
 
-/* Bordi morbidi uguali alla tua tabella/barra di ricerca */
 .btn {
   border-radius: 6px;
   font-weight: 500;
