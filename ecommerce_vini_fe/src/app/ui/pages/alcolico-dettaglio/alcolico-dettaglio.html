@@ -133,7 +133,18 @@
         </form>
       }
     </div>
-
-    <app-view-rating [nomeUtente]="'Gino'" [cogmomeUtente]="'Catalano'" [valutazione]="3" [commento]="'Questo vino è piacevole!'"></app-view-rating>
+    @if ((alcolico()?.listRatingAlcolico?.length ?? 0) > 0) {
+  <div class="ratings-list mt-4">
+    @for (rating of alcolico()?.listRatingAlcolico; track rating.id) {
+      <app-view-rating
+        [idCliente]="rating.id_cliente"
+        [valutazione]="rating.valutazione"
+        [commento]="rating.commento">
+      </app-view-rating>
+    }
+  </div>
+  } @else {
+    <p>Nessuna recensione per questo alcolico.</p>
+  }
   </div>
 </div>

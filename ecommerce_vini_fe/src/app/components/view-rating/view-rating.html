@@ -2,11 +2,11 @@
   <mat-card-header>
     <!-- Avatar con la prima lettera del nome -->
     <div mat-card-avatar class="user-avatar">
-      {{ nomeUtente?.charAt(0) }}
+      {{ cliente()?.utente?.nome?.charAt(0) }}
     </div>
     
     <mat-card-title class="user-name">
-      {{ nomeUtente }} {{ cogmomeUtente }}
+      {{ cliente()?.utente?.nome }} {{ cliente()?.utente?.cognome }}
     </mat-card-title>
     
     <mat-card-subtitle class="rating-stars">

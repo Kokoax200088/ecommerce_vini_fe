@@ -26,4 +26,5 @@ export interface AlcolicoModel {
   prezzo: number;
   immagineUrl: string;
   caratteristiche: Caratteristica[];
+  listRatingAlcolico: any[];
 }

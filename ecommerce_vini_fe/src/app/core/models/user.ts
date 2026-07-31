@@ -15,10 +15,12 @@ export interface User {
 
 export interface Cliente extends User {
     indirizzo: string;
+    utente: any;
 }
 
 export interface Venditore extends User {
     partitaIva: string;
+    utente: any;
 }
 
 export interface UserReq{

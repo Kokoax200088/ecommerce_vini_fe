@@ -80,3 +80,9 @@
   color: #6e0c18;
   font-size: 0.9rem;
 }
+
+.ratings-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}

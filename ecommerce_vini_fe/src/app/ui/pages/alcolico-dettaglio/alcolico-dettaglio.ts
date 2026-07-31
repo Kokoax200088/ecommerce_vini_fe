@@ -185,5 +185,6 @@ export class AlcolicoDettaglio implements OnInit {
     target.src = '/image-alcolico.png';
   }
 
+
   
 }
