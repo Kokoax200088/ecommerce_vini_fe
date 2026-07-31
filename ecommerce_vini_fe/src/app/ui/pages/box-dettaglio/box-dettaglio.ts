@@ -219,7 +219,7 @@ export class BoxDettaglio {
         ).subscribe({
           next: () => {
             this.cantinaService.listAlcolici(idCantina);
-            this.router.navigate(['/box'], this.id);
+            //this.router.navigate(['/box'], this.id);
           },
           error: (err) => console.error('Errore durante l\'aggiunta del box al carrello:', err),
         });
