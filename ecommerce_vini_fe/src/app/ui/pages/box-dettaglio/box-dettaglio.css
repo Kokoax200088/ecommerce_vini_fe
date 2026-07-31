@@ -1,0 +1,109 @@
+.dettaglio-title,
+.summary-header,
+.vino-card {
+  text-align: right;
+}
+
+.back-link {
+  color: #6e0c18;
+}
+
+.back-icon {
+  font-size: 1.2rem;
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.dettaglio-title {
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.summary-title {
+  font-size: 1.05rem;
+}
+
+.summary-subtitle {
+  margin-top: 2px;
+}
+
+.vino-card {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.vino-name {
+  font-size: 1.05rem;
+}
+
+.vino-price {
+  color: #b5121b;
+  white-space: nowrap;
+}
+
+.vino-description-label {
+  margin-bottom: 0.25rem;
+}
+
+.vino-description-text {
+  line-height: 1.35;
+}
+
+.dettaglio-img-container {
+  width: 100%;
+  height: 340px;
+  border-radius: 16px;
+  overflow: hidden;
+  background-color: #f8f9fa;
+}
+
+.dettaglio-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.totals {
+  margin-top: 1rem;
+}
+
+.totals-row {
+  margin-bottom: 0.35rem;
+}
+
+.totals-label {
+  color: #6c757d;
+}
+
+.totals-value {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.totals-separator {
+  height: 1px;
+  background: rgba(0, 0, 0, 0.12);
+  margin: 0.75rem 0;
+}
+
+.totals-grand .totals-label {
+  color: #000;
+}
+
+.totals-grand .totals-value {
+  font-size: 1.15rem;
+}
+
+.stock-status {
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.stock-available {
+  color: #198754;
+}
+
+.stock-out {
+  color: #dc3545;
+}

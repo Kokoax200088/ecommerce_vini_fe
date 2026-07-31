@@ -15,4 +15,6 @@ export interface BoxAlcolico{
     idBox: number; //or should I put a reference to the box?
     alcolico: AlcolicoModel;
     quantita: number; 
+    available: boolean;
+    numberAvailable: number;
 }
