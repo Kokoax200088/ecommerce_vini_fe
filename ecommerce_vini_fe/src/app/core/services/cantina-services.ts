@@ -1,7 +1,7 @@
 import { inject, Service, signal } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { tap } from 'rxjs';
-import { Cantina, CantinaALcolico } from '../models/cantina';
+import { Cantina, CantinaALcolico, CantinaDegustazione } from '../models/cantina';
 import { AppSettings } from '../../setting/config-model';
 import { APP_SETTING } from '../../setting/token';
 import { AlcolicoModel } from '../models/alcolico';
@@ -10,6 +10,7 @@ export class CantinaServices {
     private readonly http = inject(HttpClient);
     cantine = signal<Cantina[]>([]);
     alcolici = signal<CantinaALcolico[]>([]);
+    degustazioni = signal<CantinaDegustazione[]>([]);
     private readonly settings: AppSettings = inject(APP_SETTING);
 
     baseUrl: string = this.settings.apiUrl;
@@ -52,6 +53,21 @@ export class CantinaServices {
     listCantinaAlcolicoByAlcolico(idAlcolico: number) {
         let params = new HttpParams().set('idAlcolico', idAlcolico);
         return this.http.get<CantinaALcolico[]>(this.baseUrl + "/cantina-alcolico/list", { params });
+    }
+
+    listDegustazioni(idCantina?: number) {
+        let params = new HttpParams();
+        if (idCantina) params = params.set('id_cantina', idCantina);
+
+        this.http.get<CantinaDegustazione[]>(this.baseUrl + "/degustazione/list", { params })
+            .subscribe({
+                next: (resp) => {
+                     this.degustazioni.set(resp);
+                },
+                error: (err) => {
+                    console.error('Errore nel caricamento degustazioni', err);
+                }
+            });
     }
 
      updateCantinaAlcolico(body: {}) {

@@ -97,7 +97,7 @@ export class TokenServices {
         return of(false);
     }
 
-    // Se non abbiamo neanche un token salvato non facciamo il refresh
+    // Se non abbiamo un token salvato non facciamo il refresh
     const currentToken = this.authServices.grant().token || localStorage.getItem('token');
     if (!currentToken) {
         console.log("Nessun token presente, utente anonimo.");

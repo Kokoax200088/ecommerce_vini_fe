@@ -27,8 +27,8 @@
   width: 100%;
 }
 
-/* Badge Prezzo Elegante  */
-.badge-prezzo {
+/* Badge Quantità Elegante */
+.badge-quantita {
   position: absolute;
   top: 10px;
   right: 10px;
@@ -52,8 +52,44 @@
   pointer-events: none;
 }
 
-/* Card degustazione */
-.card-degustazione {
-  border: 1px solid rgba(128, 0, 32, 0.15);
-  border-radius: 0.75rem;
+.quantity-picker-custom {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8f9fa;
+  border: 1px solid #e0e0e0;
+  border-radius: 25px;
+  padding: 4px 8px;
+  width: fit-content;
+  margin: 0 auto;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.btn-qty {
+  border: none;
+  background-color: transparent;
+  color: #2b0b13;
+  font-weight: bold;
+  font-size: 1.1rem;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.btn-qty:hover {
+  background-color: #2b0b13;
+  color: #ffffff;
+}
+
+.qty-number {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #2b0b13;
+  min-width: 30px;
+  text-align: center;
 }

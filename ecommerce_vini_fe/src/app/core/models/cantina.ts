@@ -16,6 +16,16 @@ export interface CantinaRating {
     valutazione: number;
 }
 
+export interface CantinaDegustazione{
+    id: number;
+    nome: string;
+    descrizione: string;
+    prezzo: number;
+    dataInizio: Date;
+    dataFine: Date;
+    idCantina: number;
+    listAlcolici: AlcolicoModel[];
+}
 
 export interface Cantina {
     id: number;

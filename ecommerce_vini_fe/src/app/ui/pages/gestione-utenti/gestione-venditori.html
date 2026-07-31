@@ -8,9 +8,11 @@
     [columns]="colonneUtenti"
     [data]="utenti()">
     <ng-template #actionsTpl let-row>
+      @if(!isCurrentUser(row.id)){
       <button class="btn btn-sm btn-outline-danger" (click)="onDelete(row, row.ruolo)">
         <mat-icon>delete</mat-icon>
       </button>
+    }
     </ng-template>
   </app-table-generic>
 </div>

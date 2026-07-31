@@ -34,17 +34,17 @@ export class OrdiniServices {
     }
 
     create(body: {}) {
-        return this.http.post("/rest/api/ordine/create", body)
+        return this.http.post(this.baseUrl + "/ordine/create", body)
         .pipe(tap(() => this.list()))
         }
     
     update(body: {}) {
-        return this.http.patch("/rest/api/ordine/update", body)
+        return this.http.patch(this.baseUrl +"/ordine/update", body)
         .pipe(tap(() => this.list()))
     }
     
     delete(id: number) {
-        return this.http.delete("/rest/api/ordine/delete/" + id)
+        return this.http.delete(this.baseUrl +"/ordine/delete/" + id)
         .pipe(tap(() => this.list()))
     }
 }

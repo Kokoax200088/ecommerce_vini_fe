@@ -1,4 +1,4 @@
-import { Component, signal, ViewChild } from '@angular/core';
+import { Component, inject, signal, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, NgForm, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import {MatSelectModule} from '@angular/material/select';
@@ -12,6 +12,7 @@ import { User } from '../../../core/models/user';
 import { UtenteServices } from '../../../core/services/utente-services';
 import { UtilitiesServices } from '../../../core/services/utilities-services';
 import { MatIcon } from '@angular/material/icon';
+import { NotificationServices } from '../../../core/services/notification-services';
 
 @Component({
   selector: 'app-registration',
@@ -23,6 +24,8 @@ export class Registration {
   // initialize signal with null to satisfy expected arguments
   account = signal<User | null>(null);
   msg = signal('');
+
+  private notification = inject(NotificationServices);
   //@ViewChild('registrationForm') registrationForm!: NgForm;
 
   utenteForm: FormGroup = new FormGroup({
@@ -70,6 +73,9 @@ export class Registration {
       }).subscribe({
         next: ((resp:any) => {
           console.log("QUESTA E' LA RESP: " + resp);
+          this.utenteForm.clearValidators;
+          this.notification.success("Creato Account cliente");
+          this.routing.navigate(['/login']);
         }),
         error: ((resp:any) => {
           console.log(resp.error.msg);
@@ -94,6 +100,9 @@ export class Registration {
       }).subscribe({
         next: ((resp:any) => {
           console.log("QUESTA E' LA RESP: " + resp);
+          this.utenteForm.clearValidators;
+          this.notification.success("Creato Account venditore");
+          this.routing.navigate(['/login']);
         }),
         error: ((resp:any) => {
           console.log(resp.error.msg);

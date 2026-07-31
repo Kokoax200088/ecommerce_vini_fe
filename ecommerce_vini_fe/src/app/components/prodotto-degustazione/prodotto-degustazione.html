@@ -1,0 +1,42 @@
+<div class="mt-4">
+  <h3 class="section-title-underlined">Degustazioni</h3>
+
+  <div class="mt-4 row g-3">
+    @for (prodottoDegustazione of listProdottoDegustazione; track prodottoDegustazione.id) {
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="card-badge-wrapper">
+
+          <div class="badge-quantita">
+            x{{ prodottoDegustazione['quantità'] }}
+          </div>
+
+          <app-card-degustazione [degustazione]="prodottoDegustazione.degustazione"></app-card-degustazione>
+          <div class="card p-3 h-100">
+            <h5 class="mb-1">{{ prodottoDegustazione.degustazione.nome }}</h5>
+            <p class="mb-1 text-muted small">
+              {{ prodottoDegustazione.degustazione.dataInizio | date:'dd/MM/yyyy HH:mm' }}
+            </p>
+            <p class="mb-0 fw-semibold">
+              {{ prodottoDegustazione.degustazione.prezzo | currency:'EUR' }}
+            </p>
+          </div>
+
+          <div class="quantity-picker-custom mt-3">
+            <button
+              type="button"
+              class="btn-qty"
+              (click)="diminuisciQuantita(prodottoDegustazione)"
+            >
+              -
+            </button>
+
+            <span class="qty-number">
+              {{ prodottoDegustazione['quantità'] }}
+            </span>
+          </div>
+
+        </div>
+      </div>
+    }
+  </div>
+</div>

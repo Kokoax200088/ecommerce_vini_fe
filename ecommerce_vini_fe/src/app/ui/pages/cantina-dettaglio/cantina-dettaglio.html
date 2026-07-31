@@ -29,7 +29,7 @@
     <app-box-cantina [idCantina]="cantina?.id"></app-box-cantina>
     }
     @if(cantina?.listDegustazione && cantina?.listDegustazione.length > 0) {
-    <app-degustazioni-cantina></app-degustazioni-cantina>
+    <app-degustazioni-cantina [idCantina] = "cantina?.id"></app-degustazioni-cantina>
     }
 
 

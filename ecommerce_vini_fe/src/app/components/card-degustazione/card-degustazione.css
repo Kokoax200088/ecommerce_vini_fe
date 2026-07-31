@@ -1,0 +1,33 @@
+.degustazione-card {
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+  }
+}
+
+.degustazione-img {
+  height: 200px;
+  object-fit: contain;
+  width: 100%;
+  background-color: #f8f9fa;
+  padding: 1rem;
+}
+
+.degustazione-descrizione {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-group, .row-cols-1 .col {
+  display: flex;
+}
+
+.prezzo {
+  font-size: 1.1rem;
+  color: #6E0C18;
+}

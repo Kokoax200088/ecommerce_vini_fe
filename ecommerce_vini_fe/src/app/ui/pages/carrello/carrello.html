@@ -12,6 +12,8 @@
 
         <app-prodotto-alcolico [listProdottoAlcolico]="cart()?.listaProdotti ?? []" [idCart]="cart()!.id"></app-prodotto-alcolico>
 
+        <app-prodotto-degustazione [listProdottoDegustazione]="cart()?.listaDegustazione ?? []" [idCart]="cart()!.id"></app-prodotto-degustazione>
+        
         <div class="riepilogo-prezzo">
           <span class="riepilogo-label">Totale</span>
           <span class="riepilogo-prezzo-valore">{{ prezzoTotale() | currency:'EUR' }}</span>

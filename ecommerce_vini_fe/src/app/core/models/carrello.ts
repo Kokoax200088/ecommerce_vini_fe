@@ -10,9 +10,9 @@ export interface ProdottoAlcolico {
 
 export interface ProdottoDegustazione {
     id: number;
-    idCarrello: number;
-    degustazione: any;
-    idCantina: number;
+    id_carrello: number;
+    id_degustazione: any;
+    id_cantina: number;
     quantità: number;
 }
 
