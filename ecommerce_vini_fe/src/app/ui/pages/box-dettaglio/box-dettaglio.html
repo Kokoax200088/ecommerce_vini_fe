@@ -1,0 +1,91 @@
+<div>
+  <div class="container mt-4">
+    <!--<a
+      routerLink="/"
+      class="back-link d-inline-flex align-items-center gap-1 mb-3 text-decoration-none"
+    >
+      <span class="back-text">Torna al catalogo</span>
+      <mat-icon class="back-icon">arrow_back</mat-icon>
+    </a>-->
+
+    <div class="row g-4 justify-content-end">
+      <div class="col-12 col-md-5 text-end dettaglio-summary">
+        <h1 class="dettaglio-title fw-bold">{{ box()?.nome }}</h1>
+
+        <div class="summary-header mb-3">
+          <div class="summary-title fw-semibold">Lista vini</div>
+          <div class="summary-subtitle text-body-secondary small">
+            Riepilogo dei componenti del box
+          </div>
+        </div>
+
+        @for (alcolico of listBoxAlcolico(); track alcolico.id) {
+          <div class="vino-card mb-3 shadow-sm rounded-3 p-3">
+            <div class="vino-row d-flex justify-content-between align-items-start gap-3">
+              <div class="vino-left text-start">
+                <div class="vino-name fw-semibold">{{ alcolico.alcolico.nome }}</div>
+                <div class="vino-meta small text-body-secondary">
+                  Quantità: <span class="fw-bold">{{ alcolico.quantita }} ~ </span>
+
+                 @if (alcolico.numberAvailable>0) {
+                    <span class="stock-status stock-available ms-2"> Disponibile</span>
+                  }@else {
+                    <span class="stock-status stock-out ms-2">Non disponibile</span>
+                  }
+                  </div>
+            </div>
+
+              <div class="vino-right text-start">
+                <div class="vino-price fw-bold">
+                  {{ alcolico.alcolico.prezzo }} €<span class="fw-normal">/cad.</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="vino-description mt-2 text-start">
+              <div class="vino-description-label small text-body-secondary">Descrizione</div>
+              <p class="vino-description-text mb-0">{{ alcolico.alcolico.descrizione }}</p>
+            </div>
+          </div>
+        }
+
+        <div class="totals mt-4">
+  <div class="totals-row d-flex justify-content-between">
+    <span class="totals-label">Subtotale</span>
+    <span class="totals-value">{{subtotal}} €</span>
+  </div>
+
+  <div class="totals-row d-flex justify-content-between">
+    <span class="totals-label">Sconto</span>
+    <span class="totals-value">{{ box()?.sconto ?? 0 }} %</span>
+  </div>
+
+  <div class="totals-separator"></div>
+
+  <div class="totals-row d-flex justify-content-between totals-grand">
+    <span class="totals-label">Totale</span>
+    <span class="totals-value">{{ total }} €</span>
+  </div>
+</div>
+      </div>
+
+      <div class="col-12 col-md-5">
+        <div class="dettaglio-img-container shadow-sm">
+          <img
+            [src]="immagineUrl()"
+            (error)="onImageError($event)"
+            class="dettaglio-img"
+            [alt]="box()?.nome"
+          />
+        </div>
+        @if (auth.grant().isCustomer){
+         <app-quantita-selector
+              [quantitaMassima]="maxBuyNumber"
+              (aggiungiCarrello)="onAggiungiCarrello(box, $event)">
+            </app-quantita-selector>
+        }
+
+      </div>
+    </div>
+  </div>
+</div>

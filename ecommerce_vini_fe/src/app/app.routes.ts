@@ -33,6 +33,10 @@ export const routes: Routes = [
     loadComponent: () => import('./ui/pages/alcolico-dettaglio/alcolico-dettaglio').then((m) => m.AlcolicoDettaglio),
   },
   {
+    path: 'box/:id',
+    loadComponent: () => import('./ui/pages/box-dettaglio/box-dettaglio').then((m) => m.BoxDettaglio),
+  },
+  {
     path: 'gestione-ordine',
     loadComponent: () => import('./ui/pages/gestione-ordine/gestione-ordine').then((m) => m.GestioneOrdine),
   },
