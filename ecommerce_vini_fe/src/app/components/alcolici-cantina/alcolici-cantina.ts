@@ -9,10 +9,12 @@ import { UtenteServices } from '../../core/services/utente-services';
 import { AuthServices } from '../../core/services/auth-services';
 import { switchMap } from 'rxjs';
 import { NotificationServices } from '../../core/services/notification-services';
+import { AlcolicoElimina } from "../alcolico-elimina/alcolico-elimina";
+import { AlcolicoImmagine } from "../alcolico-immagine/alcolico-immagine";
 
 @Component({
   selector: 'app-alcolici-cantina',
-  imports: [CardAlcolico, QuantitaSelector],
+  imports: [CardAlcolico, QuantitaSelector, AlcolicoElimina, AlcolicoImmagine],
   templateUrl: './alcolici-cantina.html',
   styleUrl: './alcolici-cantina.css',
 })

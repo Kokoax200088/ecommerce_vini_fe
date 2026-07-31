@@ -9,11 +9,12 @@ import { AlcolicoServices } from '../../../core/services/alcolico-services';
 import { AlcoliciCantina } from '../../../components/alcolici-cantina/alcolici-cantina';
 import { DegustazioniCantina } from "../../../components/degustazioni-cantina/degustazioni-cantina";
 import { BoxCantina } from "../../../components/box-cantina/box-cantina";
+import { AlcolicoNuovo } from "../../../components/alcolico-nuovo/alcolico-nuovo";
 
 @Component({
   selector: 'app-cantina-dettaglio',
   standalone: true,
-  imports: [MatIcon, AlcoliciCantina, DegustazioniCantina, BoxCantina],
+  imports: [MatIcon, AlcoliciCantina, DegustazioniCantina, BoxCantina, AlcolicoNuovo],
   templateUrl: './cantina-dettaglio.html',
   styleUrl: './cantina-dettaglio.css',
 })

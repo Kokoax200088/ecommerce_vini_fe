@@ -1,0 +1,87 @@
+<h2 mat-dialog-title>Nuovo alcolico</h2>
+
+<mat-dialog-content>
+  @if (msg()) {
+    <p class="messaggio-dialog">{{ msg() }}</p>
+  }
+
+  <form [formGroup]="form" class="row g-2">
+    <div class="col-12 col-md-6">
+      <mat-form-field appearance="outline" class="campo-pieno">
+        <mat-label>Nome</mat-label>
+        <input matInput formControlName="nome">
+      </mat-form-field>
+    </div>
+
+    <div class="col-6 col-md-3">
+      <mat-form-field appearance="outline" class="campo-pieno">
+        <mat-label>Prezzo (€)</mat-label>
+        <input matInput type="number" step="0.01" formControlName="prezzo">
+      </mat-form-field>
+    </div>
+
+    <div class="col-6 col-md-3">
+      <mat-form-field appearance="outline" class="campo-pieno">
+        <mat-label>Quantità</mat-label>
+        <input matInput type="number" min="0" formControlName="quantita">
+      </mat-form-field>
+    </div>
+
+    <div class="col-6 col-md-3">
+      <mat-form-field appearance="outline" class="campo-pieno">
+        <mat-label>Annata</mat-label>
+        <input matInput type="number" formControlName="annata">
+      </mat-form-field>
+    </div>
+
+    <div class="col-6 col-md-3">
+      <mat-form-field appearance="outline" class="campo-pieno">
+        <mat-label>Gradazione (%)</mat-label>
+        <input matInput type="number" formControlName="gradazione">
+      </mat-form-field>
+    </div>
+
+    <div class="col-12 col-md-3">
+      <mat-form-field appearance="outline" class="campo-pieno">
+        <mat-label>Tipologia</mat-label>
+        <mat-select formControlName="idTipologia">
+          @for (t of tipologie(); track t.id) {
+            <mat-option [value]="t.id">{{ t.nome }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="col-12 col-md-3">
+      <mat-form-field appearance="outline" class="campo-pieno">
+        <mat-label>Colore</mat-label>
+        <mat-select formControlName="idColore">
+          @for (c of colori(); track c.id) {
+            <mat-option [value]="c.id">{{ c.nome }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="col-12">
+      <mat-form-field appearance="outline" class="campo-pieno">
+        <mat-label>Provenienza</mat-label>
+        <input matInput formControlName="provenienza">
+      </mat-form-field>
+    </div>
+
+    <div class="col-12">
+      <mat-form-field appearance="outline" class="campo-pieno">
+        <mat-label>Descrizione</mat-label>
+        <textarea matInput rows="3" formControlName="descrizione"></textarea>
+      </mat-form-field>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="chiudi(false)">Annulla</button>
+  <button mat-flat-button type="button" class="bottone-crea" [disabled]="salvataggioInCorso()" (click)="salva()">
+    Crea
+  </button>
+</mat-dialog-actions>

@@ -22,14 +22,12 @@
   color: #b5121b;
 }
 
-.link-catalogo {
+.bottone-indietro {
   color: #6e0c18;
 }
 
-.icona-indietro {
-  font-size: 1.2rem;
-  width: 1.2rem;
-  height: 1.2rem;
+.bottone-indietro:hover {
+  background-color: #f7e9ea;
 }
 
 .badge-caratteristica {

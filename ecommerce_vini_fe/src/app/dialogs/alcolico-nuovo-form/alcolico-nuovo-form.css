@@ -1,0 +1,13 @@
+.campo-pieno {
+  width: 100%;
+}
+
+.messaggio-dialog {
+  color: #6e0c18;
+  font-size: 0.9rem;
+}
+
+.bottone-crea {
+  background-color: #6e0c18;
+  color: #ffffff;
+}

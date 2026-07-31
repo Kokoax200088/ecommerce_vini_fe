@@ -1,7 +1,8 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { AppSettings } from '../../setting/config-model';
 import { APP_SETTING } from '../../setting/token';
 import { HttpClient } from '@angular/common/http';
+import { tap } from 'rxjs';
 
 export interface ImmagineModel {
     id: number;
@@ -12,6 +13,7 @@ export interface ImmagineModel {
 export class UploadImageService {
     private readonly settings: AppSettings = inject(APP_SETTING);
     private readonly http = inject(HttpClient);
+    readonly versione = signal(0);
 
     private baseUrlFor(entity: string): string {
         return this.settings.apiUrl + `/immagine-${entity}/`;
@@ -21,7 +23,8 @@ export class UploadImageService {
         const formData = new FormData();
         formData.append('file', file);
         formData.append(idParamName, idValue.toString());
-        return this.http.post(this.baseUrlFor(entity) + "create", formData);
+        return this.http.post(this.baseUrlFor(entity) + "create", formData)
+            .pipe(tap(() => this.versione.update(versione => versione + 1)));
     }
 
     update<T>(entity: string, req: T) {
@@ -29,7 +32,8 @@ export class UploadImageService {
     }
 
     delete(entity: string, id: number) {
-        return this.http.delete(this.baseUrlFor(entity) + "delete/" + id);
+        return this.http.delete(this.baseUrlFor(entity) + "delete/" + id)
+            .pipe(tap(() => this.versione.update(versione => versione + 1)));
     }
 
     list<T>(entity: string, idParamName: string, idValue: number) {

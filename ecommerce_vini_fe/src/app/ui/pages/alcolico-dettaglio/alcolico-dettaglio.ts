@@ -1,8 +1,9 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
+import { CommonModule, Location } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatIcon } from '@angular/material/icon';
+import { MatIconButton } from '@angular/material/button';
 import { AlcolicoModel } from '../../../core/models/alcolico';
 import { AlcolicoServices } from '../../../core/services/alcolico-services';
 import { CantinaServices } from '../../../core/services/cantina-services';
@@ -12,7 +13,7 @@ import { AuthServices } from '../../../core/services/auth-services';
 @Component({
   selector: 'app-alcolico-dettaglio',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, MatIcon],
+  imports: [CommonModule, ReactiveFormsModule, MatIcon, MatIconButton],
   templateUrl: './alcolico-dettaglio.html',
   styleUrl: './alcolico-dettaglio.css',
 })
@@ -47,10 +48,15 @@ export class AlcolicoDettaglio implements OnInit {
     private route: ActivatedRoute,
     private alcolicoService: AlcolicoServices,
     private cantinaService: CantinaServices,
-    private uploadImageAlcolicoService: UploadImageService
+    private uploadImageAlcolicoService: UploadImageService,
+    private location: Location
   ) {
     this.tipologie = this.alcolicoService.tipologie;
     this.colori = this.alcolicoService.colori;
+  }
+
+  tornaIndietro(): void {
+    this.location.back();
   }
 
   ngOnInit(): void {
@@ -74,7 +80,7 @@ export class AlcolicoDettaglio implements OnInit {
   }
 
   caricaGiacenza(): void {
-    this.cantinaService.listCantinaAlcolicoByAlcolico(this.id).subscribe({
+    this.cantinaService.getCantinaAlcolicoByFilter(undefined, this.id).subscribe({
       next: (resp) => {
         const riga = resp?.[0];
         this.idCantinaAlcolico.set(riga?.id);
