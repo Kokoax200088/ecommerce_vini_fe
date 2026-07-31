@@ -42,7 +42,6 @@ export class CantinaDettaglio implements OnInit {
         console.error('Errore nel caricamento cantina', err);
       }
     });
-    
   }
 
   caricaImmagine(): void {

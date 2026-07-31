@@ -78,10 +78,10 @@
             [alt]="box()?.nome"
           />
         </div>
-        @if (auth.grant().isCustomer){
+        @if (authService.grant().isCustomer){
          <app-quantita-selector
               [quantitaMassima]="maxBuyNumber"
-              (aggiungiCarrello)="onAggiungiCarrello(box, $event)">
+              (aggiungiCarrello)="onAggiungiCarrello(box()!, $event)">
             </app-quantita-selector>
         }
 

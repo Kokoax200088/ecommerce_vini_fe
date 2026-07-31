@@ -24,6 +24,14 @@ export interface ProdottoBox {
     quantità: number;
 }
 
+export interface ProdottoBoxRequest{
+    id: number;
+    id_carrello: number;
+    id_box: number;
+    id_cantina: number;
+    quantità: number;
+}
+
 export interface CarrelloModel {
 id: number;
 idCliente: number;

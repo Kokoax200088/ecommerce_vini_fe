@@ -11,7 +11,7 @@ import { UtenteServices } from '../../core/services/utente-services';
 
 @Component({
   selector: 'app-box-cantina',
-  imports: [CardBox, AsyncPipe, QuantitaSelector],
+  imports: [CardBox, AsyncPipe],
   templateUrl: './box-cantina.html',
   styleUrl: './box-cantina.css',
 })

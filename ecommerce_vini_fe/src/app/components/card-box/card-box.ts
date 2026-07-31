@@ -11,6 +11,7 @@ import { UploadImageService } from '../../core/services/uploadImage';
 })
 export class CardBox {
   @Input() box!: Box;
+  @Input() idCantina!: number;
   immagineUrl:any;
   private cdr = inject(ChangeDetectorRef); // COPIED per quando ho le img forzo angular: ho dei componenti cambiati
 
@@ -21,6 +22,7 @@ export class CardBox {
 
   ngOnInit(): void {
     this.caricaImmagine();
+    console.log("ID CANTINA PER FAVORE="+this.idCantina);
   }
 
   caricaImmagine(): void {
@@ -43,6 +45,8 @@ export class CardBox {
   }
 
   clickDetail(): void {
-    this.router.navigate( ['/box', this.box.id]);
+    this.router.navigate(['/box', this.box.id], {
+      queryParams: { idCantina: this.idCantina }
+    });
   }
 }
