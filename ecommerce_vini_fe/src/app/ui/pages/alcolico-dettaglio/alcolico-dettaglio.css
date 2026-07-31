@@ -39,3 +39,44 @@
   padding: 0.25rem 0.75rem;
   border-radius: 20px;
 }
+
+.bottone-modifica {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background-color: #6e0c18;
+  border-color: #6e0c18;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+.bottone-modifica:hover {
+  background-color: #58090f;
+  border-color: #58090f;
+  color: #ffffff;
+}
+
+.icona-modifica {
+  font-size: 1.1rem;
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.bottone-salva {
+  background-color: #6e0c18;
+  border-color: #6e0c18;
+  color: #ffffff;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.bottone-salva:hover {
+  background-color: #58090f;
+  border-color: #58090f;
+  color: #ffffff;
+}
+
+.messaggio-salvataggio {
+  color: #6e0c18;
+  font-size: 0.9rem;
+}

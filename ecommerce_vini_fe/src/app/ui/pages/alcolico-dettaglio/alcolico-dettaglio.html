@@ -16,44 +16,121 @@
     </div>
 
     <div class="col-12 col-md-7">
-      <h1 class="fw-bold mb-1 dettaglio-nome">{{ alcolico()?.nome }}</h1>
+      @if (msg()) {
+        <p class="messaggio-salvataggio">{{ msg() }}</p>
+      }
 
-      <p class="text-muted mb-3">
-        {{ alcolico()?.tipologiaAlcolico?.nome }} · {{ alcolico()?.colore?.nome }} · {{ alcolico()?.gradazione }}% vol
-      </p>
-
-      <p class="fw-bold mb-3 dettaglio-prezzo">{{ alcolico()?.prezzo | currency:'EUR' }}</p>
-
-      <p class="mb-4">{{ alcolico()?.descrizione }}</p>
-
-      <div class="border-top pt-3">
-        <div class="d-flex justify-content-between py-1">
-          <span class="text-muted">Annata</span>
-          <span>{{ alcolico()?.annata }}</span>
+      @if (!inModifica()) {
+        <div class="d-flex justify-content-between align-items-start">
+          <h1 class="fw-bold mb-1 dettaglio-nome">{{ alcolico()?.nome }}</h1>
+          @if (auth.grant().isSeller) {
+            <button type="button" class="btn btn-sm bottone-modifica" (click)="apriModifica()">
+              <mat-icon class="icona-modifica">edit</mat-icon>
+              Modifica
+            </button>
+          }
         </div>
-        <div class="d-flex justify-content-between py-1">
-          <span class="text-muted">Provenienza</span>
-          <span>{{ alcolico()?.provenienza }}</span>
-        </div>
-        <div class="d-flex justify-content-between py-1">
-          <span class="text-muted">Gradazione</span>
-          <span>{{ alcolico()?.gradazione }}% vol</span>
-        </div>
-        <div class="d-flex justify-content-between py-1">
-          <span class="text-muted">Tipologia</span>
-          <span>{{ alcolico()?.tipologiaAlcolico?.nome }}</span>
-        </div>
-      </div>
 
-      @if (alcolico()?.caratteristiche?.length) {
-        <div class="mt-4">
-          <p class="text-muted mb-2">Caratteristiche</p>
-          <div class="d-flex flex-wrap gap-2">
-            @for (caratteristica of alcolico()?.caratteristiche; track caratteristica.id) {
-              <span class="badge-caratteristica">{{ caratteristica.nome }}</span>
+        <p class="text-muted mb-3">
+          {{ alcolico()?.tipologiaAlcolico?.nome }} · {{ alcolico()?.colore?.nome }} · {{ alcolico()?.gradazione }}% vol
+        </p>
+
+        <p class="fw-bold mb-3 dettaglio-prezzo">{{ alcolico()?.prezzo | currency:'EUR' }}</p>
+
+        <p class="mb-4">{{ alcolico()?.descrizione }}</p>
+
+        <div class="border-top pt-3">
+          <div class="d-flex justify-content-between py-1">
+            <span class="text-muted">Annata</span>
+            <span>{{ alcolico()?.annata }}</span>
+          </div>
+          <div class="d-flex justify-content-between py-1">
+            <span class="text-muted">Provenienza</span>
+            <span>{{ alcolico()?.provenienza }}</span>
+          </div>
+          <div class="d-flex justify-content-between py-1">
+            <span class="text-muted">Gradazione</span>
+            <span>{{ alcolico()?.gradazione }}% vol</span>
+          </div>
+          <div class="d-flex justify-content-between py-1">
+            <span class="text-muted">Tipologia</span>
+            <span>{{ alcolico()?.tipologiaAlcolico?.nome }}</span>
+          </div>
+          @if (quantita() != null) {
+            <div class="d-flex justify-content-between py-1">
+              <span class="text-muted">Disponibilità in cantina</span>
+              <span>{{ quantita() }}</span>
+            </div>
+          }
+        </div>
+
+        @if (alcolico()?.caratteristiche?.length) {
+          <div class="mt-4">
+            <p class="text-muted mb-2">Caratteristiche</p>
+            <div class="d-flex flex-wrap gap-2">
+              @for (caratteristica of alcolico()?.caratteristiche; track caratteristica.id) {
+                <span class="badge-caratteristica">{{ caratteristica.nome }}</span>
+              }
+            </div>
+          </div>
+        }
+      } @else {
+        <form [formGroup]="form" (ngSubmit)="salva()">
+          <div class="mb-3">
+            <label class="form-label text-muted">Nome</label>
+            <input type="text" class="form-control" formControlName="nome">
+          </div>
+
+          <div class="row g-3">
+            <div class="col-6 col-md-4">
+              <label class="form-label text-muted">Prezzo (€)</label>
+              <input type="number" step="0.01" class="form-control" formControlName="prezzo">
+            </div>
+            <div class="col-6 col-md-4">
+              <label class="form-label text-muted">Annata</label>
+              <input type="number" class="form-control" formControlName="annata">
+            </div>
+            <div class="col-6 col-md-4">
+              <label class="form-label text-muted">Gradazione (%)</label>
+              <input type="number" class="form-control" formControlName="gradazione">
+            </div>
+            <div class="col-12 col-md-6">
+              <label class="form-label text-muted">Tipologia</label>
+              <select class="form-select" formControlName="idTipologia">
+                @for (t of tipologie(); track t.id) {
+                  <option [value]="t.id">{{ t.nome }}</option>
+                }
+              </select>
+            </div>
+            <div class="col-12 col-md-6">
+              <label class="form-label text-muted">Colore</label>
+              <select class="form-select" formControlName="idColore">
+                @for (c of colori(); track c.id) {
+                  <option [value]="c.id">{{ c.nome }}</option>
+                }
+              </select>
+            </div>
+            <div class="col-12">
+              <label class="form-label text-muted">Provenienza</label>
+              <input type="text" class="form-control" formControlName="provenienza">
+            </div>
+            <div class="col-12">
+              <label class="form-label text-muted">Descrizione</label>
+              <textarea rows="3" class="form-control" formControlName="descrizione"></textarea>
+            </div>
+            @if (idCantinaAlcolico() != null) {
+              <div class="col-6 col-md-4">
+                <label class="form-label text-muted">Quantità in cantina</label>
+                <input type="number" min="0" class="form-control" formControlName="quantita">
+              </div>
             }
           </div>
-        </div>
+
+          <div class="d-flex gap-2 mt-4">
+            <button type="submit" class="btn bottone-salva">Salva</button>
+            <button type="button" class="btn btn-outline-secondary" (click)="annullaModifica()">Annulla</button>
+          </div>
+        </form>
       }
     </div>
   </div>

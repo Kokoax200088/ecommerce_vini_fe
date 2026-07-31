@@ -49,6 +49,11 @@ export class CantinaServices {
             });
     }
 
+    listCantinaAlcolicoByAlcolico(idAlcolico: number) {
+        let params = new HttpParams().set('idAlcolico', idAlcolico);
+        return this.http.get<CantinaALcolico[]>(this.baseUrl + "/cantina-alcolico/list", { params });
+    }
+
      updateCantinaAlcolico(body: {}) {
         return this.http.put<CantinaALcolico>(this.baseUrl + "/cantina-alcolico/update", body)
             .pipe(tap(() => this.list()));
