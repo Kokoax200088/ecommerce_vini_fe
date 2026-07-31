@@ -2,9 +2,9 @@ import { AlcolicoModel } from "./alcolico";
 import { ImmagineCantinaModel } from "./immagineCantina";
 
 export interface CantinaALcolico{
-    alcolico: AlcolicoModel;
     id:number;
     idCantina: number;
+    alcolico: AlcolicoModel;
     quantita: number;
 }
 
