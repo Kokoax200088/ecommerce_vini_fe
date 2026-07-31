@@ -8,6 +8,7 @@ import { CarrelloService } from '../../core/services/carrello-services';
 import { UtenteServices } from '../../core/services/utente-services';
 import { AuthServices } from '../../core/services/auth-services';
 import { switchMap } from 'rxjs';
+import { NotificationServices } from '../../core/services/notification-services';
 
 @Component({
   selector: 'app-alcolici-cantina',
@@ -19,6 +20,7 @@ export class AlcoliciCantina {
   @Input() idCantina!: number;
   listCantinaALcolico: any;
   public readonly auth = inject(AuthServices);
+  public readonly notificationS = inject(NotificationServices);
 
   
   loggedUtente = computed(() => this.utenteService.loggedUtente());
@@ -77,6 +79,7 @@ export class AlcoliciCantina {
   ).subscribe({
     next: () => {
       this.cantinaService.listAlcolici(idCantina);
+      this.notificationS.success("Articolo aggiunto al carrello");
     },
     error: (err) => console.error('Errore durante l\'aggiunta al carrello:', err)
   });
