@@ -64,4 +64,10 @@ onDelete(row: any, role: string) {
   });
 }
 
+isCurrentUser(rowId: number | string): boolean {
+  const loggedId = this.loggedUtente()?.id;
+  if (!loggedId || !rowId) return false;
+  return Number(loggedId) === Number(rowId);
+}
+
 }
