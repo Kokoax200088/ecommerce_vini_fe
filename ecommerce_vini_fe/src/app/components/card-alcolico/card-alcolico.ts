@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, effect, inject, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
@@ -20,16 +20,21 @@ export class CardAlcolico {
   constructor(
     private router: Router,
     private uploadImageAlcolicoService: UploadImageService
-  ) {}
- ngOnInit(): void {
-    this.caricaImmagine();
+  ) {
+    effect(() => {
+      this.uploadImageAlcolicoService.versione();
+      if (this.alcolico) {
+        this.caricaImmagine();
+      }
+    });
   }
 
 caricaImmagine(): void {
-  this.uploadImageAlcolicoService.getById('alcolico', this.alcolico.id).subscribe({
-    next: (immagine: any) => {
+  this.uploadImageAlcolicoService.list<any>('alcolico', 'idAlcolico', this.alcolico.id).subscribe({
+    next: (immagini: any[]) => {
+      const immagine = immagini?.[immagini.length - 1];
       this.immagineUrl = immagine?.url ?? immagine?.path ?? immagine?.nomeFile ?? '/image-alcolico.png';
-      this.cdr.markForCheck(); 
+      this.cdr.markForCheck();
     },
     error: () => {
       this.immagineUrl = '/image-alcolico.png';

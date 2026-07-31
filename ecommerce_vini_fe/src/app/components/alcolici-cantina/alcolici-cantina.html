@@ -17,6 +17,9 @@
             </div>
           }
 
+    <app-alcolico-elimina [cantinaAlcolico]="alcolicoCantina" [idCantina]="idCantina"></app-alcolico-elimina>
+    <app-alcolico-immagine [alcolico]="alcolicoCantina?.alcolico"></app-alcolico-immagine>
+
     <app-card-alcolico [alcolico]="alcolicoCantina?.alcolico"></app-card-alcolico>
 @if(auth.grant().isCustomer && alcolicoCantina?.quantita > 0) {
 <app-quantita-selector

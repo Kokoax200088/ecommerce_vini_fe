@@ -1,0 +1,9 @@
+@if (auth.grant().isSeller) {
+  <button type="button"
+          class="bottone-immagine"
+          title="Cambia immagine"
+          aria-label="Cambia immagine"
+          (click)="apri($event)">
+    <mat-icon class="icona-immagine">photo_camera</mat-icon>
+  </button>
+}

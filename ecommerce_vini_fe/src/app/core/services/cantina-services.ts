@@ -50,9 +50,12 @@ export class CantinaServices {
             });
     }
 
-    listCantinaAlcolicoByAlcolico(idAlcolico: number) {
-        let params = new HttpParams().set('idAlcolico', idAlcolico);
-        return this.http.get<CantinaALcolico[]>(this.baseUrl + "/cantina-alcolico/list", { params });
+    createCantinaAlcolico(body: {}) {
+        return this.http.post(this.baseUrl + "/cantina-alcolico/create", body);
+    }
+
+    deleteCantinaAlcolico(id: number) {
+        return this.http.delete(this.baseUrl + "/cantina-alcolico/delete/" + id);
     }
 
     listDegustazioni(idCantina?: number) {

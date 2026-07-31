@@ -46,6 +46,10 @@ export class UploadImage {
     }
   }
 
+  onAnnulla(): void {
+    this.dialogRef.close(false);
+  }
+
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
 
@@ -57,36 +61,29 @@ export class UploadImage {
 
     this.selectedFile = input.files[0];
     this.fileName = this.selectedFile.name;
+    this.msg.set('');
 
-    this.onUpload();
+    const reader = new FileReader();
+    reader.onload = () => this.imageUrl.set(reader.result as string);
+    reader.readAsDataURL(this.selectedFile);
   }
 
   onUpload() {
-    if (!this.selectedFile) return;
+    if (!this.selectedFile) {
+      this.msg.set('Scegli prima un\'immagine.');
+      return;
+    }
 
     this.uploadServices.create(this.entity, this.selectedFile, this.idParamName, this.itemId)
       .subscribe({
         next: () => {
-          // create non restituisce la url, quindi ricarichiamo la lista immagini
-          this.uploadServices.list<any>(this.entity, this.paramNameToQueryKey(), this.itemId)
-            .subscribe({
-              next: (list: any[]) => {
-                const ultima = list[list.length - 1];
-                if (ultima) this.imageUrl.set(ultima.url);
-              },
-              error: (r: any) => this.msg.set(r.error?.msg ?? 'Errore nel recupero immagine')
-            });
+          this.dialogRef.close(true);
         },
         error: (r: any) => {
           console.log(r.error?.msg);
           this.msg.set(r.error?.msg ?? 'Errore upload');
         }
       });
-  }
-
-  // il list del controller si aspetta "idAlcolico" / "idBox" ecc (camelCase), diverso da id_box usato nella create (snake_case)
-  private paramNameToQueryKey(): string {
-    return 'id' + this.entity.charAt(0).toUpperCase() + this.entity.slice(1);
   }
 
 
