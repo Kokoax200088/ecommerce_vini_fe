@@ -65,3 +65,9 @@
 .location-icon {
     color: #6E0C18;
 }
+
+.ratings-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
