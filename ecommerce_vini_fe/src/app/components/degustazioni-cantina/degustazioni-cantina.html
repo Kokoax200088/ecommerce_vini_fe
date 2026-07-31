@@ -1,4 +1,40 @@
 <div class="mt-4">
   <h3 class="section-title-underlined">Le nostre degustazioni</h3>
-  
+
+  <div class="mt-4 row g-3">
+     @for (degustazione of listCantinaDegustazioni(); track degustazione.id) {
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+       <div class="card-badge-wrapper">
+
+    <div class="badge-prezzo">
+      € {{ degustazione.prezzo }}
+    </div>
+
+    <div class="card card-degustazione h-100 shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">{{ degustazione.nome }}</h5>
+        <p class="card-text">{{ degustazione.descrizione }}</p>
+        <p class="card-text small text-muted mb-1">
+          {{ degustazione.dataInizio | date:'dd/MM/yyyy HH:mm' }}
+          &ndash;
+          {{ degustazione.dataFine | date:'dd/MM/yyyy HH:mm' }}
+        </p>
+        @if (degustazione.listAlcolici?.length) {
+          <p class="card-text small text-muted mb-0">
+            Include {{ degustazione.listAlcolici.length }} alcolici
+          </p>
+        }
+      </div>
+    </div>
+
+@if(auth.grant().isCustomer) {
+    <button type="button" class="btn btn-outline-dark btn-sm w-100 mt-2" (click)="onAggiungiCarrello(degustazione)">
+      Prenota
+    </button>
+}
+        </div>
+        </div>
+     }
+  </div>
+
 </div>

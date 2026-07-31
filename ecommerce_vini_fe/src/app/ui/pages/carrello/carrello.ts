@@ -2,12 +2,13 @@ import { ChangeDetectorRef, Component, computed, effect, inject } from '@angular
 import { CarrelloService } from '../../../core/services/carrello-services';
 import { UtenteServices } from '../../../core/services/utente-services';
 import { ProdottoAlcolicoComponent } from "../../../components/prodotto-alcolico/prodotto-alcolico";
+import { ProdottoDegustazioneComponent } from '../../../components/prodotto-degustazione/prodotto-degustazione';
 import { AuthServices } from '../../../core/services/auth-services';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-carrello',
-  imports: [ProdottoAlcolicoComponent, CommonModule],
+  imports: [ProdottoAlcolicoComponent, CommonModule, ProdottoDegustazioneComponent],
   templateUrl: './carrello.html',
   styleUrl: './carrello.css',
 })

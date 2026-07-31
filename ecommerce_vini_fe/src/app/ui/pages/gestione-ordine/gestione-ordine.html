@@ -12,7 +12,7 @@
 
 <div class="order-list">
   @for (ordine of ordini(); track ordine.id) {
-    <article class="order-card" [attr.data-status]="statusSlug(ordine.status)" (click)="onSelected(ordine)">
+    <article class="order-card" [attr.data-status]="statusSlug(ordine.id_status)" (click)="onSelected(ordine)">
       <div class="order-id">
         <span class="hash">N°</span>
         <span class="number">{{ ordine.id }}</span>
@@ -20,10 +20,10 @@
 
       <div class="order-body">
         <div class="order-primary">
-          <span class="customer">{{ customerName(ordine.utente) }}</span>
-          <span class="seal" [attr.data-status]="statusSlug(ordine.status)">
+          <span class="customer">{{ customerName(ordine.id_utente) }}</span>
+          <span class="seal" [attr.data-status]="statusSlug(ordine.id_status)">
             <span class="seal-dot"></span>
-            {{ ordine.status?.nome ?? 'Senza stato' }}
+            {{ ordine.id_status?.nome ?? 'Senza stato' }}
           </span>
         </div>
 
@@ -35,7 +35,7 @@
           <span class="meta-divider">·</span>
           <span class="meta-item">
             <span class="meta-label">Consegna</span>
-            {{ ordine.indirizzo_destinazione || '—' }}
+            {{ ordine.indirizzoDestinazione || '—' }}
           </span>
         </div>
       </div>
