@@ -20,7 +20,7 @@ export class AlcoliciCantina {
   @Input() idCantina!: number;
   listCantinaALcolico: any;
   public readonly auth = inject(AuthServices);
-  public readonly notificationS = inject(NotificationServices);
+  private notification = inject(NotificationServices);
 
   
   loggedUtente = computed(() => this.utenteService.loggedUtente());
@@ -79,7 +79,7 @@ export class AlcoliciCantina {
   ).subscribe({
     next: () => {
       this.cantinaService.listAlcolici(idCantina);
-      this.notificationS.success("Articolo aggiunto al carrello");
+      this.notification.success("Articolo aggiunto al carrello");
     },
     error: (err) => console.error('Errore durante l\'aggiunta al carrello:', err)
   });
