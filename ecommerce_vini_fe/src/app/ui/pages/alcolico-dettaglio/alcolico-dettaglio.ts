@@ -8,11 +8,13 @@ import { AlcolicoServices } from '../../../core/services/alcolico-services';
 import { CantinaServices } from '../../../core/services/cantina-services';
 import { UploadImageService } from '../../../core/services/uploadImage';
 import { AuthServices } from '../../../core/services/auth-services';
+import { AddRating } from "../../../components/add-rating/add-rating";
+import { ViewRating } from "../../../components/view-rating/view-rating";
 
 @Component({
   selector: 'app-alcolico-dettaglio',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, MatIcon],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, MatIcon, ViewRating],
   templateUrl: './alcolico-dettaglio.html',
   styleUrl: './alcolico-dettaglio.css',
 })
@@ -182,4 +184,6 @@ export class AlcolicoDettaglio implements OnInit {
     const target = event.target as HTMLImageElement;
     target.src = '/image-alcolico.png';
   }
+
+  
 }

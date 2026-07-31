@@ -1,1 +1,26 @@
-<p>view-rating works!</p>
+<mat-card class="review-card">
+  <mat-card-header>
+    <!-- Avatar con la prima lettera del nome -->
+    <div mat-card-avatar class="user-avatar">
+      {{ nomeUtente?.charAt(0) }}
+    </div>
+    
+    <mat-card-title class="user-name">
+      {{ nomeUtente }} {{ cogmomeUtente }}
+    </mat-card-title>
+    
+    <mat-card-subtitle class="rating-stars">
+      @for (stella of stelle; track stella) {
+        <mat-icon class="star-icon">
+          {{ stella <= valutazione ? 'star' : (stella - 0.5 <= valutazione ? 'star_half' : 'star_border') }}
+        </mat-icon>
+      }
+    </mat-card-subtitle>
+  </mat-card-header>
+
+  @if (commento) {
+    <mat-card-content class="review-comment">
+      <p>{{ commento }}</p>
+    </mat-card-content>
+  }
+</mat-card>

@@ -1,0 +1,47 @@
+/* Card principale */
+.review-card {
+  max-width: 500px;
+  margin-bottom: 16px;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+  border: 1px solid #f0f0f0;
+  background-color: #ffffff;
+}
+
+.user-avatar {
+  background-color: #4a1525; /* Colore bordeaux del tuo menu */
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 1.1rem;
+  border-radius: 50%;
+}
+
+.user-name {
+  font-size: 1rem !important;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 4px;
+}
+
+.rating-stars {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.star-icon {
+  color: #e6a100; 
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.review-comment {
+  margin-top: 12px;
+  color: #4a4a4a;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
