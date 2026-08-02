@@ -5,5 +5,6 @@ export interface Ordine {
   indirizzoDestinazione: string;  
   id_status: any;
   id_utente: any;
-  listOrdineAlcolico: any[];       
+  listOrdineAlcolico: any[]; 
+  listOrdineDegustazione: any[];      
 }
