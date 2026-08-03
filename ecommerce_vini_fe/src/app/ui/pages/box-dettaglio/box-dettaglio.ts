@@ -13,15 +13,17 @@ import { UtenteServices } from '../../../core/services/utente-services';
 import { CarrelloService } from '../../../core/services/carrello-services';
 import { concatMap, from, switchMap, throwError } from 'rxjs';
 import { ProdottoBox, ProdottoBoxRequest } from '../../../core/models/carrello';
+import { Location } from '@angular/common';
+import { BoxElimina } from "../../../components/box-elimina/box-elimina";
 
 @Component({
   selector: 'app-box-dettaglio',
-  imports: [QuantitaSelector],
+  imports: [QuantitaSelector, BoxElimina],
   templateUrl: './box-dettaglio.html',
   styleUrl: './box-dettaglio.css',
 })
 export class BoxDettaglio {
-  id: number = -1;
+  id: number = 99;
   subtotal: number = 0;
   total: number = 0;
   maxBuyNumber: number = 0;
@@ -36,6 +38,7 @@ export class BoxDettaglio {
   public readonly authService = inject(AuthServices);
 
   constructor(
+    private location:Location,
     private route: ActivatedRoute,
     private router: Router,
     private boxService: BoxServices,
@@ -67,7 +70,7 @@ export class BoxDettaglio {
         this.computeTotal();
         this.listBoxAlcolico.set(this.box()?.listBoxAlcolico ?? []);
 
-        this.cantinaService.getCantinaAlcolicoByFilter(undefined, undefined).subscribe({
+        this.cantinaService.getCantinaAlcolicoByFilter(null, null).subscribe({
           next: (alcolicoCantinaList) => {
             const updated = this.listBoxAlcolico().map((boxAlc) => ({
               ...boxAlc,
@@ -111,6 +114,7 @@ export class BoxDettaglio {
       if (item.numberAvailable < min) {
         console.log(item.alcolico.nome + " available:" + item.numberAvailable);
         min = item.numberAvailable;
+        console.log("newMin=" + min);
       }
     }
     this.maxBuyNumber = Math.trunc(min);
@@ -219,7 +223,9 @@ export class BoxDettaglio {
         ).subscribe({
           next: () => {
             this.cantinaService.listAlcolici(idCantina);
-            //this.router.navigate(['/box'], this.id);
+            
+            //CHECK con questa riga torno indietro alla pagina precedente, è preferibile? ci sono varie opzioni disponibili idk
+            this.location.back(); 
           },
           error: (err) => console.error('Errore durante l\'aggiunta del box al carrello:', err),
         });

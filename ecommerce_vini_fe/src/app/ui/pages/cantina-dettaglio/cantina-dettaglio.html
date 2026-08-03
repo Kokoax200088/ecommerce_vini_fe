@@ -26,12 +26,19 @@
         <mat-icon>delete</mat-icon>
         Elimina
       </button>
+      
+      <app-card-add-box [idCantina]="this.id"></app-card-add-box>
     }
+<<<<<<< HEAD
+=======
+      <app-alcolico-nuovo class="ms-auto" [idCantina]="cantina?.id"></app-alcolico-nuovo>
+>>>>>>> main
       
     </div>
     <div class="mt-4 d-flex align-items-center gap-2">
       <p class="mb-0">{{ cantina?.descrizione }}</p>
     </div>
+    
 
     @if(cantina?.listCantinaAlcolico && cantina?.listCantinaAlcolico.length > 0) {
     <app-alcolici-cantina [idCantina]="cantina?.id"></app-alcolici-cantina>

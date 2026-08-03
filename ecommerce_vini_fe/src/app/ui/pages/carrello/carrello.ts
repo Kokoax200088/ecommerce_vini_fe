@@ -5,6 +5,7 @@ import { ProdottoAlcolicoComponent } from "../../../components/prodotto-alcolico
 import { ProdottoDegustazioneComponent } from '../../../components/prodotto-degustazione/prodotto-degustazione';
 import { AuthServices } from '../../../core/services/auth-services';
 import { CommonModule } from '@angular/common';
+import { ProdottoBox } from "../../../components/prodotto-box/prodotto-box";
 import { OrdiniServices } from '../../../core/services/ordini-services';
 import { STATUS_ORDINE, STATUS_ORDINE_DEGUSTAZIONE } from '../../../core/models/status';
 import { ordineDegustazioneReq } from '../../../core/models/ordineDegustazione';
@@ -13,7 +14,7 @@ import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-carrello',
-  imports: [ProdottoAlcolicoComponent, CommonModule, ProdottoDegustazioneComponent],
+  imports: [ProdottoAlcolicoComponent, CommonModule, ProdottoDegustazioneComponent, ProdottoBox],
   templateUrl: './carrello.html',
   styleUrl: './carrello.css',
 })
@@ -46,9 +47,9 @@ ngOnInit(): void {
 
     const qtaAlcolici = c.listaProdotti.reduce((acc, p) => acc + p.quantità, 0);
     const qtaDegustazioni = c.listaDegustazione.reduce((acc, d) => acc + d.quantità, 0);
-    const qtaBox = c.listaDegustazione.reduce((acc, b) => acc + b.quantità, 0);
+    const qtaBox = c.listaBox.reduce((acc, b) => acc + b.quantità, 0);
 
-    return qtaAlcolici + qtaDegustazioni;
+    return qtaAlcolici + qtaBox + qtaDegustazioni;
   });
 
   prezzoTotale = computed(() => {
@@ -58,13 +59,39 @@ ngOnInit(): void {
     const prezzoAlcolici = c.listaProdotti.reduce(
       (acc, p) => acc + (p.alcolico.prezzo * p.quantità), 0
     );
+
+    const prezzoBoxes = (c.listaBox ?? []).reduce((acc, p) => {
+    const box = p.box;
+
+    // somma prezzi dei prodotti contenuti nella box
+    const prezzoBoxSenzaSconto = (box.listBoxAlcolico ?? []).reduce((acc2:number, item:{ alcolico?: { prezzo?: number }; quantita?: number }) => {
+      const prezzoSingolo = item.alcolico?.prezzo ?? 0;
+      const qtaItem = item.quantita ?? 0;
+      return acc2 + prezzoSingolo * qtaItem;
+    }, 0);
+
+    // sconto: se è in % (es. sconto=15 significa -15%)
+    const scontoPercent = box.sconto ?? 0;
+    const prezzoBoxConSconto = prezzoBoxSenzaSconto * (1 - scontoPercent / 100);
+
+    // p.quantità = numero di box nel carrello
+    return acc + prezzoBoxConSconto * (p.quantità ?? 0);
+  }, 0);
+
     const prezzoDegustazioni = c.listaDegustazione.reduce(
       (acc, d) => acc + (d.degustazione.prezzo * d.quantità), 0
     );
 
-    return prezzoAlcolici + prezzoDegustazioni;
+    return prezzoAlcolici + prezzoBoxes + prezzoDegustazioni;
   });
 
+  computePrezzoBox(): number {
+    const list = this.cart()?.listaBox ?? [];
+    return list.reduce(
+      (acc, p) => acc + (p.box.prezzo * p.quantità),
+      0
+    );
+  }
 
   procediOrdine() {
     const utente = this.utenteService.loggedUtente();

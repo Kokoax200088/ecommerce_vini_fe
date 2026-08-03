@@ -19,3 +19,16 @@
   background: linear-gradient(90deg, #800020 0%, rgba(128, 0, 32, 0.1) 100%);
   border-radius: 2px;
 }
+
+.box-grid {
+  display: grid;
+  gap: 1rem;
+
+  /* Change the min width to control how many columns you get */
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+}
+
+/* Optional: remove Bootstrap mb-4 spacing if it makes gaps too large inside the grid */
+.box-grid .mb-4 {
+  margin-bottom: 0 !important;
+}

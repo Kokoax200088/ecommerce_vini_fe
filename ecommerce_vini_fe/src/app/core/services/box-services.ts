@@ -63,5 +63,4 @@ export class BoxServices {
         return this.http.delete(this.baseUrl + "/box/remove/" + id)
             .pipe(tap(() => this.list()));
     }
-
 }

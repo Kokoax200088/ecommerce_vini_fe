@@ -8,10 +8,11 @@ import { Observable } from 'rxjs';
 import { AuthServices } from '../../core/services/auth-services';
 import { CarrelloService } from '../../core/services/carrello-services';
 import { UtenteServices } from '../../core/services/utente-services';
+import { BoxElimina } from "../box-elimina/box-elimina";
 
 @Component({
   selector: 'app-box-cantina',
-  imports: [CardBox, AsyncPipe],
+  imports: [CardBox, AsyncPipe, BoxElimina],
   templateUrl: './box-cantina.html',
   styleUrl: './box-cantina.css',
 })
