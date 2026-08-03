@@ -5,12 +5,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
-
 import { CantinaServices } from '../../core/services/cantina-services';
 import { UploadImageService } from '../../core/services/uploadImage';
 import { AuthServices } from '../../core/services/auth-services';
 import { NotificationServices } from '../../core/services/notification-services';
 import { ImmagineCantinaModel } from '../../core/models/immagineCantina';
+import { UtenteServices } from '../../core/services/utente-services';
 
 @Component({
   selector: 'app-cantina-create',
@@ -31,6 +31,7 @@ export class CantinaCreate implements OnInit {
   private authService = inject(AuthServices); 
   private notifications = inject(NotificationServices);
   private cdr = inject(ChangeDetectorRef); 
+  private utenteService = inject(UtenteServices);
 
   constructor(
     public dialogRef: MatDialogRef<CantinaCreate>,
@@ -38,13 +39,24 @@ export class CantinaCreate implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log("DATI RICEVUTI DAL DIALOGO:", this.data);
+    console.log("📦 [CantinaCreate] DATI RICEVUTI DAL DIALOGO:", this.data);
 
     this.cantinaForm = this.fb.group({
       nome: ['', Validators.required],
       posizione: ['', Validators.required],
       descrizione: ['']
     });
+
+    const utenteAttuale = this.utenteService.loggedUtente();
+    console.log("🔎 [CantinaCreate] Utente in memoria all'apertura del form:", utenteAttuale);
+
+    if (!utenteAttuale) {
+      const email = this.authService.grant().userId;
+      console.log("⏳ [CantinaCreate] Utente mancante. Uso la mail per scaricarlo:", email);
+      if (email) {
+        this.utenteService.findLoggedInfos(email);
+      }
+    }
 
     if (this.data && this.data.id) {
       this.isEditMode = true;
@@ -107,7 +119,19 @@ export class CantinaCreate implements OnInit {
       return;
     }
 
-    const venditoreLoggatoId = 1; 
+    const utenteCompleto = this.utenteService.loggedUtente();
+    console.log("🚀 [CantinaCreate] Tentativo di salvataggio. Oggetto utente:", utenteCompleto);
+    
+    // QUI AVVIENE LA MAGIA: Prima prendiamo il venditoreDTO.id, poi se non c'è ripieghiamo sull'id utente
+    const venditoreLoggatoId = (utenteCompleto as any)?.venditoreDTO?.id || utenteCompleto?.id || null;
+
+    if (!venditoreLoggatoId) {
+      console.error("❌ [CantinaCreate] Impossibile recuperare ID! La mail nel token era:", this.authService.grant().userId);
+      this.notifications.error("Errore di caricamento, per favore chiudi e riapri il popup.");
+      return;
+    }
+
+    console.log("✅ [CantinaCreate] Invio dati con ID VENDITORE:", venditoreLoggatoId);
 
     const requestPayload = { 
       ...this.cantinaForm.value,
@@ -132,7 +156,10 @@ export class CantinaCreate implements OnInit {
           this.caricaImmagini();
           this.cdr.detectChanges(); 
         },
-        error: () => this.notifications.error("Errore durante la creazione della cantina")
+        error: (err) => {
+          console.error("❌ [CantinaCreate] Errore Backend:", err);
+          this.notifications.error("Errore durante la creazione della cantina");
+        }
       });
     }
   }

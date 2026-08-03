@@ -57,7 +57,7 @@
 
     <ul class="nav nav-pills flex-column mb-auto">
       <li class="nav-item">
-        <a href="/" routerLinkActive="active" class="nav-link text-white">
+        <a [routerLink]="['/catalogo-cantine']" [queryParams]="{ filtro: 'mie' }" routerLinkActive="active" class="nav-link text-white" style="cursor: pointer;">
           <i class="bi bi-house-door me-2"></i> Le mie cantine
         </a>
       </li>
@@ -69,11 +69,7 @@
       </li>
     </ul>
     }
-    
-    
-    
     <hr>
-    
     @if(auth.grant().isLogged) {
       <ul class="nav nav-pills flex-column mb-auto">
       <li class="nav-item">
