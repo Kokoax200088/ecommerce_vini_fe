@@ -102,6 +102,10 @@ export class CarrelloService {
   clearCartState() {
   this.cart.set(undefined);
 }
-
+  svuotaCarrello(id: number) {
+    return this.http.delete<void>(this.baseUrl + '/cart/svuota/' + id).pipe(
+      tap(() => this.clearCartState())
+    );
+  }
 } 
 

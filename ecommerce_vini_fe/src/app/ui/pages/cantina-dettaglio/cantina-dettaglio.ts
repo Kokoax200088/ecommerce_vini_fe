@@ -22,7 +22,7 @@ import { CantinaDelete } from '../../../dialogs/cantina-delete/cantina-delete';
 @Component({
   selector: 'app-cantina-dettaglio',
   standalone: true,
-  imports: [MatIcon, AlcoliciCantina,MatButtonModule, DegustazioniCantina, BoxCantina, ViewRating, AlcolicoNuovo, AddRatingCantina, CardAddBox],
+  imports: [MatIcon, AlcoliciCantina,MatButtonModule, DegustazioniCantina, BoxCantina, ViewRating, AlcolicoNuovo, AddRatingCantina],
   templateUrl: './cantina-dettaglio.html',
   styleUrl: './cantina-dettaglio.css',
 })
@@ -59,8 +59,9 @@ export class CantinaDettaglio implements OnInit {
   }
 
   caricaImmagine(): void {
-    this.uploadImageCantinaService.getById('cantina', this.cantina.id).subscribe({
-      next: (immagine: any) => {
+    this.uploadImageCantinaService.list<any>('cantina', 'idCantina', this.cantina.id).subscribe({
+      next: (immagini: any[]) => {
+        const immagine = immagini?.[immagini.length - 1];
         this.immagineUrl = immagine?.url ?? immagine?.path ?? immagine?.nomeFile ?? '/image-cantina.png';
         this.cdr.markForCheck(); 
       },

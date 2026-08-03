@@ -123,8 +123,9 @@ export class BoxDettaglio {
   }
 
   caricaImmagine() {
-    this.uploadImageBoxService.getById('box', this.id).subscribe({
-      next: (immagine: any) => {
+    this.uploadImageBoxService.list<any>('box', 'idBox', this.id).subscribe({
+       next: (immagini: any[]) => {
+      const immagine = immagini?.[immagini.length - 1];
         this.immagineUrl.set(
           immagine?.url ?? immagine?.path ?? immagine?.nomeFile ?? '/image-box.png',
         );
