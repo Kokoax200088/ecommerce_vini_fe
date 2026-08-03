@@ -78,6 +78,7 @@ export class Registration {
           this.routing.navigate(['/login']);
         }),
         error: ((resp:any) => {
+          this.notification.error("Errore durante la registrazione. Riprovare.");
           console.log(resp.error.msg);
           this.msg.set(resp.error.msg);
           })
@@ -99,12 +100,12 @@ export class Registration {
         partitaIva: this.utenteForm.value.partitaIva,
       }).subscribe({
         next: ((resp:any) => {
-          console.log("QUESTA E' LA RESP: " + resp);
           this.utenteForm.clearValidators;
           this.notification.success("Creato Account venditore");
           this.routing.navigate(['/login']);
         }),
         error: ((resp:any) => {
+          this.notification.error("Errore durante la registrazione. Riprovare.");
           console.log(resp.error.msg);
           this.msg.set(resp.error.msg);
           })

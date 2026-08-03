@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
 import { MeDTO } from '../../../core/models/user';
 import { UtilitiesServices } from '../../../core/services/utilities-services';
 import { MatIcon } from "@angular/material/icon";
+import { NotificationServices } from '../../../core/services/notification-services';
 
 @Component({
   selector: 'app-login',
@@ -33,6 +34,7 @@ export class Login {
   constructor(
     private account:TokenServices,
     private auth: AuthServices,
+    private notification: NotificationServices,
     private routing:Router,
     private util: UtilitiesServices,
     private service:UtenteServices
@@ -47,13 +49,14 @@ export class Login {
       }).subscribe({
         next: (resp:MeDTO) => {
           this.msg.set("");
-          console.log("QUESTA E' LA RESP:" +  JSON.stringify(resp, null, 2));
+          this.notification.success("Login effettuato con successo.");
 
           this.auth.setAuthenticated(resp);
           this.routing.navigate(['']);
           //stuff about the dialog here, not useful for now
         },
         error: (resp:any) => {
+          this.notification.error("E-mail o password errati. Riprovare.");
           console.log(resp);
           this.msg.set(resp.error.msg);
           this.email = this.loginForm.value.email;
