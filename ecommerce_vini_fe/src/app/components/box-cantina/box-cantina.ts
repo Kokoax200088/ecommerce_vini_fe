@@ -9,10 +9,11 @@ import { AuthServices } from '../../core/services/auth-services';
 import { CarrelloService } from '../../core/services/carrello-services';
 import { UtenteServices } from '../../core/services/utente-services';
 import { BoxElimina } from "../box-elimina/box-elimina";
+import { CardAddBox } from "../card-add-box/card-add-box";
 
 @Component({
   selector: 'app-box-cantina',
-  imports: [CardBox, AsyncPipe, BoxElimina],
+  imports: [CardBox, AsyncPipe, BoxElimina, CardAddBox],
   templateUrl: './box-cantina.html',
   styleUrl: './box-cantina.css',
 })

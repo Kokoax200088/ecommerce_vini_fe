@@ -26,13 +26,8 @@
         <mat-icon>delete</mat-icon>
         Elimina
       </button>
-      
-      <app-card-add-box [idCantina]="this.id"></app-card-add-box>
+    
     }
-<<<<<<< HEAD
-=======
-      <app-alcolico-nuovo class="ms-auto" [idCantina]="cantina?.id"></app-alcolico-nuovo>
->>>>>>> main
       
     </div>
     <div class="mt-4 d-flex align-items-center gap-2">
@@ -40,16 +35,11 @@
     </div>
     
 
-    @if(cantina?.listCantinaAlcolico && cantina?.listCantinaAlcolico.length > 0) {
     <app-alcolici-cantina [idCantina]="cantina?.id"></app-alcolici-cantina>
-    }
 
-    @if(cantina?.listBox && cantina?.listBox.length > 0) {
     <app-box-cantina [idCantina]="cantina?.id"></app-box-cantina>
-    }
-    @if(cantina?.listDegustazione && cantina?.listDegustazione.length > 0) {
+
     <app-degustazioni-cantina [idCantina] = "cantina?.id"></app-degustazioni-cantina>
-    }
 
      @if ((cantina?.listRatingCantina?.length ?? 0) > 0) {
   <div class="ratings-list mt-4">
