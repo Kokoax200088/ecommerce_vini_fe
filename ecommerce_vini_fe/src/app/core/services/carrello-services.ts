@@ -20,6 +20,11 @@ export class CarrelloService {
     return this.http.post<ProdottoBox>(this.baseUrl + '/prodotto-box/create', body);
   }
 
+  deleteProdottoBox(id: number){
+     return this.http.delete(this.baseUrl + '/prodotto-box/delete/' + id);
+  }
+
+
   updateProdottoAlcolico(body: ProdottoAlcolico) {
     return this.http.patch<ProdottoAlcolico>(this.baseUrl + `/prodotto-alcolico/update`, body);
   }

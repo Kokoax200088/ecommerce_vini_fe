@@ -108,13 +108,14 @@ export class AddBox implements OnInit {
   }
 
    removeFromBox(alcolicoId: number) {
+    console.log("remove from box alcolicoId=" + alcolicoId);
     this.listAlcoliciBox.update(prev => prev.filter(x => x.alcolico.id !== alcolicoId));
   }
 
   OnSubmit(){
     //metto questo passaggio intermedio perchè potrebbe essere necessario per la modifica
     this.createBox(this.createBoxForm);
-    this.close()
+    this.close();
   }
 
   createBox(form: FormGroup){
