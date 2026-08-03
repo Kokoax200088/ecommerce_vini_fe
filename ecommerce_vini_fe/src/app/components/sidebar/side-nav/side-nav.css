@@ -11,3 +11,14 @@
   width: 1.2rem;
   height: 1.2rem;
 }
+
+:host {
+  width: 10%;
+}
+
+@media (max-width: 991.98px) {
+  :host {
+    width: 100%;
+    position: relative; /* se ora è fixed/absolute */
+  }
+}

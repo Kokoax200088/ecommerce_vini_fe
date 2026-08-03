@@ -11,10 +11,11 @@ import { switchMap } from 'rxjs';
 import { NotificationServices } from '../../core/services/notification-services';
 import { AlcolicoElimina } from "../alcolico-elimina/alcolico-elimina";
 import { AlcolicoImmagine } from "../alcolico-immagine/alcolico-immagine";
+import { AlcolicoNuovo } from "../alcolico-nuovo/alcolico-nuovo";
 
 @Component({
   selector: 'app-alcolici-cantina',
-  imports: [CardAlcolico, QuantitaSelector, AlcolicoElimina, AlcolicoImmagine],
+  imports: [CardAlcolico, QuantitaSelector, AlcolicoElimina, AlcolicoImmagine, AlcolicoNuovo],
   templateUrl: './alcolici-cantina.html',
   styleUrl: './alcolici-cantina.css',
 })

@@ -1,5 +1,10 @@
 <div class="mt-4">
-  <h3 class="section-title-underlined">I nostri alcolici</h3>
+  <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+  <h3 class="section-title-underlined mb-0">I nostri alcolici</h3>
+  @if(auth.grant().isSeller) {
+    <app-alcolico-nuovo [idCantina]="idCantina"></app-alcolico-nuovo>
+  }
+</div>
 
   <div class="mt-4 row g-3">
      @for (alcolicoCantina of listCantinaALcolico(); track alcolicoCantina.id) {

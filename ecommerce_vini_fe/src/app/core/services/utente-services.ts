@@ -37,7 +37,7 @@ export class UtenteServices {
             .subscribe({
                 next: (resp) => {
                     const result = resp?.[0];
-                    console.log('loggedUtente response:', resp?.[0]);
+                    //console.log('loggedUtente response:', resp?.[0]);
                     this.loggedUtente.set({
                         ...resp[0],
                         id: result.id, //dovrebbe settarlo in automatico ma per sicurezza lo esplicito

@@ -5,6 +5,7 @@ import { ProdottoAlcolicoComponent } from "../../../components/prodotto-alcolico
 import { ProdottoDegustazioneComponent } from '../../../components/prodotto-degustazione/prodotto-degustazione';
 import { AuthServices } from '../../../core/services/auth-services';
 import { CommonModule } from '@angular/common';
+import { ProdottoBox } from "../../../components/prodotto-box/prodotto-box";
 import { OrdiniServices } from '../../../core/services/ordini-services';
 import { STATUS_ORDINE, STATUS_ORDINE_DEGUSTAZIONE } from '../../../core/models/status';
 import { ordineDegustazioneReq } from '../../../core/models/ordineDegustazione';
@@ -17,7 +18,7 @@ import { OrdineBoxServices } from '../../../core/services/ordine-box-service';
 
 @Component({
   selector: 'app-carrello',
-  imports: [ProdottoAlcolicoComponent, CommonModule, ProdottoDegustazioneComponent],
+  imports: [ProdottoAlcolicoComponent, CommonModule, ProdottoDegustazioneComponent, ProdottoBox],
   templateUrl: './carrello.html',
   styleUrl: './carrello.css',
 })
@@ -90,6 +91,13 @@ ngOnInit(): void {
     return prezzoAlcolici + prezzoBoxes + prezzoDegustazioni;
   });
 
+  computePrezzoBox(): number {
+    const list = this.cart()?.listaBox ?? [];
+    return list.reduce(
+      (acc, p) => acc + (p.box.prezzo * p.quantità),
+      0
+    );
+  }
 
   procediOrdine() {
     const utente = this.utenteService.loggedUtente();

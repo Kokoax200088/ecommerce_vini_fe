@@ -84,6 +84,9 @@
               (aggiungiCarrello)="onAggiungiCarrello(box()!, $event)">
             </app-quantita-selector>
         }
+        @if (authService.grant().isCustomer) {
+          
+        }
 
       </div>
     </div>

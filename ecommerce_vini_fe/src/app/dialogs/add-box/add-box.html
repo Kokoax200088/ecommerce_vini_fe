@@ -1,0 +1,67 @@
+<div class="dialog-container">
+    <mat-icon class="icon add me-2">add</mat-icon>
+    {{data.title}}
+
+    <mat-dialog-content class="dialog-content">
+    <form [formGroup]="createBoxForm" (ngSubmit)="OnSubmit()" class="form-grid">
+      <mat-form-field>
+        <mat-label>Inserisci nome box</mat-label>
+        <input matInput formControlName="nome" placeholder="Nome box">
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Inserisci sconto</mat-label>
+        <input matInput type="number" class="example-right-align" formControlName="sconto" placeholder="0">
+        <span matTextPrefix>%&nbsp;</span>
+    </mat-form-field>
+
+    
+    <mat-form-field appearance="fill">
+    <mat-label>Seleziona alcolico</mat-label>
+
+    <mat-select [(value)]="selectedAlcolicoId">
+      @for (x of listAlcolici(); track x.id) {
+        <mat-option [value]="x.id">
+          {{ x.alcolico.nome }}
+        </mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+    <div class="box-controls">
+    <mat-form-field appearance="fill">
+  <mat-label>Quantità (bottiglie)</mat-label>
+  <input matInput type="number" min="1" [value]="selectedQty"
+         (input)="setQtyFromInput(+$event.target.value)">
+</mat-form-field>
+
+<button mat-raised-button color="primary"
+        type="button"
+        (click)="addOrUpdateSelectedInBox()"
+        [disabled]="selectedAlcolicoId == null">
+  Aggiungi al box
+</button>
+</div>
+
+<div class="selected-list">
+  @if (listAlcoliciBox().length > 0) {
+    <mat-list>
+      @for (x of listAlcoliciBox(); track x.id) {
+        <mat-list-item>
+          {{ x.alcolico.nome }} - Quantità: {{x.quantita}}
+        </mat-list-item>
+      }
+    </mat-list>
+  } @else {
+    <p>Nessun alcolico nel box.</p>
+  }
+</div>
+
+          <div class="form-actions full-width">
+          <button mat-flat-button class="btn-submit" type="submit" [disabled]="!createBoxForm.valid">
+            Crea Box
+          </button>
+        </div>
+
+
+      </form>
+  </mat-dialog-content>
+</div>

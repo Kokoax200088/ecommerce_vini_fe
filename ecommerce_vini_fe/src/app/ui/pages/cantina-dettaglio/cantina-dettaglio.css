@@ -71,3 +71,24 @@
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 16px;
 }
+
+.btn-crea-cantina {
+  background-color: #6E0C18 !important;
+  color: white !important;
+  font-weight: 500;
+  border-radius: 0.5rem;
+  padding: 0 1.5rem;
+  height: 2.8rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+.btn-crea-cantina mat-icon {
+  margin-right: 0.4rem;
+}
+
+.btn-crea-cantina:hover {
+  background-color: #8a0f1e !important; 
+}

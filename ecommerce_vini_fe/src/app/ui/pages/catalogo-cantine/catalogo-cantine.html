@@ -1,9 +1,18 @@
 <div class="container mt-4">
-  <div class="d-flex justify-content-between align-items-center mb-3">
+  <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3 gap-2">
     <h2 class="mb-0">Catalogo Cantine</h2>
-    <app-search-bar (search)="onSearch($event)"></app-search-bar>
+    <div class="d-flex flex-column flex-sm-row align-items-stretch align-items-sm-center gap-3">
+      <app-search-bar (search)="onSearch($event)" class="search-bar-responsive"></app-search-bar>
+      @if (isSeller) {
+        <button type="button" mat-flat-button class="btn-crea-cantina" (click)="apriNuovaCantina()">
+          <mat-icon>add</mat-icon>
+          Nuova Cantina
+        </button>
+      }
+    </div>
   </div>
-<div class="row g-3">
+
+  <div class="row g-3">
     @for (cantina of cantine(); track cantina.id) {
       <div class="col-12 col-sm-6 col-md-4 col-lg-3">
         <app-card-cantina [cantina]="cantina"></app-card-cantina>
