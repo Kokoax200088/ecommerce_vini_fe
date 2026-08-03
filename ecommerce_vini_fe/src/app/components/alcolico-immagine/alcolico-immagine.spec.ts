@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AlcolicoDettaglio } from './alcolico-dettaglio';
+import { AlcolicoImmagine } from './alcolico-immagine';
 
-describe('AlcolicoDettaglio', () => {
-  let component: AlcolicoDettaglio;
-  let fixture: ComponentFixture<AlcolicoDettaglio>;
+describe('AlcolicoImmagine', () => {
+  let component: AlcolicoImmagine;
+  let fixture: ComponentFixture<AlcolicoImmagine>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AlcolicoDettaglio],
+      imports: [AlcolicoImmagine],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(AlcolicoDettaglio);
+    fixture = TestBed.createComponent(AlcolicoImmagine);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

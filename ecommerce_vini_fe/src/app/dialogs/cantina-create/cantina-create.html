@@ -1,0 +1,62 @@
+<h2 mat-dialog-title class="cantina-header">
+  {{ isEditMode ? 'Gestisci Cantina' : 'Nuova Cantina' }}
+</h2>
+
+<mat-dialog-content class="mat-typography pt-4">
+  <form [formGroup]="cantinaForm" id="cantinaForm" (ngSubmit)="onSubmit()">
+    <div class="form-row-percent">
+      <mat-form-field appearance="outline" class="field-half">
+        <mat-label>Nome Cantina</mat-label>
+        <input matInput formControlName="nome" placeholder="Es. Tenuta San Guido">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="field-half">
+        <mat-label>Posizione</mat-label>
+        <input matInput formControlName="posizione" placeholder="Indirizzo o Regione">
+      </mat-form-field>
+    </div>
+
+    <div class="form-row-percent">
+      <mat-form-field appearance="outline" class="field-full">
+        <mat-label>Descrizione</mat-label>
+        <textarea matInput formControlName="descrizione" rows="4"></textarea>
+      </mat-form-field>
+    </div>
+
+    @if (isEditMode) {
+      <div class="immagini-section">
+        <h4 class="bordeaux-text"><mat-icon>photo_library</mat-icon> Galleria Immagini</h4>
+        <p class="text-muted mb-3">Seleziona e aggiungi quante immagini desideri alla cantina.</p>
+        <input type="file" id="fileMultiplo" multiple hidden accept="image/*" (change)="onFileSelected($event)">
+        <button mat-flat-button class="btn-bordeaux mb-4" type="button" (click)="triggerFileInput()">
+          <mat-icon>upload</mat-icon> Carica Immagini
+        </button>
+
+        <div class="d-flex flex-wrap gap-3">
+          @for (img of immagini(); track img.id) {
+            <div class="position-relative">
+              <img [src]="img.url" class="img-thumbnail custom-thumb shadow-sm" alt="Cantina" style="max-width: 150px; height: auto;">
+              <button mat-mini-fab color="warn" class="delete-btn position-absolute top-0 end-0" type="button" (click)="eliminaImmagine(img.id)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          }
+        </div>
+      </div>
+    } @else {
+       <div class="alert alert-warning bordeaux-alert mt-4">
+         <mat-icon class="align-middle me-2">info</mat-icon>
+         Clicca su <strong>"Salva e Continua"</strong> qui sotto per salvare i testi e sbloccare il caricamento delle immagini.
+       </div>
+    }
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="p-3">
+  <button mat-stroked-button type="button" class="btn-outline-bordeaux me-2" (click)="onAnnulla()">
+    {{ isEditMode ? 'Chiudi' : 'Annulla' }}
+  </button>
+  <button mat-flat-button type="submit" form="cantinaForm" class="btn-bordeaux" [disabled]="cantinaForm.invalid">
+    {{ isEditMode ? 'Salva e Chiudi' : 'Salva e Continua' }}
+  </button>
+</mat-dialog-actions>

@@ -20,6 +20,11 @@ export class AlcolicoServices {
         return this.http.get<AlcolicoModel>(this.baseUrl + '/alcolico/get/' + id);
     }
 
+    getByNome(nome: string) {
+        let params = new HttpParams().set('nome', nome);
+        return this.http.get<AlcolicoModel[]>(this.baseUrl + '/alcolico/list', { params });
+    }
+
     listTipologie() {
         this.http.get<TipologiaAlcolico[]>(this.baseUrl + '/tipologia-alcolico/list')
             .subscribe({

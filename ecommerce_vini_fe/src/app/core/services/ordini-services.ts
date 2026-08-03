@@ -33,10 +33,11 @@ export class OrdiniServices {
         })
     }
 
+
     create(body: {}) {
-        return this.http.post(this.baseUrl + "/ordine/create", body)
-        .pipe(tap(() => this.list()))
-        }
+        return this.http.post<Ordine>(this.baseUrl + "/ordine/create", body)
+            .pipe(tap(() => this.list()));
+    }
     
     update(body: {}) {
         return this.http.patch(this.baseUrl +"/ordine/update", body)

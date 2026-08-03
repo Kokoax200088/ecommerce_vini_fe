@@ -66,11 +66,6 @@ export class DegustazioniCantina {
         if (listaProdotti && listaProdotti.length > 0) {
           const prodottoEsistente = listaProdotti[0];
 
-          // ATTENZIONE: prodottoEsistente arriva dal backend con gli oggetti
-          // annidati (degustazione, cantina, carrello), non con gli id piatti.
-          // Il body per l'update deve avere la forma "piatta" richiesta dal
-          // DTO (ProdottoDegustazioneReq): id, id_carrello, id_degustazione,
-          // id_cantina, quantità.
           const quantitaAttuale = prodottoEsistente.quantità ?? 0;
           const itemAggiornato: ProdottoDegustazione = {
             id: prodottoEsistente.id,

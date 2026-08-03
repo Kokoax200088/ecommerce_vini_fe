@@ -30,8 +30,13 @@ export class ProdottoDegustazioneComponent {
       });
 
     } else {
-      const itemAggiornato = { ...item, quantità: nuovaQuantita };
-
+      const itemAggiornato = {
+        id: item.id,
+        id_carrello: 0,
+        id_degustazione: 0,
+        id_cantina: 0,
+        quantità: nuovaQuantita,
+      };
       this.carrelloService.updateProdottoDegustazione(itemAggiornato).subscribe({
         next: () => {
           item['quantità'] = nuovaQuantita;

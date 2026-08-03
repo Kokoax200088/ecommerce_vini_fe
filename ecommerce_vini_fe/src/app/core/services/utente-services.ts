@@ -106,6 +106,12 @@ export class UtenteServices {
         return this.http.get(this.getBaseUrlUtente() + "user/getById");
     }
 
+    getClienteById(id: number) {
+    let params = new HttpParams();
+    params = params.set('id', id); 
+    return this.http.get(this.getBaseUrlCliente() + "getClienteById", { params });
+}
+
     changePassword(body: {}){
         return this.http.put(this.getBaseUrlUtente() + "user/changePassword", body); //TODO non c'è il controller ancora
     }

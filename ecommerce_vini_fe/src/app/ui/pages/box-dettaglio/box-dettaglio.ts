@@ -14,10 +14,11 @@ import { CarrelloService } from '../../../core/services/carrello-services';
 import { concatMap, from, switchMap, throwError } from 'rxjs';
 import { ProdottoBox, ProdottoBoxRequest } from '../../../core/models/carrello';
 import { Location } from '@angular/common';
+import { BoxElimina } from "../../../components/box-elimina/box-elimina";
 
 @Component({
   selector: 'app-box-dettaglio',
-  imports: [QuantitaSelector],
+  imports: [QuantitaSelector, BoxElimina],
   templateUrl: './box-dettaglio.html',
   styleUrl: './box-dettaglio.css',
 })

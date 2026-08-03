@@ -1,0 +1,85 @@
+/* Card principale */
+.add-rating-card {
+  max-width: 500px;
+  margin-top: 24px;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+  border: 1px solid #f0f0f0;
+  background-color: #ffffff;
+  padding: 16px;
+}
+
+.card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 16px;
+}
+
+/* Container del form */
+.rating-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Stelle cliccabili */
+.rating-input-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.rating-label {
+  font-size: 0.9rem;
+  color: #4a4a4a;
+  margin: 0;
+}
+
+.stars-row {
+  display: flex;
+  gap: 4px;
+}
+
+.star-icon.clickable {
+  cursor: pointer;
+  font-size: 28px; /* Stelle più grandi per input */
+  width: 28px;
+  height: 28px;
+  color: #e6a100; /* Oro warm coordinato */
+  transition: transform 0.15s ease-in-out;
+
+  &:hover {
+    transform: scale(1.15); /* Feedback visivo su hover */
+  }
+}
+
+/* Input nascosto per logica form */
+.hidden-rating-input {
+  display: none;
+}
+
+/* Elementi standard del form */
+.full-width {
+  width: 100%;
+}
+
+.action-row {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Bottone bordeaux */
+.submit-button {
+  background-color: #4a1525 !important; /* Colore bordeaux del tuo menu */
+  color: #ffffff !important;
+  border-radius: 8px !important;
+  padding: 0 24px !important;
+}
+
+.submit-button:disabled {
+  background-color: #e0e0e0 !important;
+  color: #9e9e9e !important;
+  cursor: not-allowed;
+}

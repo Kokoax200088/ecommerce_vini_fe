@@ -1,0 +1,22 @@
+<div class="dialog-container">
+  <h2 mat-dialog-title class="cantina-header d-flex justify-content-center align-items-center gap-2 m-0">
+    <mat-icon>warning</mat-icon>
+    Rimozione Cantina
+  </h2>
+
+  <mat-dialog-content class="dialog-content mt-4">
+    <div class="bordeaux-alert mb-3">
+      <p class="mb-0">{{ data.message }}</p>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="center" class="dialog-actions pb-3 gap-3">
+    <button type="button" class="btn btn-outline-bordeaux px-4 py-2" (click)="close()">
+      Annulla
+    </button>
+    <button type="button" class="btn btn-bordeaux px-4 py-2 d-flex align-items-center gap-1" (click)="onDelete()">
+      <mat-icon class="icon-sm">delete</mat-icon>
+      Conferma
+    </button>
+  </mat-dialog-actions>
+</div>

@@ -119,22 +119,33 @@ export class AddBox implements OnInit {
   createBox(form: FormGroup){
     console.log("Creating a box with name: " + form.value.nome);
     this.boxService.create({
-      nome: form.value.nome, //FIXME nome missing
+      nome: form.value.nome,
       cantinaId: this.data.idCantina,
-      sconto: form.value.sconto//probabile problema anche qui
+      sconto: form.value.sconto
     }).subscribe({
       next: (resp: any) => {
         console.log(resp);
         const idCreated = resp?.id;
         console.log("Box created with id: " + idCreated);
         const contents =  this.listAlcoliciBox().map(x => ({
-          idBox: idCreated,
-          alcolico: x.alcolico,
-          quantita: x.quantita,
+          id: 0,
+          boxId: idCreated as number,
+          alcolicoId: x.alcolico.id as number,
+          quantita: x.quantita as number,
         }));
 
-        console.log("Dovrei adesso cambiare tutto e inserirlo");
-        contents.map(item => this.boxAlcolicoService.create(item));
+        contents.forEach(item => {
+          console.log(JSON.stringify(item));
+          this.boxAlcolicoService.create(item).subscribe({
+            next: (r) => console.log('BoxAlcolico created', r),
+            error: (err) => console.error('BoxAlcolico create failed', err)
+          });
+        })
+        /*
+        contents.map(item =>{
+          console.log(JSON.stringify(item));
+          this.boxAlcolicoService.create(item);
+        });*/
       },
       error: (resp) => {
         console.error("Errore creazione box", resp);

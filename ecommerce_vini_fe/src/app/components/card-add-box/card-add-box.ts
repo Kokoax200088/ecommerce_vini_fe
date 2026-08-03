@@ -1,10 +1,11 @@
 import { Component, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AddBox } from '../../dialogs/add-box/add-box';
+import { MatIconModule } from "@angular/material/icon";
 
 @Component({
   selector: 'app-card-add-box',
-  imports: [],
+  imports: [MatIconModule],
   standalone: true,
   templateUrl: './card-add-box.html',
   styleUrl: './card-add-box.css',

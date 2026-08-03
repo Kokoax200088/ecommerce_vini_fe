@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, effect, inject, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
@@ -20,16 +20,21 @@ export class CardAlcolico {
   constructor(
     private router: Router,
     private uploadImageAlcolicoService: UploadImageService
-  ) {}
- ngOnInit(): void {
-    this.caricaImmagine();
+  ) {
+    effect(() => {
+      this.uploadImageAlcolicoService.versione();
+      if (this.alcolico) {
+        this.caricaImmagine();
+      }
+    });
   }
 
 caricaImmagine(): void {
-  this.uploadImageAlcolicoService.getById('alcolico', this.alcolico.id).subscribe({
-    next: (immagine: any) => {
+  this.uploadImageAlcolicoService.list<any>('alcolico', 'idAlcolico', this.alcolico.id).subscribe({
+    next: (immagini: any[]) => {
+      const immagine = immagini?.[immagini.length - 1];
       this.immagineUrl = immagine?.url ?? immagine?.path ?? immagine?.nomeFile ?? '/image-alcolico.png';
-      this.cdr.markForCheck(); 
+      this.cdr.markForCheck();
     },
     error: () => {
       this.immagineUrl = '/image-alcolico.png';
@@ -46,4 +51,19 @@ onImageError(event: Event): void {
   vaiAlDettaglio(): void {
     this.router.navigate(['/alcolico', this.alcolico.id]);
   }
+
+    get mediaValutazione(): number {
+  const ratings = this.alcolico.listRatingAlcolico;
+  if (!ratings || ratings.length === 0) {
+    return 0;
+  }
+  const somma = ratings.reduce((acc, r) => acc + r.valutazione, 0);
+  return somma / ratings.length;
+}
+
+get numeroRecensioni(): number {
+  return this.alcolico.listRatingAlcolico?.length ?? 0;
+}
+
+readonly stelle = [1, 2, 3, 4, 5];
 }
