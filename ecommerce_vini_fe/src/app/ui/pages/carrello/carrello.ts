@@ -60,7 +60,6 @@ ngOnInit(): void {
       (acc, p) => acc + (p.alcolico.prezzo * p.quantità), 0
     );
 
-    console.log(JSON.stringify(c.listaBox[0]));
     const prezzoBoxes = (c.listaBox ?? []).reduce((acc, p) => {
     const box = p.box;
 
@@ -79,9 +78,11 @@ ngOnInit(): void {
     return acc + prezzoBoxConSconto * (p.quantità ?? 0);
   }, 0);
 
-    //const prezzoDegustazioni = this.computePrezzoBox();
+    const prezzoDegustazioni = c.listaDegustazione.reduce(
+      (acc, d) => acc + (d.degustazione.prezzo * d.quantità), 0
+    );
 
-    return prezzoAlcolici + prezzoBoxes;// + prezzoDegustazioni;
+    return prezzoAlcolici + prezzoBoxes + prezzoDegustazioni;
   });
 
   computePrezzoBox(): number {
