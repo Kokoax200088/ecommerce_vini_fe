@@ -11,6 +11,10 @@ import { STATUS_ORDINE, STATUS_ORDINE_DEGUSTAZIONE } from '../../../core/models/
 import { ordineDegustazioneReq } from '../../../core/models/ordineDegustazione';
 import { OrdineDegustazioneServices } from '../../../core/services/ordine-degustazione-services';
 import { forkJoin } from 'rxjs';
+import { OrdineAlcolicoService } from '../../../core/services/ordine-alcolico-services';
+import { ordineAlcolicoReq } from '../../../core/models/ordineAlcolico';
+import { ordineBoxReq } from '../../../core/models/ordineBox';
+import { OrdineBoxServices } from '../../../core/services/ordine-box-service';
 
 @Component({
   selector: 'app-carrello',
@@ -24,6 +28,8 @@ export class Carrello {
   private authService = inject(AuthServices);
   private ordineService = inject(OrdiniServices);
   private ordineDegustazioneService = inject(OrdineDegustazioneServices);
+  private ordineAlcolicoService = inject(OrdineAlcolicoService);
+  private ordineBoxService = inject(OrdineBoxServices);
   loggedUtente = computed(() => this.utenteService.loggedUtente());
   cart = this.cartService.cart;
 
@@ -49,10 +55,10 @@ ngOnInit(): void {
     const qtaDegustazioni = c.listaDegustazione.reduce((acc, d) => acc + d.quantità, 0);
     const qtaBox = c.listaBox.reduce((acc, b) => acc + b.quantità, 0);
 
-    return qtaAlcolici + qtaBox + qtaDegustazioni;
+    return qtaAlcolici + qtaDegustazioni + qtaBox;
   });
 
-  prezzoTotale = computed(() => {
+ prezzoTotale = computed(() => {
     const c = this.cart();
     if (!c) return 0;
 
@@ -114,10 +120,10 @@ ngOnInit(): void {
     this.ordineService.create(ordine).subscribe({
       next: (ordineCreato) => {
         const listaDegustazione = cart?.listaDegustazione ?? [];
-
+        const listaProdotti = cart?.listaProdotti ?? [];
+        const listaBox = cart?.listaBox ?? [];
         if (listaDegustazione.length === 0) {
           console.log('Ordine creato senza degustazioni:', ordineCreato);
-          return;
         }
 
         const richiesteDegustazione = listaDegustazione.map(d => {
@@ -132,9 +138,41 @@ ngOnInit(): void {
           return this.ordineDegustazioneService.create(body);
         });
 
+        const richiestaAlcolico = listaProdotti.map(p => {
+          const body: ordineAlcolicoReq = {
+            ordineId: ordineCreato.id,
+            alcolicoId: p.alcolico.id,
+            quantita: p.quantità,
+            cantinaId: p.cantina.id,
+            statusId: STATUS_ORDINE.IN_ATTESA,
+            data_ordine: data_ordine
+          };
+          return this.ordineAlcolicoService.create(body);
+        });
+        const richiestaBox = listaBox.map(b =>{ 
+            const body: ordineBoxReq = {
+              data_ordine: data_ordine,
+              ordineId: ordineCreato.id,
+              boxId: b.box.id, 
+              statusId: STATUS_ORDINE.IN_ATTESA,
+              cantinaId: b.cantina.id, 
+              quantita: b.quantità     
+            };
+          return this.ordineBoxService.create(body);
+        });
         forkJoin(richiesteDegustazione).subscribe({
           next: () => console.log('Tutte le degustazioni associate all\'ordine', ordineCreato.id + " JSON ordine creato:" + JSON.stringify(ordineCreato)),
           error: (err) => console.error('Errore nella creazione di una o più ordine-degustazione', err)
+        });
+
+        forkJoin(richiestaAlcolico).subscribe({
+          next: () => console.log('Tutti gli alcolici associati all\'ordine', ordineCreato.id + " JSON ordine creato:" + JSON.stringify(ordineCreato)),
+          error: (err) => console.error('Errore nella creazione di una o più ordine-alcolico', err)
+        });
+
+        forkJoin(richiestaBox).subscribe({
+          next: () => console.log('Tutti i box associati all\'ordine', ordineCreato.id + " JSON ordine creato:" + JSON.stringify(ordineCreato)),
+          error: (err) => console.error('Errore nella creazione di una o più ordine-box', err)
         });
       },
       error: (err) => console.error('Errore nella creazione dell\'ordine', err)
