@@ -67,7 +67,7 @@ export class BoxDettaglio {
         this.computeTotal();
         this.listBoxAlcolico.set(this.box()?.listBoxAlcolico ?? []);
 
-        this.cantinaService.getCantinaAlcolicoByFilter(undefined, undefined).subscribe({
+        this.cantinaService.getCantinaAlcolicoByFilter(undefined, null).subscribe({
           next: (alcolicoCantinaList) => {
             const updated = this.listBoxAlcolico().map((boxAlc) => ({
               ...boxAlc,
