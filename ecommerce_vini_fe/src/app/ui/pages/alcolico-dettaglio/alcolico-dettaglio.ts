@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule, Location } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -29,6 +29,7 @@ export class AlcolicoDettaglio implements OnInit {
   idCantinaAlcolico = signal<number | undefined>(undefined);
   idCantina = signal<number | undefined>(undefined);
   quantita = signal<number | undefined>(undefined);
+  private cdr = inject(ChangeDetectorRef);
 
   public readonly auth = inject(AuthServices);
   tipologie: any;
@@ -95,16 +96,19 @@ export class AlcolicoDettaglio implements OnInit {
     });
   }
 
-  caricaImmagine(): void {
-    this.uploadImageAlcolicoService.getById('alcolico', this.id).subscribe({
-      next: (immagine: any) => {
-        this.immagineUrl.set(immagine?.url ?? immagine?.path ?? immagine?.nomeFile ?? '/image-alcolico.png');
-      },
-      error: () => {
-        this.immagineUrl.set('/image-alcolico.png');
-      }
-    });
-  }
+ caricaImmagine(): void {
+  this.uploadImageAlcolicoService.list<any>('alcolico', 'idAlcolico', this.id).subscribe({
+    next: (immagini: any[]) => {
+      const immagine = immagini?.[immagini.length - 1];
+      this.immagineUrl.set(immagine?.url ?? immagine?.path ?? immagine?.nomeFile ?? '/image-alcolico.png');
+      this.cdr.markForCheck();
+    },
+    error: () => {
+      this.immagineUrl.set('/image-alcolico.png');
+      this.cdr.markForCheck();
+    }
+  });
+}
 
   apriModifica(): void {
     const a = this.alcolico();
