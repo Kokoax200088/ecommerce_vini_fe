@@ -46,10 +46,13 @@ export class BoxCantina implements OnChanges {
     }
   });
     console.log("BoxCantina di cantina id:" + this.idCantina);
+  
+    
     this.listBoxCantina =  this.boxService.listByIdCantina(this.idCantina); //ma serve farlo again?
     const userId = this.auth.grant()?.userId ?? undefined;
     this.utenteService.findLoggedInfos(userId);
   }
+
 
   loadBoxes() {
     this.listBoxCantina = this.boxService.listByIdCantina(this.idCantina);
