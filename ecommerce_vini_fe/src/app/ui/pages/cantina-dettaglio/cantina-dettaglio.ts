@@ -3,17 +3,15 @@ import { ActivatedRoute } from '@angular/router';
 import { CantinaServices } from '../../../core/services/cantina-services';
 import { UploadImageService } from '../../../core/services/uploadImage';
 import { MatIcon } from "@angular/material/icon";
-import { Cantina, CantinaALcolico } from '../../../core/models/cantina';
-import { CardAlcolico } from "../../../components/card-alcolico/card-alcolico";
-import { AlcolicoServices } from '../../../core/services/alcolico-services';
+import { Cantina } from '../../../core/models/cantina';
 import { AlcoliciCantina } from '../../../components/alcolici-cantina/alcolici-cantina';
 import { DegustazioniCantina } from "../../../components/degustazioni-cantina/degustazioni-cantina";
 import { BoxCantina } from "../../../components/box-cantina/box-cantina";
-import { CardAddBox } from "../../../components/card-add-box/card-add-box";
 import { ViewRating } from "../../../components/view-rating/view-rating";
-import { AlcolicoNuovo } from "../../../components/alcolico-nuovo/alcolico-nuovo";
 import { AddRatingCantina } from "../../../components/add-rating-cantina/add-rating-cantina";
+import { AlcolicoNuovo } from "../../../components/alcolico-nuovo/alcolico-nuovo";
 import { AuthServices } from '../../../core/services/auth-services';
+import { UtenteServices } from '../../../core/services/utente-services'; 
 import { CantinaCreate } from '../../../dialogs/cantina-create/cantina-create';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
@@ -22,7 +20,8 @@ import { CantinaDelete } from '../../../dialogs/cantina-delete/cantina-delete';
 @Component({
   selector: 'app-cantina-dettaglio',
   standalone: true,
-  imports: [MatIcon, AlcoliciCantina,MatButtonModule, DegustazioniCantina, BoxCantina, ViewRating, AlcolicoNuovo, AddRatingCantina],
+  // Sono presenti esattamente i componenti chiamati nel tuo file HTML
+  imports: [MatIcon, AlcoliciCantina, MatButtonModule, DegustazioniCantina, BoxCantina, ViewRating, AddRatingCantina, AlcolicoNuovo],
   templateUrl: './cantina-dettaglio.html',
   styleUrl: './cantina-dettaglio.css',
 })
@@ -31,20 +30,24 @@ export class CantinaDettaglio implements OnInit {
   cantina!: Cantina;
   alcolici: any;
   immagineUrl: string = '/image-cantina.png';
+  
   private cdr = inject(ChangeDetectorRef);
   private dialog = inject(MatDialog);
+  
+  // Devono essere 'public' perché li usi direttamente nell'HTML (es. auth.grant().isCustomer)
   public readonly auth = inject(AuthServices);
+  public readonly utenteService = inject(UtenteServices); 
 
   constructor(
     private route: ActivatedRoute,
     private cantinaService: CantinaServices,
     private uploadImageCantinaService: UploadImageService
-  ) {
-
-  }
+  ) {}
 
   ngOnInit(): void {
     this.id = Number(this.route.snapshot.paramMap.get('id'));
+    console.log("CantinaDettaglio instanziato, idCantina:" + this.id);
+    
     this.cantinaService.getById(this.id).subscribe({
       next: (resp) => {
         this.cantina = resp;
@@ -54,15 +57,17 @@ export class CantinaDettaglio implements OnInit {
         console.error('Errore nel caricamento cantina', err);
       }
     });
-
-    console.log("CantinaDettaglio instanziato, idCantina:" + this.id);
   }
 
   caricaImmagine(): void {
-    this.uploadImageCantinaService.list<any>('cantina', 'idCantina', this.cantina.id).subscribe({
+    this.uploadImageCantinaService.list<any>('cantina', 'idCantina', this.id).subscribe({
       next: (immagini: any[]) => {
-        const immagine = immagini?.[immagini.length - 1];
-        this.immagineUrl = immagine?.url ?? immagine?.path ?? immagine?.nomeFile ?? '/image-cantina.png';
+        if (immagini && immagini.length > 0) {
+          const primaImmagine = immagini[0];
+          this.immagineUrl = primaImmagine.url ?? primaImmagine.path ?? primaImmagine.nomeFile ?? '/image-cantina.png';
+        } else {
+          this.immagineUrl = '/image-cantina.png';
+        }
         this.cdr.markForCheck(); 
       },
       error: () => {
@@ -72,17 +77,17 @@ export class CantinaDettaglio implements OnInit {
     });
   }
 
-onImageError(event: Event): void {
-  const target = event.target as HTMLImageElement;
-  target.src = '/image-cantina.png';
-}
+  onImageError(event: Event): void {
+    const target = event.target as HTMLImageElement;
+    target.src = '/image-cantina.png';
+  }
 
-reloadCantina() {
- this.cantinaService.getById(this.id).subscribe({
+  reloadCantina() {
+    this.cantinaService.getById(this.id).subscribe({
       next: (resp) => {
         this.cantina = resp;
-     this.caricaImmagine();
-     this.cdr.detectChanges();
+        this.caricaImmagine();
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Errore nel caricamento cantina', err);
@@ -100,7 +105,7 @@ reloadCantina() {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.reloadCantina();
-        window.location.reload();
+        window.location.reload(); // Forza un refresh completo se preferisci
       }
     });
   }  
@@ -115,7 +120,21 @@ reloadCantina() {
     });
   }
 
-  get isSeller(): boolean {
-    return this.auth.grant().isSeller;
+  // --- LOGICA DI CONTROLLO PROPRIETARIO (Allineata con @if(isOwner) dell'HTML) ---
+  get isOwner(): boolean {
+    // 1. Se la cantina non c'è o non ha un venditore, nascondi i bottoni
+    if (!this.cantina || !this.cantina.idVenditore) return false;
+
+    // 2. Se non ha il ruolo di venditore nel token, nascondi
+    if (!this.auth.grant().isSeller) return false;
+
+    // 3. Estraiamo l'utente reale dallo stato dell'applicazione
+    const utenteCorrente = this.utenteService.loggedUtente();
+
+    // 4. Verifichiamo che l'utente sia stato caricato correttamente dal backend
+    if (!utenteCorrente || !utenteCorrente.id) return false;
+
+    // 5. Confrontiamo i due ID numerici esatti
+    return this.cantina.idVenditore === utenteCorrente.id;
   }
 }
