@@ -4,31 +4,12 @@
     <app-search-bar (search)="onSearch($event)"></app-search-bar>
   </div>
 
-  @if (msgErrore()) {
-    <p class="messaggio-errore">{{ msgErrore() }}</p>
-  }
 <div class="row g-3">
     @for (alcolico of alcolici(); track alcolico.id) {
       <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-        <div class="card-wrapper-eliminabile">
-          <button
-            type="button"
-            class="bottone-elimina"
-            [class.d-none]="!auth.grant().isSeller"
-            (click)="chiediConferma(alcolico.id)"
-            aria-label="Elimina alcolico">
-            <mat-icon class="icona-elimina">close</mat-icon>
-          </button>
-
-          @if (idInEliminazione() === alcolico.id) {
-            <div class="overlay-conferma d-flex flex-column align-items-center justify-content-center">
-              <p class="testo-conferma">Eliminare questo alcolico?</p>
-              <div class="d-flex gap-2">
-                <button type="button" class="btn btn-sm bottone-conferma" (click)="elimina(alcolico.id)">Elimina</button>
-                <button type="button" class="btn btn-sm btn-light" (click)="annullaEliminazione()">Annulla</button>
-              </div>
-            </div>
-          }
+        <div class="card-badge-wrapper">
+          <app-alcolico-elimina [alcolico]="alcolico"></app-alcolico-elimina>
+          <app-alcolico-immagine [alcolico]="alcolico"></app-alcolico-immagine>
 
           <app-card-alcolico [alcolico]="alcolico"></app-card-alcolico>
         </div>
