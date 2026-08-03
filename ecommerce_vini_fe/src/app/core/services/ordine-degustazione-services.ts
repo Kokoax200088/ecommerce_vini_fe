@@ -29,7 +29,7 @@ export class OrdineDegustazioneServices {
         if (idDegustazione) params = params.set('idDegustazione', idDegustazione);
         if (idCantina) params = params.set('idCantina', idCantina);
 
-        this.http.get<ordineDegustazione[]>(this.baseUrl + "/rest/api/ordine-degustazione/list", { params })
+        this.http.get<ordineDegustazione[]>(this.baseUrl + "/ordine-degustazione/list", { params })
             .subscribe({
                 next: (resp) => this.ordiniDegustazione.set(resp),
                 error: (err) => console.error('Errore nel caricamento ordini degustazione', err)
@@ -37,17 +37,17 @@ export class OrdineDegustazioneServices {
     }
 
     create(body: ordineDegustazioneReq) {
-        return this.http.post(this.baseUrl + "/rest/api/ordine-degustazione/create", body)
+        return this.http.post(this.baseUrl + "/ordine-degustazione/create", body)
             .pipe(tap(() => this.list()));
     }
 
     update(body: ordineDegustazioneReq) {
-        return this.http.put(this.baseUrl + "/rest/api/ordine-degustazione/update", body)
+        return this.http.put(this.baseUrl + "/ordine-degustazione/update", body)
             .pipe(tap(() => this.list()));
     }
 
     remove(id: number) {
-        return this.http.delete(this.baseUrl + "/rest/api/ordine-degustazione/remove/" + id)
+        return this.http.delete(this.baseUrl + "/ordine-degustazione/remove/" + id)
             .pipe(tap(() => this.list()));
     }
 }

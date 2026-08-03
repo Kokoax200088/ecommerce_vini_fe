@@ -29,6 +29,7 @@ caricaImmagine(): void {
   this.uploadImageDegustazioneService.getById('degustazione', this.degustazione.id).subscribe({
     next: (immagine: any) => {
       this.immagineUrl = immagine?.url ?? immagine?.path ?? immagine?.nomeFile ?? '/image-degustazione.png';
+      console.log("URL IMMAGINE "+this.immagineUrl);
       this.cdr.markForCheck(); 
     },
     error: () => {

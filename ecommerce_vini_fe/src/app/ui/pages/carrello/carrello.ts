@@ -5,6 +5,11 @@ import { ProdottoAlcolicoComponent } from "../../../components/prodotto-alcolico
 import { ProdottoDegustazioneComponent } from '../../../components/prodotto-degustazione/prodotto-degustazione';
 import { AuthServices } from '../../../core/services/auth-services';
 import { CommonModule } from '@angular/common';
+import { OrdiniServices } from '../../../core/services/ordini-services';
+import { STATUS_ORDINE, STATUS_ORDINE_DEGUSTAZIONE } from '../../../core/models/status';
+import { ordineDegustazioneReq } from '../../../core/models/ordineDegustazione';
+import { OrdineDegustazioneServices } from '../../../core/services/ordine-degustazione-services';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-carrello',
@@ -16,7 +21,8 @@ export class Carrello {
   private cartService = inject(CarrelloService);
   private utenteService = inject(UtenteServices);
   private authService = inject(AuthServices);
-
+  private ordineService = inject(OrdiniServices);
+  private ordineDegustazioneService = inject(OrdineDegustazioneServices);
   loggedUtente = computed(() => this.utenteService.loggedUtente());
   cart = this.cartService.cart;
 
@@ -60,6 +66,53 @@ ngOnInit(): void {
   });
 
 
-  procediOrdine() {}
+  procediOrdine() {
+    const utente = this.utenteService.loggedUtente();
+    const data_ordine = new Date().toISOString().slice(0, 10);
+    const cart = this.cart();
 
+    const ordine = {
+      id_utente: utente?.id,
+      id_status: STATUS_ORDINE.IN_ATTESA,
+      data_ordine: data_ordine,
+      totale: this.prezzoTotale(),
+      indirizzoDestinazione: utente?.indirizzo,
+      listOrdineAlcolico: cart?.listaProdotti.map(p => ({
+        id_alcolico: p.alcolico.id,
+        quantità: p.quantità
+      })) ?? [],
+      listOrdineDegustazione: [] 
+    };
+
+    this.ordineService.create(ordine).subscribe({
+      next: (ordineCreato) => {
+        const listaDegustazione = cart?.listaDegustazione ?? [];
+
+        if (listaDegustazione.length === 0) {
+          console.log('Ordine creato senza degustazioni:', ordineCreato);
+          return;
+        }
+
+        const richiesteDegustazione = listaDegustazione.map(d => {
+          const body: ordineDegustazioneReq = {
+            ordineId: ordineCreato.id,
+            statusId: STATUS_ORDINE_DEGUSTAZIONE.IN_ATTESA,
+            degustazioneId: d.degustazione.id,
+            cantinaId: d.degustazione.id_cantina,
+            quantita: d.quantità,
+            data_ordine: data_ordine
+          };
+          return this.ordineDegustazioneService.create(body);
+        });
+
+        forkJoin(richiesteDegustazione).subscribe({
+          next: () => console.log('Tutte le degustazioni associate all\'ordine', ordineCreato.id + " JSON ordine creato:" + JSON.stringify(ordineCreato)),
+          error: (err) => console.error('Errore nella creazione di una o più ordine-degustazione', err)
+        });
+      },
+      error: (err) => console.error('Errore nella creazione dell\'ordine', err)
+    });
+  }
+
+  
 }
