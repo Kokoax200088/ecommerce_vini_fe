@@ -18,7 +18,7 @@
       <mat-icon class="location-icon">place</mat-icon>
       <p class="mb-0">{{ cantina?.posizione }}</p>
       @if(isSeller){
-      <button type="button" mat-flat-button class="btn-crea-cantina" (click)="apriModificaCantina()">
+      <button type="button" mat-flat-button class="btn-crea-cantina ms-auto" (click)="apriModificaCantina()">
         <mat-icon>edit</mat-icon>
         Modifica
       </button>
@@ -26,10 +26,8 @@
         <mat-icon>delete</mat-icon>
         Elimina
       </button>
-      
-      <app-card-add-box [idCantina]="this.id"></app-card-add-box>
+    
     }
-      <app-alcolico-nuovo class="ms-auto" [idCantina]="cantina?.id"></app-alcolico-nuovo>
       
     </div>
     <div class="mt-4 d-flex align-items-center gap-2">
@@ -37,16 +35,11 @@
     </div>
     
 
-    @if(cantina?.listCantinaAlcolico && cantina?.listCantinaAlcolico.length > 0) {
     <app-alcolici-cantina [idCantina]="cantina?.id"></app-alcolici-cantina>
-    }
 
-    @if(cantina?.listBox && cantina?.listBox.length > 0) {
     <app-box-cantina [idCantina]="cantina?.id"></app-box-cantina>
-    }
-    @if(cantina?.listDegustazione && cantina?.listDegustazione.length > 0) {
+
     <app-degustazioni-cantina [idCantina] = "cantina?.id"></app-degustazioni-cantina>
-    }
 
      @if ((cantina?.listRatingCantina?.length ?? 0) > 0) {
   <div class="ratings-list mt-4">
