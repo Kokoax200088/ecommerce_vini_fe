@@ -21,6 +21,7 @@
     <div class="mt-4 d-flex align-items-center gap-2">
       <p class="mb-0">{{ cantina?.descrizione }}</p>
     </div>
+    <app-card-add-box [idCantina]="this.id"></app-card-add-box>
     @if(cantina?.listCantinaAlcolico && cantina?.listCantinaAlcolico.length > 0) {
     <app-alcolici-cantina [idCantina]="cantina?.id"></app-alcolici-cantina>
     }

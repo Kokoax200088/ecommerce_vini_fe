@@ -9,11 +9,12 @@ import { AlcolicoServices } from '../../../core/services/alcolico-services';
 import { AlcoliciCantina } from '../../../components/alcolici-cantina/alcolici-cantina';
 import { DegustazioniCantina } from "../../../components/degustazioni-cantina/degustazioni-cantina";
 import { BoxCantina } from "../../../components/box-cantina/box-cantina";
+import { CardAddBox } from "../../../components/card-add-box/card-add-box";
 
 @Component({
   selector: 'app-cantina-dettaglio',
   standalone: true,
-  imports: [MatIcon, AlcoliciCantina, DegustazioniCantina, BoxCantina],
+  imports: [MatIcon, AlcoliciCantina, DegustazioniCantina, BoxCantina, CardAddBox],
   templateUrl: './cantina-dettaglio.html',
   styleUrl: './cantina-dettaglio.css',
 })
@@ -29,6 +30,7 @@ export class CantinaDettaglio implements OnInit {
     private cantinaService: CantinaServices,
     private uploadImageCantinaService: UploadImageService
   ) {
+
   }
 
   ngOnInit(): void {
@@ -42,6 +44,8 @@ export class CantinaDettaglio implements OnInit {
         console.error('Errore nel caricamento cantina', err);
       }
     });
+
+    console.log("CantinaDettaglio instanziato, idCantina:" + this.id);
   }
 
   caricaImmagine(): void {

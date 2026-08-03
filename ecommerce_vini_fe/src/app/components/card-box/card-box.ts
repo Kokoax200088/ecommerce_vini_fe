@@ -22,7 +22,7 @@ export class CardBox {
 
   ngOnInit(): void {
     this.caricaImmagine();
-    console.log("ID CANTINA PER FAVORE="+this.idCantina);
+    //console.log("ID CANTINA PER FAVORE="+this.idCantina);
   }
 
   caricaImmagine(): void {
@@ -33,7 +33,8 @@ export class CardBox {
           this.cdr.markForCheck(); //what does this do?
         },
         error: () => {
-          this.immagineUrl = 'image-box.png'; //TO BE LOADED
+          console.log("CARDBOX caricamento image-box.png");
+          this.immagineUrl = 'image-box.png';
           this.cdr.markForCheck();
         }
       });

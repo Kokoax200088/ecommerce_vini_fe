@@ -28,4 +28,8 @@ export class BoxAlcolicoServices {
 
         return 0;
     }
+
+    create(body: {}){
+        return this.http.post(this.baseUrl + "/box-alcolico/create", body);
+    }
 }

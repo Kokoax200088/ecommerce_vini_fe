@@ -79,7 +79,7 @@ export class CantinaServices {
     return this.http.get<CantinaALcolico>(this.baseUrl + "/cantina-alcolico/get/" + id);
 }
 
-getCantinaAlcolicoByFilter(idCantina: number | undefined, idAlcolico: number| undefined) {
+getCantinaAlcolicoByFilter(idCantina: number | null, idAlcolico: number| null) {
     let params = new HttpParams();
     if (idCantina != null) params = params.set('idCantina', idCantina);
     if (idAlcolico != null) params = params.set('idAlcolico', idAlcolico);

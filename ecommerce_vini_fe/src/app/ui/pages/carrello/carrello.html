@@ -11,7 +11,7 @@
         </div>
 
         <app-prodotto-alcolico [listProdottoAlcolico]="cart()?.listaProdotti ?? []" [idCart]="cart()!.id"></app-prodotto-alcolico>
-
+        <app-prodotto-box [listProdottoBox]="cart()?.listaBox ?? []" [idCart]="cart()!.id"></app-prodotto-box>
         <app-prodotto-degustazione [listProdottoDegustazione]="cart()?.listaDegustazione ?? []" [idCart]="cart()!.id"></app-prodotto-degustazione>
         
         <div class="riepilogo-prezzo">

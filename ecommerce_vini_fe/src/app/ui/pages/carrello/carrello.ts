@@ -5,10 +5,11 @@ import { ProdottoAlcolicoComponent } from "../../../components/prodotto-alcolico
 import { ProdottoDegustazioneComponent } from '../../../components/prodotto-degustazione/prodotto-degustazione';
 import { AuthServices } from '../../../core/services/auth-services';
 import { CommonModule } from '@angular/common';
+import { ProdottoBox } from "../../../components/prodotto-box/prodotto-box";
 
 @Component({
   selector: 'app-carrello',
-  imports: [ProdottoAlcolicoComponent, CommonModule, ProdottoDegustazioneComponent],
+  imports: [ProdottoAlcolicoComponent, CommonModule, ProdottoDegustazioneComponent, ProdottoBox],
   templateUrl: './carrello.html',
   styleUrl: './carrello.css',
 })
@@ -40,9 +41,9 @@ ngOnInit(): void {
 
     const qtaAlcolici = c.listaProdotti.reduce((acc, p) => acc + p.quantità, 0);
     const qtaDegustazioni = c.listaDegustazione.reduce((acc, d) => acc + d.quantità, 0);
-    const qtaBox = c.listaDegustazione.reduce((acc, b) => acc + b.quantità, 0);
+    const qtaBox = c.listaBox.reduce((acc, b) => acc + b.quantità, 0);
 
-    return qtaAlcolici + qtaDegustazioni;
+    return qtaAlcolici + qtaBox + qtaDegustazioni;
   });
 
   prezzoTotale = computed(() => {
@@ -52,13 +53,42 @@ ngOnInit(): void {
     const prezzoAlcolici = c.listaProdotti.reduce(
       (acc, p) => acc + (p.alcolico.prezzo * p.quantità), 0
     );
-    const prezzoDegustazioni = c.listaDegustazione.reduce(
-      (acc, d) => acc + (d.degustazione.prezzo * d.quantità), 0
-    );
 
-    return prezzoAlcolici + prezzoDegustazioni;
+    console.log("AOO " + JSON.stringify(this.cart()?.listaBox));
+
+    const prezzoBoxes = c.listaBox.reduce( //CHECK
+      (acc, p) => acc + (p.box.prezzo * p.quantità), 0
+    )
+
+    const prezzoDegustazioni = this.computePrezzoBox();
+
+    return prezzoAlcolici + prezzoBoxes + prezzoDegustazioni;
   });
 
+  computePrezzoBox():number{
+    console.log("entering computePrezzoBox");
+    const list = this.cart()?.listaBox ?? [];
+    //console.log("AOO " + JSON.stringify(list));
+    let total = 0;
+  
+    if (!list) return 0;
+    
+  for (const box of list) {
+    let boxSubtotal = 0;
+
+    for (const item of box.listBoxAlcolico) {
+      boxSubtotal += item.alcolico.prezzo * item.quantita;
+    }
+
+    const discountPercent = box.sconto as number;
+
+    const boxTotal = boxSubtotal * (1 - discountPercent / 100);
+    total += boxTotal;
+  }
+
+  console.log("AOO totale=" + total);
+    return total;
+  }
 
   procediOrdine() {}
 
