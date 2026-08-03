@@ -10,7 +10,7 @@ import { OrdiniServices } from '../../../core/services/ordini-services';
 import { STATUS_ORDINE, STATUS_ORDINE_DEGUSTAZIONE } from '../../../core/models/status';
 import { ordineDegustazioneReq } from '../../../core/models/ordineDegustazione';
 import { OrdineDegustazioneServices } from '../../../core/services/ordine-degustazione-services';
-import { forkJoin } from 'rxjs';
+import { forkJoin, of } from 'rxjs';
 import { OrdineAlcolicoService } from '../../../core/services/ordine-alcolico-services';
 import { ordineAlcolicoReq } from '../../../core/models/ordineAlcolico';
 import { ordineBoxReq } from '../../../core/models/ordineBox';
@@ -99,7 +99,7 @@ ngOnInit(): void {
     );
   }
 
-  procediOrdine() {
+   procediOrdine() {
     const utente = this.utenteService.loggedUtente();
     const data_ordine = new Date().toISOString().slice(0, 10);
     const cart = this.cart();
@@ -173,6 +173,27 @@ ngOnInit(): void {
         forkJoin(richiestaBox).subscribe({
           next: () => console.log('Tutti i box associati all\'ordine', ordineCreato.id + " JSON ordine creato:" + JSON.stringify(ordineCreato)),
           error: (err) => console.error('Errore nella creazione di una o più ordine-box', err)
+        });
+
+        // Una volta create tutte le righe d'ordine (degustazioni, alcolici, box),
+        // svuoto il carrello sia lato backend che lato stato locale.
+        forkJoin([
+          forkJoin(richiesteDegustazione.length ? richiesteDegustazione : [of(null)]),
+          forkJoin(richiestaAlcolico.length ? richiestaAlcolico : [of(null)]),
+          forkJoin(richiestaBox.length ? richiestaBox : [of(null)])
+        ]).subscribe({
+          next: () => {
+            const idCarrello = utente?.idCarrello;
+            if (idCarrello) {
+              this.cartService.svuotaCarrello(idCarrello).subscribe({
+                next: () => console.log('Carrello svuotato con successo'),
+                error: (err) => console.error('Errore nello svuotamento del carrello', err)
+              });
+            } else {
+              this.cartService.clearCartState();
+            }
+          },
+          error: (err) => console.error('Errore: carrello non svuotato per un errore nella creazione dell\'ordine', err)
         });
       },
       error: (err) => console.error('Errore nella creazione dell\'ordine', err)
