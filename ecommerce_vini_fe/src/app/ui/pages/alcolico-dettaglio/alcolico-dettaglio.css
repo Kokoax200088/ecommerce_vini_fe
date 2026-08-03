@@ -24,10 +24,17 @@
 
 .bottone-indietro {
   color: #6e0c18;
+  background-color: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.2s ease-in-out;
+  border: 1px solid rgba(0, 0, 0, 0.05); /* opzionale per definirlo meglio */
 }
 
 .bottone-indietro:hover {
-  background-color: #f7e9ea;
+  background-color: #f8f9fa;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
 }
 
 .badge-caratteristica {
