@@ -114,6 +114,7 @@ export class AddBox implements OnInit {
   OnSubmit(){
     //metto questo passaggio intermedio perchè potrebbe essere necessario per la modifica
     this.createBox(this.createBoxForm);
+    this.close()
   }
 
   createBox(form: FormGroup){
@@ -141,11 +142,6 @@ export class AddBox implements OnInit {
             error: (err) => console.error('BoxAlcolico create failed', err)
           });
         })
-        /*
-        contents.map(item =>{
-          console.log(JSON.stringify(item));
-          this.boxAlcolicoService.create(item);
-        });*/
       },
       error: (resp) => {
         console.error("Errore creazione box", resp);

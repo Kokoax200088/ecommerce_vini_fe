@@ -60,7 +60,7 @@ export class BoxServices {
     }
 
     delete(id:number){
-        return this.http.delete(this.baseUrl + "/box/remove/" + id)
+        return this.http.delete(this.baseUrl + "/box/delete/" + id)
             .pipe(tap(() => this.list()));
     }
 }

@@ -42,4 +42,9 @@ export class BoxAlcolicoServices {
         return this.http.post(this.baseUrl + "/boxalcolico/create", body)
             .pipe(tap(() => this.list(undefined, undefined)));
     }
+
+    delete(id:number){
+        return this.http.delete(this.baseUrl + "/boxalcolico/delete/"+ id)
+            .pipe(tap(() => this.list(undefined, undefined)));
+    }
 }
