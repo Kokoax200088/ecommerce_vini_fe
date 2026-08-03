@@ -13,11 +13,15 @@ import { ViewRating } from "../../../components/view-rating/view-rating";
 import { AlcolicoNuovo } from "../../../components/alcolico-nuovo/alcolico-nuovo";
 import { AddRatingCantina } from "../../../components/add-rating-cantina/add-rating-cantina";
 import { AuthServices } from '../../../core/services/auth-services';
+import { CantinaCreate } from '../../../dialogs/cantina-create/cantina-create';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
+import { CantinaDelete } from '../../../dialogs/cantina-delete/cantina-delete';
 
 @Component({
   selector: 'app-cantina-dettaglio',
   standalone: true,
-  imports: [MatIcon, AlcoliciCantina, DegustazioniCantina, BoxCantina, ViewRating, AlcolicoNuovo, AddRatingCantina],
+  imports: [MatIcon, AlcoliciCantina,MatButtonModule, DegustazioniCantina, BoxCantina, ViewRating, AlcolicoNuovo, AddRatingCantina],
   templateUrl: './cantina-dettaglio.html',
   styleUrl: './cantina-dettaglio.css',
 })
@@ -27,7 +31,7 @@ export class CantinaDettaglio implements OnInit {
   alcolici: any;
   immagineUrl: string = '/image-cantina.png';
   private cdr = inject(ChangeDetectorRef);
-  
+  private dialog = inject(MatDialog);
   public readonly auth = inject(AuthServices);
 
   constructor(
@@ -72,11 +76,41 @@ reloadCantina() {
  this.cantinaService.getById(this.id).subscribe({
       next: (resp) => {
         this.cantina = resp;
-        this.caricaImmagine();
+     this.caricaImmagine();
+     this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Errore nel caricamento cantina', err);
       }
     });
-}
+  }
+  
+  apriModificaCantina() {
+    console.log("Apri Modifica Cantina con ID:", this.cantina.id);
+    const dialogRef = this.dialog.open(CantinaCreate, {
+      width: '60%',
+      data: { id: this.cantina.id }
+    });
+      
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.reloadCantina();
+        window.location.reload();
+      }
+    });
+  }  
+
+  apriEliminaCantina(): void {
+    this.dialog.open(CantinaDelete, {
+      width: '40%',
+      data: {
+        idCantina: this.cantina?.id,
+        message: `Sei sicuro di voler eliminare la cantina "${this.cantina?.nome}"? L'operazione è irreversibile.`
+      }
+    });
+  }
+
+  get isSeller(): boolean {
+    return this.auth.grant().isSeller;
+  }
 }

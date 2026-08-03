@@ -17,6 +17,16 @@
     <div class="mt-4 d-flex align-items-center gap-2">
       <mat-icon class="location-icon">place</mat-icon>
       <p class="mb-0">{{ cantina?.posizione }}</p>
+      @if(isSeller){
+      <button type="button" mat-flat-button class="btn-crea-cantina" (click)="apriModificaCantina()">
+        <mat-icon>edit</mat-icon>
+        Modifica
+      </button>
+      <button type="button" mat-flat-button class="btn-crea-cantina" (click)="apriEliminaCantina()">
+        <mat-icon>delete</mat-icon>
+        Elimina
+      </button>
+    }
       <app-alcolico-nuovo class="ms-auto" [idCantina]="cantina?.id"></app-alcolico-nuovo>
     </div>
     <div class="mt-4 d-flex align-items-center gap-2">

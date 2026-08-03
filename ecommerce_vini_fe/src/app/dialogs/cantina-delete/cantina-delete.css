@@ -1,0 +1,64 @@
+.dialog-container {
+  overflow: hidden;
+  padding-bottom: 0.5rem; 
+}
+
+.cantina-header {
+  background-color: #6E0C18;
+  color: white;
+  margin: -1.5rem -1.5rem 0 -1.5rem;
+  padding: 1.5rem;
+  text-align: center;
+  font-weight: 500;
+  border-top-left-radius: 4px; /* Aiuta se material fa angoli stondati */
+  border-top-right-radius: 4px;
+}
+
+.dialog-content {
+  margin: 1.5rem 0;
+}
+
+.btn-bordeaux {
+  background-color: #6E0C18 !important;
+  color: white !important;
+  border: 0.1rem solid #6E0C18 !important;
+  border-radius: 0.4rem;
+  transition: opacity 0.2s;
+}
+
+.btn-bordeaux:hover {
+  opacity: 0.9;
+}
+
+.btn-outline-bordeaux {
+  color: #6E0C18 !important;
+  background-color: transparent !important;
+  border: 0.1rem solid #6E0C18 !important;
+  border-radius: 0.4rem;
+  transition: background-color 0.2s;
+}
+
+.btn-outline-bordeaux:hover {
+  background-color: #fcf4f5 !important;
+}
+
+.bordeaux-alert {
+  background-color: #fcf4f5;
+  border: 0.1rem solid #e2c1c6;
+  border-left: 0.4rem solid #6E0C18;
+  color: #6E0C18;
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  font-weight: 500;
+  border-radius: 0.3rem;
+}
+
+.icon-sm {
+  font-size: 1.2rem;
+  width: 1.2rem;
+  height: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
