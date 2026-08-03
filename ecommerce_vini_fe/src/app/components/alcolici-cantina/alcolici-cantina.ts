@@ -1,4 +1,4 @@
-import { Component, computed, inject, Input } from '@angular/core';
+import { Component, computed, inject, Input, SimpleChanges } from '@angular/core';
 import { CantinaALcolico } from '../../core/models/cantina';
 import { CantinaServices } from '../../core/services/cantina-services';
 import { CardAlcolico } from "../card-alcolico/card-alcolico";
@@ -36,6 +36,12 @@ export class AlcoliciCantina {
     this.cantinaService.listAlcolici(this.idCantina);
     const userId = this.auth.grant()?.userId ?? undefined;
     this.utenteService.findLoggedInfos(userId);
+  }
+
+   ngOnChanges(changes: SimpleChanges): void {
+    if (changes['idCantina'] && this.idCantina) {
+      this.cantinaService.listAlcolici(this.idCantina);
+    }
   }
 
   onAggiungiCarrello(alcolicoCantina: any, quantita: number): void {
