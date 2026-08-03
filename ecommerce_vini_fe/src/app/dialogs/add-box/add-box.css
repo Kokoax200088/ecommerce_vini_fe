@@ -1,0 +1,107 @@
+.profile-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.profile-card {
+  border-radius: 12px;
+  padding: 16px;
+  background-color: #ffffff;
+}
+
+.profile-header {
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 12px;
+}
+
+.dialog-header .mat-card-subtitle {
+  color: #6c757d;
+}
+
+.user-name {
+  color: #3b0d18;
+  font-weight: 700;
+}
+
+/* Colore bordeaux per il tema dell'app */
+.bg-burgundy {
+  background-color: #3b0d18;
+  color: #ffffff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+}
+
+.btn-burgundy {
+  background-color: #3b0d18 !important;
+  color: #ffffff !important;
+  padding: 8px 24px !important;
+  border-radius: 6px !important;
+}
+
+.btn-dialog-action {
+  min-width: 180px;
+}
+
+/* Delete button + text on the same line */
+.selected-list-wrapper {
+  background: #fafafa;
+  border: 1px solid #f0f0f0;
+  border-radius: 10px;
+  padding: 14px;
+}
+
+.selected-list {
+  padding: 0;
+}
+
+/* Force the MDC list item to be a single row */
+.selected-item.mat-mdc-list-item {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  flex-wrap: nowrap !important;
+}
+
+/* The internal content wrapper must also stay in the same row */
+.selected-item .mat-mdc-list-item__content {
+  display: flex !important;
+  align-items: center !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;   /* important for ellipsis/wrapping behavior */
+  flex-wrap: nowrap !important;
+}
+
+/* Your text should not wrap */
+.selected-item-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Ensure the delete icon button stays inline (not taking a new line) */
+.selected-item button.mat-mdc-icon-button,
+.selected-item button[mat-icon-button] {
+  flex: 0 0 auto !important;
+  margin: 0 !important;
+}
+
+/* % must NOT be bold */
+.sconto-suffix {
+  font-weight: 400 !important;
+}
+
+/* Optional: make the warning icon a bit cleaner */
+mat-icon-button.mat-mdc-icon-button[color='warn'] {
+  flex: 0 0 auto;
+}
+
+/* Optional tablet/desktop separator style if you reuse it elsewhere */
+@media (min-width: 768px) {
+  .border-end-md {
+    border-right: 1px solid #e9ecef;
+  }
+}

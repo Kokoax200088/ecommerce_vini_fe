@@ -13,7 +13,7 @@ import { UtenteServices } from '../../../core/services/utente-services';
 import { CarrelloService } from '../../../core/services/carrello-services';
 import { concatMap, filter, forkJoin, from, of, switchMap, throwError } from 'rxjs';
 import { ProdottoBox, ProdottoBoxRequest } from '../../../core/models/carrello';
-import { Location } from '@angular/common';
+import { Location, DecimalPipe } from '@angular/common';
 import { BoxElimina } from '../../../components/box-elimina/box-elimina';
 import { MatDialog } from '@angular/material/dialog';
 import { NotificationServices } from '../../../core/services/notification-services';
@@ -23,7 +23,7 @@ import { UploadImage } from '../../../components/upload-image/upload-image';
 
 @Component({
   selector: 'app-box-dettaglio',
-  imports: [QuantitaSelector, BoxElimina],
+  imports: [QuantitaSelector, DecimalPipe],
   templateUrl: './box-dettaglio.html',
   styleUrl: './box-dettaglio.css',
 })

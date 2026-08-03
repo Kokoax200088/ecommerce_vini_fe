@@ -13,10 +13,11 @@ import { BoxAlcolico } from '../../core/models/box';
 import { BoxAlcolicoServices } from '../../core/services/box-alcolico-services';
 import { BoxServices } from '../../core/services/box-services';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatCardModule } from "@angular/material/card";
 
 @Component({
   selector: 'app-add-box',
-  imports: [MatIcon, MatDialogContent, MatFormField, MatLabel, MatFormFieldModule, MatInputModule, MatSelectModule, MatList, MatListItem, FormsModule, ReactiveFormsModule],
+  imports: [MatIcon, MatDialogContent, MatFormField, MatLabel, MatFormFieldModule, MatInputModule, MatSelectModule, MatList, MatListItem, FormsModule, ReactiveFormsModule, MatCardModule],
   templateUrl: './add-box.html',
   styleUrl: './add-box.css',
 })
