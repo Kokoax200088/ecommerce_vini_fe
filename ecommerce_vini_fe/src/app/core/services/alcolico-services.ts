@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Service, signal } from '@angular/core';
-import { tap } from 'rxjs';
+import { switchMap, tap } from 'rxjs';
 import { AlcolicoModel, Colore, TipologiaAlcolico } from '../models/alcolico';
 import { APP_SETTING } from '../../setting/token';
 import { AppSettings } from '../../setting/config-model';
@@ -50,8 +50,24 @@ export class AlcolicoServices {
     }
 
     create(body: {}) {
-        return this.http.post(this.baseUrl + '/alcolico/create', body)
+        return this.http.post<{ msg: string, id: number }>(this.baseUrl + '/alcolico/create', body)
             .pipe(tap(() => this.list()));
+    }
+
+    createTipologia(nome: string) {
+        return this.http.post(this.baseUrl + '/tipologia-alcolico/create', { nome })
+            .pipe(
+                switchMap(() => this.http.get<TipologiaAlcolico[]>(this.baseUrl + '/tipologia-alcolico/list')),
+                tap((resp) => this.tipologie.set(resp))
+            );
+    }
+
+    createColore(nome: string) {
+        return this.http.post(this.baseUrl + '/colore/create', { nome })
+            .pipe(
+                switchMap(() => this.http.get<Colore[]>(this.baseUrl + '/colore/list')),
+                tap((resp) => this.colori.set(resp))
+            );
     }
 
     update(body: {}) {
