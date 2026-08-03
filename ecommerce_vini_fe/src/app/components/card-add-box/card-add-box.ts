@@ -19,7 +19,7 @@ export class CardAddBox {
   }
 
   ngOnInit(): void {
-    console.log("ID CANTINA PER FAVORE ADDBOX="+this.idCantina);
+    //console.log("ID CANTINA PER FAVORE ADDBOX="+this.idCantina);
   }
 
   aggiungiBox() {

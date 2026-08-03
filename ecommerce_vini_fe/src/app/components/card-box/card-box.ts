@@ -22,7 +22,7 @@ export class CardBox {
 
   ngOnInit(): void {
     this.caricaImmagine();
-    //console.log("ID CANTINA PER FAVORE="+this.idCantina);
+    console.log("ID CANTINA PER FAVORE="+this.idCantina);
   }
 
   caricaImmagine(): void {
@@ -41,6 +41,7 @@ export class CardBox {
   }
 
   onImageError(event: Event): void {
+    console.log("OnImageError per box id=" + this.box.id);
     const target = event.target as HTMLImageElement;
     target.src = '/image-box.png';
   }

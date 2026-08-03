@@ -2,7 +2,7 @@ import { Component, computed, inject, Input, signal } from '@angular/core';
 import { Box, BoxAlcolico } from '../../../core/models/box';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BoxServices } from '../../../core/services/box-services';
-import { UploadImageService } from '../../../core/services/uploadImage';
+import { ImmagineModel, UploadImageService } from '../../../core/services/uploadImage';
 import { BoxAlcolicoServices } from '../../../core/services/box-alcolico-services';
 import { CantinaServices } from '../../../core/services/cantina-services';
 import { Cantina, CantinaALcolico } from '../../../core/models/cantina';
@@ -11,13 +11,15 @@ import { QuantitaSelector } from '../../../components/quantita-selector/quantita
 import { BoxCantina } from '../../../components/box-cantina/box-cantina';
 import { UtenteServices } from '../../../core/services/utente-services';
 import { CarrelloService } from '../../../core/services/carrello-services';
-import { concatMap, filter, forkJoin, from, switchMap, throwError } from 'rxjs';
+import { concatMap, filter, forkJoin, from, of, switchMap, throwError } from 'rxjs';
 import { ProdottoBox, ProdottoBoxRequest } from '../../../core/models/carrello';
 import { Location } from '@angular/common';
 import { BoxElimina } from '../../../components/box-elimina/box-elimina';
 import { MatDialog } from '@angular/material/dialog';
 import { NotificationServices } from '../../../core/services/notification-services';
 import { DeleteBox } from '../../../dialogs/delete-box/delete-box';
+import { UtilitiesServices } from '../../../core/services/utilities-services';
+import { UploadImage } from '../../../components/upload-image/upload-image';
 
 @Component({
   selector: 'app-box-dettaglio',
@@ -40,6 +42,8 @@ export class BoxDettaglio {
 
   public readonly authService = inject(AuthServices);
   private readonly dialog = inject(MatDialog);
+  private readonly uploadImageService = inject(UploadImageService);
+  private readonly util = inject(UtilitiesServices);
   private readonly notification = inject(NotificationServices);
 
   constructor(
@@ -293,7 +297,46 @@ export class BoxDettaglio {
   });
 }
 
-  editBox(event: MouseEvent): void {
-    console.log('editBox');
+  addImage(event: MouseEvent): void {
+    event.stopPropagation();
+    
+        this.uploadImageService.list<ImmagineModel>('alcolico', 'idAlcolico', this.id).subscribe({
+          next: (immagini) => this.apriDialog(immagini ?? []),
+          error: () => this.apriDialog([])
+        });
   }
+
+  private apriDialog(precedenti: ImmagineModel[]): void {
+      const attuale = precedenti[precedenti.length - 1];
+  
+      const dialogRef = this.util.openDialog(UploadImage, {
+        entity: 'box',
+        idParamName: 'id_box',
+        id: this.id,
+        titolo: this.box()?.nome ?? "Immagine Box",
+        imageUrl: attuale?.url ?? null
+      });
+  
+      dialogRef.afterClosed().pipe(
+        filter(salvata => salvata === true),
+        switchMap(() => this.rimuoviPrecedenti(precedenti))
+      ).subscribe({
+        next: () => {
+          this.notification.success('Immagine aggiornata');
+        },
+        error: (err) => {
+          console.error('Errore durante l\'aggiornamento dell\'immagine', err);
+          this.notification.error('Impossibile aggiornare l\'immagine dell\'alcolico');
+        }
+      });
+    }
+
+      private rimuoviPrecedenti(precedenti: ImmagineModel[]) {
+        if (precedenti.length === 0) {
+          return of([]);
+        }
+    
+        return forkJoin(precedenti.map(immagine => this.uploadImageService.delete('alcolico', immagine.id)));
+      }
+
 }

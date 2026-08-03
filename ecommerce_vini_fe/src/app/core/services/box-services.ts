@@ -41,7 +41,7 @@ export class BoxServices {
 
     listByIdCantina(idCantina?: number): Observable<Box[]> {
         let params = new HttpParams();
-
+        console.log("MALEDETTO IDCANTINA=" + idCantina);
         if (idCantina !== undefined && idCantina !== null) {
             params = params.set('idCantina', String(idCantina));
         }
