@@ -84,8 +84,19 @@
               (aggiungiCarrello)="onAggiungiCarrello(box()!, $event)">
             </app-quantita-selector>
         }
-        @if (authService.grant().isCustomer) {
-          
+        @if (authService.grant().isSeller) {
+          <div> 
+          <button type="button"
+          title="Modifica box"
+          aria-label="Modifica box della cantina"
+          (click)="editBox($event)">Modifica Box
+  </button>
+          <button type="button"
+          title="Rimuovi dalla cantina"
+          aria-label="Rimuovi dalla cantina"
+          (click)="deleteBox($event)">Cancella Box
+  </button>
+  </div>
         }
 
       </div>

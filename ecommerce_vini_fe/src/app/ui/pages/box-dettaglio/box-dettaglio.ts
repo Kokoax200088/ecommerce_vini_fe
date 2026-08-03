@@ -7,14 +7,17 @@ import { BoxAlcolicoServices } from '../../../core/services/box-alcolico-service
 import { CantinaServices } from '../../../core/services/cantina-services';
 import { Cantina, CantinaALcolico } from '../../../core/models/cantina';
 import { AuthServices } from '../../../core/services/auth-services';
-import { QuantitaSelector} from "../../../components/quantita-selector/quantita-selector";
+import { QuantitaSelector } from '../../../components/quantita-selector/quantita-selector';
 import { BoxCantina } from '../../../components/box-cantina/box-cantina';
 import { UtenteServices } from '../../../core/services/utente-services';
 import { CarrelloService } from '../../../core/services/carrello-services';
-import { concatMap, from, switchMap, throwError } from 'rxjs';
+import { concatMap, filter, forkJoin, from, switchMap, throwError } from 'rxjs';
 import { ProdottoBox, ProdottoBoxRequest } from '../../../core/models/carrello';
 import { Location } from '@angular/common';
-import { BoxElimina } from "../../../components/box-elimina/box-elimina";
+import { BoxElimina } from '../../../components/box-elimina/box-elimina';
+import { MatDialog } from '@angular/material/dialog';
+import { NotificationServices } from '../../../core/services/notification-services';
+import { DeleteBox } from '../../../dialogs/delete-box/delete-box';
 
 @Component({
   selector: 'app-box-dettaglio',
@@ -36,9 +39,11 @@ export class BoxDettaglio {
   loggedUtente = computed(() => this.utenteService.loggedUtente());
 
   public readonly authService = inject(AuthServices);
+  private readonly dialog = inject(MatDialog);
+  private readonly notification = inject(NotificationServices);
 
   constructor(
-    private location:Location,
+    private location: Location,
     private route: ActivatedRoute,
     private router: Router,
     private boxService: BoxServices,
@@ -46,21 +51,18 @@ export class BoxDettaglio {
     private cantinaService: CantinaServices,
     private carrelloService: CarrelloService,
     private utenteService: UtenteServices,
-    private uploadImageBoxService: UploadImageService
-  ){
+    private uploadImageBoxService: UploadImageService,
+  ) {}
 
-  }
-
-  ngOnInit(): void{
+  ngOnInit(): void {
     this.id = Number(this.route.snapshot.paramMap.get('id')); //e funziona sta roba?
 
     const userId = this.authService.grant()?.userId ?? undefined;
     this.utenteService.findLoggedInfos(userId);
 
-
     const qc = this.route.snapshot.queryParamMap.get('idCantina');
     this.idCantina.set(qc != null ? Number(qc) : undefined);
-    console.log("ID set to " + this.id + ". idCantina=" + this.idCantina);
+    console.log('ID set to ' + this.id + '. idCantina=' + this.idCantina);
 
     this.boxService.getById(this.id).subscribe({
       next: (resp) => {
@@ -75,29 +77,29 @@ export class BoxDettaglio {
             const updated = this.listBoxAlcolico().map((boxAlc) => ({
               ...boxAlc,
               //available: this.boxAlcolicoService.findAvailability(boxAlc, alcolicoCantinaList),
-              numberAvailable: this.boxAlcolicoService.findMaxNumber(boxAlc, alcolicoCantinaList)
+              numberAvailable: this.boxAlcolicoService.findMaxNumber(boxAlc, alcolicoCantinaList),
             }));
 
             this.listBoxAlcolico.set(updated);
             this.computeMaxBuy();
           },
           error: (resp) => {
-            console.error("Errore nel caricamento delle disponibilità alcoliche", resp);
-          }
+            console.error('Errore nel caricamento delle disponibilità alcoliche', resp);
+          },
         });
       },
       error: (resp) => {
-        console.error("Errore nel caricamento box", resp);
-      }
-    })
+        console.error('Errore nel caricamento box', resp);
+      },
+    });
   }
 
-  computeSubtotal(){
+  computeSubtotal() {
     const list = this.box()?.listBoxAlcolico;
     this.subtotal = 0; // dovrebbe essere già inizializzato ma per sicurezza lo metto
     list?.forEach((item) => {
       this.subtotal += item.alcolico.prezzo * item.quantita;
-    })
+    });
   }
 
   computeTotal() {
@@ -107,130 +109,190 @@ export class BoxDettaglio {
     this.total = this.subtotal - discountAmount;
   }
 
-  computeMaxBuy(){
-    
+  computeMaxBuy() {
     let min = 99; //numero max arbitrario di box acquistabili
     for (var item of this.listBoxAlcolico()) {
       if (item.numberAvailable < min) {
-        console.log(item.alcolico.nome + " available:" + item.numberAvailable);
+        console.log(item.alcolico.nome + ' available:' + item.numberAvailable);
         min = item.numberAvailable;
-        console.log("newMin=" + min);
+        console.log('newMin=' + min);
       }
     }
     this.maxBuyNumber = Math.trunc(min);
-    console.log("maxBuyNumber=" + this.maxBuyNumber);
+    console.log('maxBuyNumber=' + this.maxBuyNumber);
   }
 
-  caricaImmagine(){
+  caricaImmagine() {
     this.uploadImageBoxService.getById('box', this.id).subscribe({
-      next: (immagine:any) => {
-        this.immagineUrl.set(immagine?.url ?? immagine?.path ?? immagine?.nomeFile ?? '/image-box.png');
+      next: (immagine: any) => {
+        this.immagineUrl.set(
+          immagine?.url ?? immagine?.path ?? immagine?.nomeFile ?? '/image-box.png',
+        );
       },
       error: () => {
         this.immagineUrl.set('/image-box.png');
-      }
-    })
+      },
+    });
   }
 
-  onImageError(event: Event) : void{
-    console.log("onImageError Box id=" + this.id);
+  onImageError(event: Event): void {
+    console.log('onImageError Box id=' + this.id);
     const target = event.target as HTMLImageElement;
     target.src = '/image-box.png';
   }
 
-  
-  onAggiungiCarrello(boxCantina: Box, quantita: number){
-    console.log("onAggiungiCarrello box=" + boxCantina.nome + " how many? " + quantita);
+  onAggiungiCarrello(boxCantina: Box, quantita: number) {
+    console.log('onAggiungiCarrello box=' + boxCantina.nome + ' how many? ' + quantita);
     const user = this.loggedUtente();
     if (!user || !this.box) return;
 
     const idCarrello = user.idCarrello;
     const idBox = this.box()?.id;
     const idCantina = this.idCantina();
-    console.log("idCarrello=" + idCarrello + " idBox=" + idBox + " idCantina=" + idCantina);
+    console.log('idCarrello=' + idCarrello + ' idBox=' + idBox + ' idCantina=' + idCantina);
 
     if (idBox == null) {
       throw new Error('Box id mancante');
     }
-    if (idCantina == null) { //è più safe di usare "!"
+    if (idCantina == null) {
+      //è più safe di usare "!"
       return throwError(() => new Error('Id cantina mancante'));
     }
 
     // 1) Crea/aggiorna riga Box nel carrello (ProdottoBox)
-    this.carrelloService.getByBox(idBox, idCarrello).pipe(
-      switchMap((listaProdotti: ProdottoBox[]) => {
-        if (listaProdotti && listaProdotti.length > 0) {
-          const rigaEsistente = listaProdotti[0];
-          //console.log(JSON.stringify(listaProdotti[0]));
-          const quantitaAttuale =
-            rigaEsistente.quantità ?? (rigaEsistente as any)['quantità'] ?? 0;
+    this.carrelloService
+      .getByBox(idBox, idCarrello)
+      .pipe(
+        switchMap((listaProdotti: ProdottoBox[]) => {
+          if (listaProdotti && listaProdotti.length > 0) {
+            const rigaEsistente = listaProdotti[0];
+            //console.log(JSON.stringify(listaProdotti[0]));
+            const quantitaAttuale =
+              rigaEsistente.quantità ?? (rigaEsistente as any)['quantità'] ?? 0;
 
-          const bodyAggiornato: ProdottoBoxRequest ={
-            id: listaProdotti[0].id,
-            id_carrello:idCarrello,
-            id_box: idBox,
-            id_cantina: idCantina,
-            quantità: quantitaAttuale + quantita
-          }
-          /*const itemAggiornato: any = {
+            const bodyAggiornato: ProdottoBoxRequest = {
+              id: listaProdotti[0].id,
+              id_carrello: idCarrello,
+              id_box: idBox,
+              id_cantina: idCantina,
+              quantità: quantitaAttuale + quantita,
+            };
+            /*const itemAggiornato: any = {
             ...rigaEsistente,
             quantita: quantitaAttuale + quantita,
           };*/
 
-          return this.carrelloService.updateProdottoBox(bodyAggiornato);
+            return this.carrelloService.updateProdottoBox(bodyAggiornato);
+          }
+
+          const body: ProdottoBoxRequest = {
+            id: 0,
+            id_carrello: idCarrello,
+            id_box: idBox, // richiesto dal backend
+            id_cantina: idCantina,
+            quantità: quantita,
+          };
+
+          console.log('PRODOTTOBOX BODY ' + JSON.stringify(body));
+          return this.carrelloService.createProdBox(body);
+        }),
+
+        // 2) Decrementa cantina per ogni componente del box
+        switchMap(() => {
+          const boxValue = this.box();
+          if (!boxValue?.listBoxAlcolico?.length) {
+            return from([] as any[]); //se non lo metto vs code mi flamma
+          }
+          return from(boxValue.listBoxAlcolico).pipe(
+            concatMap((comp) => {
+              const idAlcolico = comp.alcolico.id;
+              const consumo = comp.quantita * quantita; // per 1 box: comp.quantita, per quantitaBox: *
+
+              // Leggi quantità attuale in cantina
+              return this.cantinaService.getCantinaAlcolicoByFilter(idCantina, idAlcolico).pipe(
+                switchMap((rigaCantina: any) => {
+                  const item = Array.isArray(rigaCantina) ? rigaCantina[0] : rigaCantina;
+                  const nuovaQuantita: number = (item?.quantita ?? 0) - consumo;
+                  //console.log("Item: " + JSON.stringify(item));
+                  return this.cantinaService.updateCantinaAlcolico({
+                    id: item.id, // IMPORTANTISSIMO: usa l'id della riga CantinaALcolico
+                    cantinaId: item.idCantina,
+                    alcolicoId: idAlcolico,
+                    quantita: nuovaQuantita, // backend chiede la nuova quantità
+                  });
+                }),
+              );
+            }),
+          );
+        }),
+      )
+      .subscribe({
+        next: () => {
+          this.cantinaService.listAlcolici(idCantina);
+
+          //CHECK con questa riga torno indietro alla pagina precedente, è preferibile? ci sono varie opzioni disponibili idk
+          this.location.back();
+        },
+        error: (err) => console.error("Errore durante l'aggiunta del box al carrello:", err),
+      });
+
+    return null; //tutti i file path devono avere un return value
+  }
+
+  deleteBox(event: MouseEvent): void {
+    console.log('deleteBox');
+
+    event.stopPropagation();
+
+    const dialogRef = this.dialog.open(DeleteBox, {
+      //crea dialog
+      width: '450px',
+      data: {
+        message: `Sei sicuro di voler rimuovere ${this.box()?.nome} da questa cantina?`,
+        idCantina: this.idCantina(),
+      },
+    });
+
+    dialogRef
+      .afterClosed()
+      .pipe(filter((confermato) => confermato === true))
+      .subscribe(() => this.eseguiDelete());
+  }
+
+  private eseguiDelete(): void {
+  const boxId = this.box()?.id;
+  if (!boxId) return;
+
+  this.boxService.getById(boxId).pipe(
+    switchMap((boxResp: Box | any) => {
+      const list: BoxAlcolico[] = boxResp?.listBoxAlcolico ?? [];
+      const deletes = list.map((ba) =>
+        this.boxAlcolicoService.delete(ba.id)
+      );
+
+      // If there are no alcolici, still allow box deletion
+      return deletes.length ? forkJoin(deletes) : from([null]);
+    })
+  ).subscribe({
+    next: () => {
+      this.boxService.delete(boxId).subscribe({
+        next: () => {
+          this.boxService.list();
+          this.notification.success('Box rimosso dalla cantina');
+        },
+        error: (err) => {
+          console.error('Errore durante la rimozione del box', err);
+          this.notification.error('Impossibile rimuovere il box dalla cantina');
         }
+      });
+    },
+    error: (err) => {
+      console.error('Errore durante la cancellazione dei BoxAlcolico', err);
+    }
+  });
+}
 
-        const body:ProdottoBoxRequest = {
-          id: 0,
-          id_carrello: idCarrello,
-          id_box: idBox, // richiesto dal backend
-          id_cantina: idCantina,
-          quantità: quantita,
-        };
-
-        console.log("PRODOTTOBOX BODY " + JSON.stringify(body));
-        return this.carrelloService.createProdBox(body);
-      }),
-
-      // 2) Decrementa cantina per ogni componente del box
-          switchMap(() => {
-            const boxValue = this.box();
-            if (!boxValue?.listBoxAlcolico?.length) {
-              return from([] as any[]); //se non lo metto vs code mi flamma 
-            }
-            return from(boxValue.listBoxAlcolico).pipe(
-              concatMap((comp) => {
-                const idAlcolico = comp.alcolico.id;
-                const consumo = comp.quantita * quantita; // per 1 box: comp.quantita, per quantitaBox: *
-              
-                // Leggi quantità attuale in cantina
-                return this.cantinaService.getCantinaAlcolicoByFilter(idCantina, idAlcolico).pipe(
-                  switchMap((rigaCantina: any) => {
-                    const item = Array.isArray(rigaCantina) ? rigaCantina[0] : rigaCantina;
-                    const nuovaQuantita :number = (item?.quantita ?? 0) - consumo;
-                    //console.log("Item: " + JSON.stringify(item));
-                    return this.cantinaService.updateCantinaAlcolico({
-                      id: item.id,     // IMPORTANTISSIMO: usa l'id della riga CantinaALcolico
-                      cantinaId: item.idCantina,
-                      alcolicoId: idAlcolico,
-                      quantita: nuovaQuantita, // backend chiede la nuova quantità
-                    });
-                  })
-                );
-              })
-            );
-          })
-        ).subscribe({
-          next: () => {
-            this.cantinaService.listAlcolici(idCantina);
-            
-            //CHECK con questa riga torno indietro alla pagina precedente, è preferibile? ci sono varie opzioni disponibili idk
-            this.location.back(); 
-          },
-          error: (err) => console.error('Errore durante l\'aggiunta del box al carrello:', err),
-        });
-
-        return null; //tutti i file path devono avere un return value
-      }
-
+  editBox(event: MouseEvent): void {
+    console.log('editBox');
+  }
 }

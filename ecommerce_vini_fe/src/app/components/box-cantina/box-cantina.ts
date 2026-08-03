@@ -9,6 +9,7 @@ import { AuthServices } from '../../core/services/auth-services';
 import { CarrelloService } from '../../core/services/carrello-services';
 import { UtenteServices } from '../../core/services/utente-services';
 import { BoxElimina } from "../box-elimina/box-elimina";
+import { ActivatedRoute } from '@angular/router';
 import { CardAddBox } from "../card-add-box/card-add-box";
 
 @Component({
@@ -21,6 +22,7 @@ export class BoxCantina {
   @Input() idCantina!:number;
   listBoxCantina!: Observable<Box[]>;
   public readonly auth = inject(AuthServices);
+  public readonly route = inject(ActivatedRoute);
 
   loggedUtente = computed(() => this.utenteService.loggedUtente());
 
@@ -30,8 +32,20 @@ export class BoxCantina {
 
   ngOnInit(): void{
     //qui dovrei inizializzare la lista dei box in base all'id cantina
+    
+    this.route.queryParamMap.subscribe(() => {
+    const refresh = this.route.snapshot.queryParamMap.get('refresh');
+    if (refresh) {
+      this.loadBoxes(); // your method that calls boxService.listByCantina(...)
+    }
+  });
+    
     this.listBoxCantina =  this.boxService.listByIdCantina(this.idCantina); //ma serve farlo again?
     const userId = this.auth.grant()?.userId ?? undefined;
     this.utenteService.findLoggedInfos(userId);
+  }
+
+  loadBoxes() {
+    this.listBoxCantina = this.boxService.listByIdCantina(this.idCantina);
   }
 }
