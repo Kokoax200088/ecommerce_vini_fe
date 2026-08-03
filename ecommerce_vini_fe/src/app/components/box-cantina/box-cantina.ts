@@ -1,4 +1,4 @@
-import { Component, computed, inject, Input, OnInit } from '@angular/core';
+import { Component, computed, inject, Input, OnInit, SimpleChanges } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import { BoxServices } from '../../core/services/box-services';
 import { QuantitaSelector } from "../quantita-selector/quantita-selector";
@@ -30,6 +30,11 @@ export class BoxCantina {
     //this.listBoxCantina = this.boxService.listByIdCantina(this.idCantina);
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['idCantina'] && this.idCantina) {
+      this.boxService.listByIdCantina(this.idCantina)
+    }
+  }
   ngOnInit(): void{
     //qui dovrei inizializzare la lista dei box in base all'id cantina
     
@@ -39,11 +44,13 @@ export class BoxCantina {
       this.loadBoxes(); // your method that calls boxService.listByCantina(...)
     }
   });
+  
     
     this.listBoxCantina =  this.boxService.listByIdCantina(this.idCantina); //ma serve farlo again?
     const userId = this.auth.grant()?.userId ?? undefined;
     this.utenteService.findLoggedInfos(userId);
   }
+
 
   loadBoxes() {
     this.listBoxCantina = this.boxService.listByIdCantina(this.idCantina);
