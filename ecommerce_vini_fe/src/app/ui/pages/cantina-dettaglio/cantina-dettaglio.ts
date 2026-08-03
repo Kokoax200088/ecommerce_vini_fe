@@ -20,7 +20,6 @@ import { CantinaDelete } from '../../../dialogs/cantina-delete/cantina-delete';
 @Component({
   selector: 'app-cantina-dettaglio',
   standalone: true,
-  // Sono presenti esattamente i componenti chiamati nel tuo file HTML
   imports: [MatIcon, AlcoliciCantina, MatButtonModule, DegustazioniCantina, BoxCantina, ViewRating, AddRatingCantina, AlcolicoNuovo],
   templateUrl: './cantina-dettaglio.html',
   styleUrl: './cantina-dettaglio.css',
@@ -34,7 +33,6 @@ export class CantinaDettaglio implements OnInit {
   private cdr = inject(ChangeDetectorRef);
   private dialog = inject(MatDialog);
   
-  // Devono essere 'public' perché li usi direttamente nell'HTML (es. auth.grant().isCustomer)
   public readonly auth = inject(AuthServices);
   public readonly utenteService = inject(UtenteServices); 
 
@@ -105,7 +103,7 @@ export class CantinaDettaglio implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.reloadCantina();
-        window.location.reload(); // Forza un refresh completo se preferisci
+        window.location.reload();
       }
     });
   }  
@@ -120,21 +118,15 @@ export class CantinaDettaglio implements OnInit {
     });
   }
 
-  // --- LOGICA DI CONTROLLO PROPRIETARIO (Allineata con @if(isOwner) dell'HTML) ---
   get isOwner(): boolean {
-    // 1. Se la cantina non c'è o non ha un venditore, nascondi i bottoni
     if (!this.cantina || !this.cantina.idVenditore) return false;
 
-    // 2. Se non ha il ruolo di venditore nel token, nascondi
     if (!this.auth.grant().isSeller) return false;
 
-    // 3. Estraiamo l'utente reale dallo stato dell'applicazione
     const utenteCorrente = this.utenteService.loggedUtente();
 
-    // 4. Verifichiamo che l'utente sia stato caricato correttamente dal backend
     if (!utenteCorrente || !utenteCorrente.id) return false;
 
-    // 5. Confrontiamo i due ID numerici esatti
     return this.cantina.idVenditore === utenteCorrente.id;
   }
 }

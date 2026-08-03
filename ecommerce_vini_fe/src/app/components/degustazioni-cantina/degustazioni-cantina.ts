@@ -18,6 +18,7 @@ import { switchMap } from 'rxjs';
 })
 export class DegustazioniCantina {
   @Input() idCantina!: number;
+  @Input() isOwner: boolean = false;
 
   listCantinaDegustazioni: () => CantinaDegustazione[];
 
@@ -34,19 +35,27 @@ export class DegustazioniCantina {
   }
 
   ngOnInit(): void {
+    // 1. Carica le degustazioni (questo è pubblico e va bene per tutti)
     this.cantinaService.listDegustazioni(this.idCantina);
-    this.tokenService.me().subscribe({
-      next: (resp: MeDTO) => {
-        const userId = this.auth.grant().userId;
-        if (userId) {
+
+    // 2. Recuperiamo l'ID utente in modo sicuro, senza far arrabbiare TypeScript
+    const grantData = this.auth.grant() as any;
+    const userId = grantData?.userId || grantData?.id;
+
+    // 3. CONTROLLO PREVENTIVO: Chiama il backend SOLO se c'è un utente loggato
+    if (userId) {
+      this.tokenService.me().subscribe({
+        next: (resp: MeDTO) => {
           this.utenteService.findLoggedInfos(userId);
           console.log("nome=" + (this.loggedUtente()?.nome));
+        },
+        error: (resp: any) => {
+          console.error("Errore in init profile: il token potrebbe essere scaduto", resp);
         }
-      },
-      error: (resp: any) => {
-        console.log("errore in init profile" + resp);
-      }
-    });
+      });
+    } else {
+      console.log("Utente non loggato: salto la chiamata /me per evitare l'errore 401 e il redirect automatico.");
+    }
   }
 
   onAggiungiCarrello(degustazione: CantinaDegustazione, quantita: number = 1): void {

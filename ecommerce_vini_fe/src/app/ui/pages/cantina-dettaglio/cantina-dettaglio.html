@@ -11,8 +11,6 @@
     <div class="mt-4 d-flex align-items-center gap-2">
       <mat-icon class="location-icon">place</mat-icon>
       <p class="mb-0">{{ cantina?.posizione }}</p>
-      
-      <!-- Mostra i tasti solo se l'utente loggato è il reale proprietario -->
       @if(isOwner) {
         <button type="button" mat-flat-button class="btn-crea-cantina ms-auto" (click)="apriModificaCantina()">
           <mat-icon>edit</mat-icon>
@@ -25,16 +23,13 @@
       }
 
     </div>
-    
     <div class="mt-4 d-flex align-items-center gap-2">
       <p class="mb-0">{{ cantina?.descrizione }}</p>
     </div>
 
-    <app-alcolici-cantina [idCantina]="cantina?.id"></app-alcolici-cantina>
-
-    <app-box-cantina [idCantina]="cantina?.id"></app-box-cantina>
-
-    <app-degustazioni-cantina [idCantina]="cantina?.id"></app-degustazioni-cantina>
+    <app-alcolici-cantina [idCantina]="cantina?.id" [isOwner]="isOwner"></app-alcolici-cantina>
+    <app-box-cantina [idCantina]="cantina?.id" [isOwner]="isOwner"></app-box-cantina>
+    <app-degustazioni-cantina [idCantina]="cantina?.id" [isOwner]="isOwner"></app-degustazioni-cantina>
 
     @if ((cantina?.listRatingCantina?.length ?? 0) > 0) {
       <div class="ratings-list mt-4">
@@ -46,7 +41,7 @@
           </app-view-rating>
         }
       </div>
-    } 
+    }
 
     @if(auth.grant().isCustomer) {
       <app-add-rating-cantina [idCantina]="cantina?.id" (ratingCreated)="reloadCantina()"></app-add-rating-cantina>

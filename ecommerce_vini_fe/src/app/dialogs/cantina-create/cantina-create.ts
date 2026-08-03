@@ -39,7 +39,7 @@ export class CantinaCreate implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log("📦 [CantinaCreate] DATI RICEVUTI DAL DIALOGO:", this.data);
+    console.log("[CantinaCreate] DATI RICEVUTI DAL DIALOGO:", this.data);
 
     this.cantinaForm = this.fb.group({
       nome: ['', Validators.required],
@@ -48,11 +48,11 @@ export class CantinaCreate implements OnInit {
     });
 
     const utenteAttuale = this.utenteService.loggedUtente();
-    console.log("🔎 [CantinaCreate] Utente in memoria all'apertura del form:", utenteAttuale);
+    console.log("[CantinaCreate] Utente in memoria all'apertura del form:", utenteAttuale);
 
     if (!utenteAttuale) {
       const email = this.authService.grant().userId;
-      console.log("⏳ [CantinaCreate] Utente mancante. Uso la mail per scaricarlo:", email);
+      console.log("[CantinaCreate] Utente mancante. Uso la mail per scaricarlo:", email);
       if (email) {
         this.utenteService.findLoggedInfos(email);
       }
@@ -120,18 +120,18 @@ export class CantinaCreate implements OnInit {
     }
 
     const utenteCompleto = this.utenteService.loggedUtente();
-    console.log("🚀 [CantinaCreate] Tentativo di salvataggio. Oggetto utente:", utenteCompleto);
+    console.log("[CantinaCreate] Tentativo di salvataggio. Oggetto utente:", utenteCompleto);
     
     // QUI AVVIENE LA MAGIA: Prima prendiamo il venditoreDTO.id, poi se non c'è ripieghiamo sull'id utente
     const venditoreLoggatoId = (utenteCompleto as any)?.venditoreDTO?.id || utenteCompleto?.id || null;
 
     if (!venditoreLoggatoId) {
-      console.error("❌ [CantinaCreate] Impossibile recuperare ID! La mail nel token era:", this.authService.grant().userId);
+      console.error("[CantinaCreate] Impossibile recuperare ID! La mail nel token era:", this.authService.grant().userId);
       this.notifications.error("Errore di caricamento, per favore chiudi e riapri il popup.");
       return;
     }
 
-    console.log("✅ [CantinaCreate] Invio dati con ID VENDITORE:", venditoreLoggatoId);
+    console.log("[CantinaCreate] Invio dati con ID VENDITORE:", venditoreLoggatoId);
 
     const requestPayload = { 
       ...this.cantinaForm.value,
@@ -157,7 +157,7 @@ export class CantinaCreate implements OnInit {
           this.cdr.detectChanges(); 
         },
         error: (err) => {
-          console.error("❌ [CantinaCreate] Errore Backend:", err);
+          console.error("[CantinaCreate] Errore Backend:", err);
           this.notifications.error("Errore durante la creazione della cantina");
         }
       });
