@@ -118,7 +118,7 @@ export class CantinaDettaglio implements OnInit {
     });
   }
 
-  get isOwner(): boolean {
+ get isOwner(): boolean {
     if (!this.cantina || !this.cantina.idVenditore) return false;
 
     if (!this.auth.grant().isSeller) return false;
@@ -134,4 +134,8 @@ export class CantinaDettaglio implements OnInit {
 
     return Number(this.cantina.idVenditore) === Number(idVenditoreLoggato);
 }
+
+  onRatingEliminato() {
+    this.reloadCantina();
+  }
 }

@@ -1,5 +1,10 @@
 <div class="mt-4">
-  <h3 class="section-title-underlined">Le nostre degustazioni</h3>
+  <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+    <h3 class="section-title-underlined mb-0">Le nostre degustazioni</h3>
+    @if(isOwner) {
+      <app-degustazione-nuova [idCantina]="idCantina" (salvata)="ricarica()"></app-degustazione-nuova>
+    }
+  </div>
 
   <div class="mt-4 row g-3">
      @for (degustazione of listCantinaDegustazioni(); track degustazione.id) {
@@ -10,7 +15,23 @@
       € {{ degustazione.prezzo }}
     </div>
 
+    <app-degustazione-azioni
+      [degustazione]="degustazione"
+      [idCantina]="idCantina"
+      (aggiornata)="ricarica()">
+    </app-degustazione-azioni>
+    <app-degustazione-immagine
+      [idDegustazione]="degustazione.id"
+      [nome]="degustazione.nome">
+    </app-degustazione-immagine>
+
     <div class="card card-degustazione h-100 shadow-sm">
+      <img
+        [src]="urlImmagine(degustazione)"
+        (error)="onImageError($event)"
+        class="card-img-top img-fluid degustazione-img rounded-top"
+        [alt]="degustazione.nome">
+
       <div class="card-body">
         <h5 class="card-title">{{ degustazione.nome }}</h5>
         <p class="card-text">{{ degustazione.descrizione }}</p>

@@ -22,7 +22,7 @@ export class CardBox {
 
   ngOnInit(): void {
     this.caricaImmagine();
-    console.log("ID CANTINA PER FAVORE="+this.idCantina);
+    console.log("ID BOX PER FAVORE="+this.box.id);
   }
 
   caricaImmagine(): void {

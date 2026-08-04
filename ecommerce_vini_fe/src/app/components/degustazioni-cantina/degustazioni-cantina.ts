@@ -1,4 +1,4 @@
-import { Component, computed, inject, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, computed, inject, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CantinaDegustazione } from '../../core/models/cantina';
 import { CantinaServices } from '../../core/services/cantina-services';
@@ -9,10 +9,13 @@ import { CarrelloService } from '../../core/services/carrello-services';
 import { TokenServices } from '../../core/security/token-services';
 import { MeDTO } from '../../core/models/user';
 import { switchMap } from 'rxjs';
+import { DegustazioneNuova } from "../degustazione-nuova/degustazione-nuova";
+import { DegustazioneAzioni } from "../degustazione-azioni/degustazione-azioni";
+import { DegustazioneImmagine } from "../degustazione-immagine/degustazione-immagine";
 
 @Component({
   selector: 'app-degustazioni-cantina',
-  imports: [CommonModule],
+  imports: [CommonModule, DegustazioneNuova, DegustazioneAzioni, DegustazioneImmagine],
   templateUrl: './degustazioni-cantina.html',
   styleUrl: './degustazioni-cantina.css',
 })
@@ -24,6 +27,7 @@ export class DegustazioniCantina {
 
   public readonly auth = inject(AuthServices);
   private tokenService = inject(TokenServices);
+  private cdr = inject(ChangeDetectorRef);
   loggedUtente = computed(() => this.utenteService.loggedUtente());
 
   constructor(
@@ -56,6 +60,21 @@ export class DegustazioniCantina {
     } else {
       console.log("Utente non loggato: salto la chiamata /me per evitare l'errore 401 e il redirect automatico.");
     }
+  }
+
+  ricarica(): void {
+    this.cantinaService.listDegustazioni(this.idCantina);
+    this.cdr.markForCheck();
+  }
+
+  urlImmagine(degustazione: CantinaDegustazione): string {
+    const immagini = degustazione.immagini;
+    return immagini?.[immagini.length - 1]?.url ?? '/image-degustazione.png';
+  }
+
+  onImageError(event: Event): void {
+    const target = event.target as HTMLImageElement;
+    target.src = '/image-degustazione.png';
   }
 
   onAggiungiCarrello(degustazione: CantinaDegustazione, quantita: number = 1): void {

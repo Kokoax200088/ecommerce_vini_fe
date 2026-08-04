@@ -1,76 +1,129 @@
-<div class="dialog-container">
-    <mat-icon class="icon add me-2">add</mat-icon>
-    {{data.title}}
+<div class="profile-container container py-4">
+  <mat-card class="profile-card shadow-sm border-0 dialog-card">
+    <mat-card-header class="profile-header dialog-header">
+      <mat-card-title class="fs-3 font-weight-bold">
+        <div class="d-flex align-items-center gap-2">
+          <mat-icon class="icon add">add</mat-icon>
+          {{ data.title }}
+        </div>
+      </mat-card-title>
+      <mat-card-subtitle>Gestisci gli elementi nel box</mat-card-subtitle>
+    </mat-card-header>
 
-    <mat-dialog-content class="dialog-content">
-    <form [formGroup]="createBoxForm" (ngSubmit)="OnSubmit()" class="form-grid">
-      <mat-form-field>
-        <mat-label>Inserisci nome box</mat-label>
-        <input matInput formControlName="nome" placeholder="Nome box">
-    </mat-form-field>
-    <mat-form-field>
-        <mat-label>Inserisci sconto</mat-label>
-        <input matInput type="number" class="example-right-align" formControlName="sconto" placeholder="0">
-        <span matTextPrefix>%&nbsp;</span>
-    </mat-form-field>
+    <mat-card-content class="pt-4">
+      <form
+        [formGroup]="createBoxForm"
+        (ngSubmit)="OnSubmit()"
+        class="d-flex flex-column gap-3"
+      >
+        <!-- [nome] [sconto] -->
+        <div class="row g-3">
+          <div class="col-12 col-md-6">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Inserisci nome box</mat-label>
+              <input matInput formControlName="nome" placeholder="Nome box" />
+            </mat-form-field>
+          </div>
 
-    
-    <mat-form-field appearance="fill">
-    <mat-label>Seleziona alcolico</mat-label>
+          <div class="col-12 col-md-6">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Inserisci sconto</mat-label>
+              <input
+                matInput
+                type="number"
+                formControlName="sconto"
+                placeholder="0"
+              />
+              <span matTextSuffix class="sconto-suffix">% </span>
+            </mat-form-field>
+          </div>
+        </div>
 
-    <mat-select [(value)]="selectedAlcolicoId">
-      @for (x of listAlcolici(); track x.id) {
-        <mat-option [value]="x.id">
-          {{ x.alcolico.nome }}
-        </mat-option>
-      }
-    </mat-select>
-  </mat-form-field>
-    <div class="box-controls">
-    <mat-form-field appearance="fill">
-  <mat-label>Quantità (bottiglie)</mat-label>
-  <input matInput type="number" min="1" [value]="selectedQty"
-         (input)="setQtyFromInput(+$event.target.value)">
-</mat-form-field>
+        <!-- [seleziona alcolico] [quantità] -->
+        <div class="row g-3">
+          <div class="col-12 col-md-6">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Seleziona alcolico</mat-label>
+              <mat-select [(value)]="selectedAlcolicoId">
+                @for (x of listAlcolici(); track x.id) {
+                  <mat-option [value]="x.id">
+                    {{ x.alcolico.nome }}
+                  </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
 
-<button mat-raised-button color="primary"
-        type="button"
-        (click)="addOrUpdateSelectedInBox()"
-        [disabled]="selectedAlcolicoId == null">
-  Aggiungi al box
-</button>
-</div>
+          <div class="col-12 col-md-6">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Quantità (bottiglie)</mat-label>
+              <input
+                matInput
+                type="number"
+                min="1"
+                [value]="selectedQty"
+                (input)="setQtyFromInput(+$event.target.value)"
+              />
+            </mat-form-field>
+          </div>
+        </div>
 
-<div class="selected-list">
-  @if (listAlcoliciBox().length > 0) {
-    <mat-list>
-      @for (x of listAlcoliciBox(); track x.id) {
-        <mat-list-item>
-          {{ x.alcolico.nome }} - Quantità: {{x.quantita}}
-            <button
-              mat-icon-button
-              color="warn"
-              type="button"
-              aria-label="Rimuovi alcolico dal box"
-              (click)="removeFromBox(x.alcolico.id)"
-  >
-    <mat-icon>delete</mat-icon>
-  </button>
-        </mat-list-item>
-      }
-    </mat-list>
-  } @else {
-    <p>Nessun alcolico nel box.</p>
-  }
-</div>
-
-          <div class="form-actions full-width">
-          <button mat-flat-button class="btn-submit" type="submit" [disabled]="!createBoxForm.valid">
-            Crea Box
+        <!-- [button aggiungi al box] (centered) -->
+        <div class="d-flex justify-content-center mt-1">
+          <button
+            mat-flat-button
+            class="btn-burgundy btn-dialog-action"
+            type="button"
+            (click)="addOrUpdateSelectedInBox()"
+            [disabled]="selectedAlcolicoId == null"
+          >
+            Aggiungi al box
           </button>
         </div>
 
+        <!-- Nel box -->
+        <div class="selected-list-wrapper">
+          <h5 class="dialog-section-title text-secondary mb-3">Nel box</h5>
 
+          @if (listAlcoliciBox().length > 0) {
+            <mat-list class="selected-list">
+              @for (x of listAlcoliciBox(); track x.id) {
+                <!-- entry + delete button on same line -->
+                <mat-list-item class="selected-item">
+                  <div class="selected-item-text">
+                    {{ x.alcolico.nome }} - Quantità: {{ x.quantita }}
+                  
+
+                  <button
+                    mat-icon-button
+                    color="warn"
+                    type="button"
+                    aria-label="Rimuovi alcolico dal box"
+                    (click)="removeFromBox(x.alcolico.id)"
+                  >
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                  </div>
+                </mat-list-item>
+              }
+            </mat-list>
+          } @else {
+            <p class="text-muted m-0">Nessun alcolico nel box.</p>
+          }
+        </div>
+
+        <!-- [crea box] (centered) -->
+        <div class="form-actions full-width d-flex justify-content-center mt-2">
+          <button
+            mat-flat-button
+            class="btn-burgundy btn-submit"
+            type="submit"
+            [disabled]="!createBoxForm.valid"
+          >
+            Crea Box
+          </button>
+        </div>
       </form>
-  </mat-dialog-content>
+    </mat-card-content>
+  </mat-card>
 </div>

@@ -47,15 +47,13 @@ export class CatalogoCantine implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
-      if (params['filtro'] === 'mie') {
+    if(this.authService.grant().isSeller) {
         this.isVistaFiltrata = true;
-      } else {
+    }else {
         this.isVistaFiltrata = false;
         console.log("[Catalogo] Vista completa, scarico tutte le cantine.");
         this.cantinaService.list();
       }
-    });
   }
 
   onSearch(query: string): void {

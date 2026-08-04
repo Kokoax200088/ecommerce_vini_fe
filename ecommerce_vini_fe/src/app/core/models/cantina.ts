@@ -1,5 +1,6 @@
 import { AlcolicoModel } from "./alcolico";
 import { ImmagineCantinaModel } from "./immagineCantina";
+import { ImmagineDegustazioneModel } from "./immagineDegustazione";
 
 export interface CantinaALcolico{
     id:number;
@@ -18,6 +19,7 @@ export interface CantinaDegustazione{
     dataFine: Date;
     idCantina: number;
     listAlcolici: AlcolicoModel[];
+    immagini?: ImmagineDegustazioneModel[];
 }
 
 export interface Cantina {
