@@ -1,12 +1,12 @@
 import { Component, computed, inject } from '@angular/core';
 import {MatIconModule} from "@angular/material/icon";
 import { AuthServices } from '../../../core/services/auth-services';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { UtenteServices } from '../../../core/services/utente-services';
 
 @Component({
   selector: 'app-side-nav',
-  imports: [MatIconModule],
+  imports: [MatIconModule, RouterModule],
   templateUrl: './side-nav.html',
   styleUrl: './side-nav.css',
 })

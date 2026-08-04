@@ -9,9 +9,9 @@
        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
        <div class="card-badge-wrapper">
         <app-box-elimina [box]="boxCantina" [idCantina]="idCantina"></app-box-elimina>
-        
+        @if (idCantina != undefined) {
         <app-card-box [box]="boxCantina" [idCantina]="idCantina"></app-card-box>
-
+        }
         </div>
         </div>
     }

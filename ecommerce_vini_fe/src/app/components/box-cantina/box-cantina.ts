@@ -1,4 +1,4 @@
-import { Component, computed, inject, Input, OnInit } from '@angular/core';
+import { Component, computed, inject, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import { BoxServices } from '../../core/services/box-services';
 import { QuantitaSelector } from "../quantita-selector/quantita-selector";
@@ -18,7 +18,7 @@ import { CardAddBox } from "../card-add-box/card-add-box";
   templateUrl: './box-cantina.html',
   styleUrl: './box-cantina.css',
 })
-export class BoxCantina {
+export class BoxCantina implements OnChanges {
   @Input() idCantina!:number;
   listBoxCantina!: Observable<Box[]>;
   public readonly auth = inject(AuthServices);
@@ -27,7 +27,13 @@ export class BoxCantina {
   loggedUtente = computed(() => this.utenteService.loggedUtente());
 
   constructor(private boxService:BoxServices, private carrelloService: CarrelloService, private utenteService: UtenteServices){
-    //this.listBoxCantina = this.boxService.listByIdCantina(this.idCantina);
+  }
+
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['idCantina'] && this.idCantina != null) {
+      this.listBoxCantina = this.boxService.listByIdCantina(this.idCantina);
+    }
   }
 
   ngOnInit(): void{
@@ -39,11 +45,14 @@ export class BoxCantina {
       this.loadBoxes(); // your method that calls boxService.listByCantina(...)
     }
   });
+    console.log("BoxCantina di cantina id:" + this.idCantina);
+  
     
     this.listBoxCantina =  this.boxService.listByIdCantina(this.idCantina); //ma serve farlo again?
     const userId = this.auth.grant()?.userId ?? undefined;
     this.utenteService.findLoggedInfos(userId);
   }
+
 
   loadBoxes() {
     this.listBoxCantina = this.boxService.listByIdCantina(this.idCantina);

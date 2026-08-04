@@ -47,6 +47,15 @@
       @for (x of listAlcoliciBox(); track x.id) {
         <mat-list-item>
           {{ x.alcolico.nome }} - Quantità: {{x.quantita}}
+            <button
+              mat-icon-button
+              color="warn"
+              type="button"
+              aria-label="Rimuovi alcolico dal box"
+              (click)="removeFromBox(x.alcolico.id)"
+  >
+    <mat-icon>delete</mat-icon>
+  </button>
         </mat-list-item>
       }
     </mat-list>
