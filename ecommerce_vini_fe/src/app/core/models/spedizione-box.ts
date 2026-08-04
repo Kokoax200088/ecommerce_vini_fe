@@ -1,4 +1,4 @@
-export interface spedizioneBox {
+export interface SpedizioneBox {
     id: number;
 	corriere: String;
 	codice_tracciamento: String;
@@ -10,4 +10,12 @@ export interface spedizioneBox {
     cliente: any;
     status: any;
     ordBox: any;
+}
+
+export interface SpedizioneBoxReq {
+  corriere: string,
+  codice_tracciamento: string,
+  id_cantina: number,
+  id_status: number,
+  id_ordbox: number
 }

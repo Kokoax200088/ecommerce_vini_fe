@@ -29,6 +29,7 @@ export class SpedizioneBoxServices {
     }
 
     create(body: {}) {
+        console.log("SpedizioneBoxService create with body: " + JSON.stringify(body));
         return this.http.post(this.baseUrl+"/spedizionebox/create", body)
             .pipe(tap(() => this.list()))
     }

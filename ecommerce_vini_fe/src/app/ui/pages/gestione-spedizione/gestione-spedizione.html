@@ -56,3 +56,55 @@
     </div>
   }
 </div>
+
+<div class="spedizione-list">
+  @for (itemBox of spedizioniBox(); track itemBox.id) {
+    <article
+      class="spedizione-card"
+      [attr.data-status]="statusSlug(itemBox.status)"
+      (click)="onSelected(itemBox)">
+      <div class="spedizione-id">
+        <span class="hash">N°</span>
+        <span class="number">{{ itemBox.id }}</span>
+      </div>
+
+      <div class="spedizione-body">
+        <div class="spedizione-primary">
+          <span class="customer">{{ customerName(itemBox.cliente) }}</span>
+          <span class="seal" [attr.data-status]="statusSlug(itemBox.status)">
+            <span class="seal-dot"></span>
+            {{ itemBox.status?.nome ?? 'Senza stato' }}
+          </span>
+        </div>
+
+        <div class="spedizione-meta">
+          <span class="meta-item">
+            <span class="meta-label">Corriere</span>
+            {{ itemBox.corriere || '—' }}
+          </span>
+          <span class="meta-divider">·</span>
+          <span class="meta-item">
+            <span class="meta-label">Cantina</span>
+            {{ cantinaName(itemBox.cantina) }}
+          </span>
+          <span class="meta-divider">·</span>
+          <span class="meta-item">
+            <span class="meta-label">Ordine</span>
+            {{ ordineLabel(itemBox.ord_box) }}
+          </span>
+        </div>
+      </div>
+
+      <div class="spedizione-tracking">
+        <span class="meta-label">Tracciamento</span>
+        <span class="code">{{ itemBox.codice_tracciamento || '—' }}</span>
+      </div>
+    </article>
+  } @empty {
+    <div class="empty-state">
+      <span class="empty-glyph">📦</span>
+      <p>Nessuna spedizione box registrata.</p>
+      <span class="empty-hint">Le nuove spedizioni compariranno qui.</span>
+    </div>
+  }
+</div>
