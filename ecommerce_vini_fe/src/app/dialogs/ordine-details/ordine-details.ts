@@ -95,11 +95,10 @@ confermaSpedizione(): void {
     const righeOrdine: any[] = this.ordine.ordineAlcolico ?? [];
     const idOrdineAlcolico = righeOrdine[0]?.id;
     const idCantina = righeOrdine[0]?.cantina?.id;
-    const idCliente = this.ordine.utente?.id;
     const idStatus = STATUS_SPEDIZIONE.IN_CORSO;
 
-    if (!idOrdineAlcolico || !idCantina || !idCliente) {
-      this.errore.set('Dati ordine incompleti: impossibile creare la spedizione (riga ordine, cantina o cliente mancante).');
+    if (!idOrdineAlcolico || !idCantina) {
+      this.errore.set('Dati ordine incompleti: impossibile creare la spedizione (riga ordine o cantina mancante).');
       return;
     }
 
@@ -108,13 +107,12 @@ confermaSpedizione(): void {
 
     const payload: SpedizioneAlcolicoReq = {
       id_ordine_alcolico: idOrdineAlcolico,
-      id_cliente: idCliente,
       id_cantina: idCantina,
       id_status: idStatus,
       corriere: this.corriere.trim(),
       codice_tracciamento: this.codiceTracciamento.trim(),
     };
-
+    
     this.spedizioniService.create(payload).subscribe({
       next: (spedizione) => {
         this.isSubmitting.set(false);
