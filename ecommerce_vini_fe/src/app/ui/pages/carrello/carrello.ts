@@ -125,7 +125,7 @@ ngOnInit(): void {
         if (listaDegustazione.length === 0) {
           console.log('Ordine creato senza degustazioni:', ordineCreato);
         }
-
+        console.log('ID ordine creato:', ordineCreato.id);
         const richiesteDegustazione = listaDegustazione.map(d => {
           const body: ordineDegustazioneReq = {
             ordineId: ordineCreato.id,
@@ -175,8 +175,6 @@ ngOnInit(): void {
           error: (err) => console.error('Errore nella creazione di una o più ordine-box', err)
         });
 
-        // Una volta create tutte le righe d'ordine (degustazioni, alcolici, box),
-        // svuoto il carrello sia lato backend che lato stato locale.
         forkJoin([
           forkJoin(richiesteDegustazione.length ? richiesteDegustazione : [of(null)]),
           forkJoin(richiestaAlcolico.length ? richiestaAlcolico : [of(null)]),

@@ -12,7 +12,7 @@
 
   --status-default: #8c8279;
   --status-consegnato: #5c7a52;
-  --status-in-preparazione: #c08a2e;
+  --status-attesa: #c08a2e;
   --status-annullato: #a23b3b;
   --status-spedito: #4a6f8a;
 
@@ -57,42 +57,16 @@
   color: var(--wine-950);
 }
 
-.btn-nuova-spedizione {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: var(--wine-700);
-  color: var(--cream-50);
-  border: none;
-  border-radius: 8px;
-  padding: 0.65rem 1.2rem;
-  font-family: 'Inter', system-ui, sans-serif;
-  font-weight: 600;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: background 0.18s ease, transform 0.18s ease;
-}
-
-.btn-nuova-spedizione:hover {
-  background: var(--wine-600);
-  transform: translateY(-1px);
-}
-
-.btn-nuova-spedizione:focus-visible {
-  outline: 2px solid var(--wine-700);
-  outline-offset: 2px;
-}
-
 /* ---------- List ---------- */
 
-.spedizione-list {
+.order-list {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
   max-width: 880px;
 }
 
-.spedizione-card {
+.order-card {
   display: flex;
   align-items: center;
   gap: 1.5rem;
@@ -101,20 +75,26 @@
   border-left: 3px solid var(--status-default, var(--gold-300));
   border-radius: 10px;
   padding: 1.1rem 1.4rem;
+  cursor: pointer;
   transition: box-shadow 0.18s ease, transform 0.18s ease, border-color 0.18s ease;
 }
 
-.spedizione-card:hover {
+.order-card:hover {
   box-shadow: 0 10px 24px rgba(61, 12, 28, 0.1);
   transform: translateY(-2px);
 }
 
-.spedizione-card[data-status='consegnato'] { border-left-color: var(--status-consegnato); }
-.spedizione-card[data-status='in-preparazione'] { border-left-color: var(--status-in-preparazione); }
-.spedizione-card[data-status='annullato'] { border-left-color: var(--status-annullato); }
-.spedizione-card[data-status='spedito'] { border-left-color: var(--status-spedito); }
+.order-card:focus-visible {
+  outline: 2px solid var(--wine-700);
+  outline-offset: 2px;
+}
 
-.spedizione-id {
+.order-card[data-status='consegnato'] { border-left-color: var(--status-consegnato); }
+.order-card[data-status='attesa'] { border-left-color: var(--status-attesa); }
+.order-card[data-status='annullato'] { border-left-color: var(--status-annullato); }
+.order-card[data-status='spedito'] { border-left-color: var(--status-spedito); }
+
+.order-id {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -123,21 +103,21 @@
   color: var(--wine-950);
 }
 
-.spedizione-id .hash {
+.order-id .hash {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 0.65rem;
   letter-spacing: 0.08em;
   color: var(--ink-500);
 }
 
-.spedizione-id .number {
+.order-id .number {
   font-family: 'Fraunces', serif;
   font-weight: 600;
   font-size: 1.6rem;
   line-height: 1;
 }
 
-.spedizione-body {
+.order-body {
   flex: 1;
   min-width: 0;
   display: flex;
@@ -145,7 +125,7 @@
   gap: 0.4rem;
 }
 
-.spedizione-primary {
+.order-primary {
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -177,11 +157,11 @@
 }
 
 .seal[data-status='consegnato'] .seal-dot { background: var(--status-consegnato); }
-.seal[data-status='in-preparazione'] .seal-dot { background: var(--status-in-preparazione); }
+.seal[data-status='attesa'] .seal-dot { background: var(--status-attesa); }
 .seal[data-status='annullato'] .seal-dot { background: var(--status-annullato); }
 .seal[data-status='spedito'] .seal-dot { background: var(--status-spedito); }
 
-.spedizione-meta {
+.order-meta {
   font-size: 0.85rem;
   color: var(--ink-500);
   display: flex;
@@ -200,7 +180,7 @@
   color: var(--gold-300);
 }
 
-.spedizione-tracking {
+.order-total {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -209,16 +189,16 @@
   border-left: 1px solid var(--line);
 }
 
-.spedizione-tracking .meta-label {
+.order-total .meta-label {
   font-size: 0.68rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
 
-.spedizione-tracking .code {
+.order-total .amount {
   font-family: 'IBM Plex Mono', monospace;
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 1.05rem;
   color: var(--wine-950);
 }
 
@@ -251,10 +231,10 @@
 /* ---------- Responsive ---------- */
 
 @media (max-width: 640px) {
-  .spedizione-card {
+  .order-card {
     flex-wrap: wrap;
   }
-  .spedizione-tracking {
+  .order-total {
     border-left: none;
     padding-left: 0;
     align-items: flex-start;
@@ -268,7 +248,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .spedizione-card {
+  .order-card {
     transition: none;
   }
 }

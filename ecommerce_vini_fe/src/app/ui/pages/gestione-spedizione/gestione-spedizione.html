@@ -1,15 +1,55 @@
-<h3>Elenco spedizioni</h3>
+<header class="page-header">
+  <div class="heading">
+    <span class="eyebrow">Amministrazione</span>
+    <h1>Elenco spedizioni</h1>
+  </div>
+</header>
 
-<mat-list>
+<div class="spedizione-list">
   @for (spedizione of spedizioni(); track spedizione.id) {
-    <mat-list-item lines="3">
-      <span matListItemTitle>Ordine #{{ spedizione.id }} - {{spedizione.cliente}} - {{ spedizione.corriere}}</span>
-      <span matListItemLine>Codice tracciamento: {{ spedizione.codice_tracciamento}} - Stato: {{ spedizione.status}}</span>
-      <span matListItemLine>
-        Cantina: {{ spedizione.cantina}} - Ordine: {{ spedizione.ordine_alcolico}}
-      </span>
-    </mat-list-item>
+    <article class="spedizione-card" [attr.data-status]="statusSlug(spedizione.status)">
+      <div class="spedizione-id">
+        <span class="hash">N°</span>
+        <span class="number">{{ spedizione.id }}</span>
+      </div>
+
+      <div class="spedizione-body">
+        <div class="spedizione-primary">
+          <span class="customer">{{ customerName(spedizione.cliente) }}</span>
+          <span class="seal" [attr.data-status]="statusSlug(spedizione.status)">
+            <span class="seal-dot"></span>
+            {{ spedizione.status?.nome ?? 'Senza stato' }}
+          </span>
+        </div>
+
+        <div class="spedizione-meta">
+          <span class="meta-item">
+            <span class="meta-label">Corriere</span>
+            {{ spedizione.corriere || '—' }}
+          </span>
+          <span class="meta-divider">·</span>
+          <span class="meta-item">
+            <span class="meta-label">Cantina</span>
+            {{ cantinaName(spedizione.cantina) }}
+          </span>
+          <span class="meta-divider">·</span>
+          <span class="meta-item">
+            <span class="meta-label">Ordine</span>
+            {{ ordineLabel(spedizione.ordine_alcolico) }}
+          </span>
+        </div>
+      </div>
+
+      <div class="spedizione-tracking">
+        <span class="meta-label">Tracciamento</span>
+        <span class="code">{{ spedizione.codice_tracciamento || '—' }}</span>
+      </div>
+    </article>
   } @empty {
-    <mat-list-item>Nessun ordine disponibile</mat-list-item>
+    <div class="empty-state">
+      <span class="empty-glyph">📦</span>
+      <p>Nessuna spedizione registrata.</p>
+      <span class="empty-hint">Le nuove spedizioni compariranno qui.</span>
+    </div>
   }
-</mat-list>
+</div>

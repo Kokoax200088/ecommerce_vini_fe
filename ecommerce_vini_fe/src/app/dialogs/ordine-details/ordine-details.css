@@ -38,3 +38,46 @@
   display: flex;
   justify-content: flex-end;
 }
+
+.spedizione-trigger {
+  justify-content: flex-start;
+  margin-bottom: 0.5rem;
+}
+
+.spedizione-trigger button mat-icon {
+  margin-right: 0.35rem;
+  vertical-align: middle;
+}
+
+.spedizione-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.spedizione-form-title {
+  margin: 0 0 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.spedizione-field {
+  width: 100%;
+}
+
+.spedizione-error {
+  color: #a23b3b;
+  font-size: 0.85rem;
+  margin: 0 0 0.5rem;
+}
+
+.spedizione-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}

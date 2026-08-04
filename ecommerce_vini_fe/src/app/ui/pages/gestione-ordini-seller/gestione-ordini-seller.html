@@ -1,0 +1,50 @@
+<header class="page-header">
+  <div class="heading">
+    <span class="eyebrow">Area venditore</span>
+    <h1>Ordini delle tue cantine</h1>
+  </div>
+</header>
+
+<div class="order-list">
+  @for (ordine of ordini(); track ordine.id) {
+    <article class="order-card" [attr.data-status]="statusSlug(ordine.status)" (click)="onSelected(ordine)">
+      <div class="order-id">
+        <span class="hash">N°</span>
+        <span class="number">{{ ordine.id }}</span>
+      </div>
+
+      <div class="order-body">
+        <div class="order-primary">
+          <span class="customer">{{ customerName(ordine.utente) }}</span>
+          <span class="seal" [attr.data-status]="statusSlug(ordine.status)">
+            <span class="seal-dot"></span>
+            {{ ordine.status?.nome ?? 'Senza stato' }}
+          </span>
+        </div>
+
+        <div class="order-meta">
+          <span class="meta-item">
+            <span class="meta-label">Data</span>
+            {{ ordine.data_ordine | date:'dd MMM yyyy' }}
+          </span>
+          <span class="meta-divider">·</span>
+          <span class="meta-item">
+            <span class="meta-label">Consegna</span>
+            {{ ordine.indirizzo_destinazione || '—' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="order-total">
+        <span class="meta-label">Totale</span>
+        <span class="amount">{{ ordine.totale | currency:'EUR' }}</span>
+      </div>
+    </article>
+  } @empty {
+    <div class="empty-state">
+      <span class="empty-glyph">🍷</span>
+      <p>Nessun ordine per le tue cantine.</p>
+      <span class="empty-hint">I nuovi ordini compariranno qui.</span>
+    </div>
+  }
+</div>

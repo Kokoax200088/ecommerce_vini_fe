@@ -38,9 +38,69 @@
         <span class="detail-label">Status</span>
         <span class="detail-value">{{ ordine.status?.nome ?? 'Senza stato' }}</span>
       </div>
+
+      <div class="detail-products">
+        <span class="detail-label">Prodotti</span>
+        <ul class="product-list">
+          @for (prodotto of prodotti; track $index) {
+            <li class="product-item">
+              <span class="product-name">{{ prodotto.nome }}</span>
+            </li>
+          } @empty {
+            <li class="product-item product-empty">Nessun prodotto associato.</li>
+          }
+        </ul>
+      </div>
     </div>
   } @else {
     <p>Nessun dato disponibile per questo ordine.</p>
+  }
+
+  @if (ordine && !showSpedizioneForm()) {
+    <div class="button-group spedizione-trigger">
+      <button
+        mat-stroked-button
+        color="primary"
+        type="button"
+        (click)="apriFormSpedizione()">
+        <mat-icon>local_shipping</mat-icon>
+        Trasforma in spedizione
+      </button>
+    </div>
+  }
+
+  @if (showSpedizioneForm()) {
+    <div class="spedizione-form">
+      <h3 class="spedizione-form-title">Dati di spedizione</h3>
+
+      <mat-form-field appearance="outline" class="spedizione-field">
+        <mat-label>Corriere</mat-label>
+        <input matInput [(ngModel)]="corriere" name="corriere" placeholder="es. BRT, GLS, DHL" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="spedizione-field">
+        <mat-label>Codice tracciamento</mat-label>
+        <input matInput [(ngModel)]="codiceTracciamento" name="codiceTracciamento" />
+      </mat-form-field>
+
+      @if (errore()) {
+        <p class="spedizione-error">{{ errore() }}</p>
+      }
+
+      <div class="spedizione-actions">
+        <button mat-button type="button" [disabled]="isSubmitting()" (click)="annullaSpedizione()">
+          Annulla
+        </button>
+        <button
+          mat-raised-button
+          color="primary"
+          type="button"
+          [disabled]="isSubmitting()"
+          (click)="confermaSpedizione()">
+          {{ isSubmitting() ? 'Creazione…' : 'Conferma spedizione' }}
+        </button>
+      </div>
+    </div>
   }
 
   <div class="button-group">

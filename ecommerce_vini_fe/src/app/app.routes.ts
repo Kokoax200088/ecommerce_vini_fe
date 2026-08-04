@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { adminGuard } from './core/auth/admin-guard';
 import { customerGuard } from './core/auth/customer-guard';
+import { sellerGuard } from './core/auth/seller-guard';
 
 export const routes: Routes = [
     // Utilizzo LazyLoading per caricare i componenti solo quando necessario.
@@ -39,6 +40,10 @@ export const routes: Routes = [
   {
     path: 'gestione-ordine',
     loadComponent: () => import('./ui/pages/gestione-ordine/gestione-ordine').then((m) => m.GestioneOrdine),
+  },
+  {
+    path: 'gestione-ordine-seller',
+    loadComponent: () => import('./ui/pages/gestione-ordini-seller/gestione-ordini-seller').then((m) => m.GestioneOrdineSeller),
   },
   {
     path: 'gestione-spedizione',
