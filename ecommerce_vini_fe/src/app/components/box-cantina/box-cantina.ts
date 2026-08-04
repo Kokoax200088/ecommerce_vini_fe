@@ -19,7 +19,8 @@ import { CardAddBox } from "../card-add-box/card-add-box";
   styleUrl: './box-cantina.css',
 })
 export class BoxCantina implements OnChanges {
-  @Input() idCantina!:number;
+  @Input() idCantina!: number;
+  @Input() isOwner: boolean = false;
   listBoxCantina!: Observable<Box[]>;
   public readonly auth = inject(AuthServices);
   public readonly route = inject(ActivatedRoute);

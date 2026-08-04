@@ -21,6 +21,7 @@ import { AlcolicoNuovo } from "../alcolico-nuovo/alcolico-nuovo";
 })
 export class AlcoliciCantina {
   @Input() idCantina!: number;
+  @Input() isOwner: boolean = false;
   listCantinaALcolico: any;
   public readonly auth = inject(AuthServices);
   private notification = inject(NotificationServices);

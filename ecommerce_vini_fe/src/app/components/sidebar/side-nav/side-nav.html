@@ -8,7 +8,6 @@
      @if (!auth.grant().isSeller) {
     <hr class="d-none d-lg-block">
      }
-    
     <ul class="nav nav-pills flex-column mb-auto">
        @if (!auth.grant().isSeller) {
       <li class="nav-item">
@@ -49,7 +48,6 @@
         </a>
       </li>
     }
-        
     </ul>
 
     @if(auth.grant().isSeller) {
@@ -61,7 +59,6 @@
           <i class="bi bi-house-door me-2"></i> Le mie cantine
         </a>
       </li>
-      <li>
       <li>
         <a href="/gestione-spedizione" routerLinkActive="active" class="nav-link text-white">
           <i class="bi bi-cart me-2"></i> Gestione Spedizioni
