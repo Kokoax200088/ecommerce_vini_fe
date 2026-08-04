@@ -9,6 +9,8 @@ import { FormsModule } from '@angular/forms';
 import { SpedizioneServices } from '../../core/services/spedizione-alcolico-services';
 import { SpedizioneAlcolicoReq } from '../../core/models/spedizione-alcolico';
 import { STATUS_SPEDIZIONE } from '../../core/models/status';
+import { SpedizioneBoxReq } from '../../core/models/spedizione-box';
+import { SpedizioneBoxServices } from '../../core/services/spedizione-box-services';
 @Component({
   selector: 'app-ordine-details',
   imports: [
@@ -28,6 +30,7 @@ export class OrdineDetails {
   private readonly data = inject(MAT_DIALOG_DATA);
   private readonly dialogRef = inject(MatDialogRef<OrdineDetails>);
   private readonly spedizioniService = inject(SpedizioneServices);
+  private readonly spedizioniBoxService = inject(SpedizioneBoxServices);
 
   readonly ordine: any = this.data?.ordine ?? null;
 
@@ -92,13 +95,19 @@ confermaSpedizione(): void {
       return;
     }
 
+    //console.log(JSON.stringify(this.ordine));
     const righeOrdine: any[] = this.ordine.ordineAlcolico ?? [];
+
+    const righeOrdineBox: any[] = this.ordine.ordineBox ?? [];
+    //console.log(JSON.stringify(righeOrdineBox));
+
     const idOrdineAlcolico = righeOrdine[0]?.id;
     const idCantina = righeOrdine[0]?.cantina?.id;
     const idCliente = this.ordine.utente?.id;
     const idStatus = STATUS_SPEDIZIONE.IN_CORSO;
 
-    if (!idOrdineAlcolico || !idCantina || !idCliente) {
+    if (!idCliente) {
+      //console.log("idCliente=" + idCliente);
       this.errore.set('Dati ordine incompleti: impossibile creare la spedizione (riga ordine, cantina o cliente mancante).');
       return;
     }
@@ -126,6 +135,35 @@ confermaSpedizione(): void {
         console.error(err);
       },
     });
+
+    righeOrdineBox.map(item => {
+
+        const itemCantinaId : number = item.box.id_cantina;
+        const itemBoxId : number = item.box.id;
+        //console.log(itemCantinaId + " " + itemBoxId);
+        const payloadBox: SpedizioneBoxReq = {
+          corriere: this.corriere.trim(),
+          codice_tracciamento: this.codiceTracciamento.trim(),
+          id_cantina: itemCantinaId,
+          id_cliente: idCliente,
+          id_status: idStatus,
+          id_ordbox: itemBoxId
+        }
+
+        //console.log("Creo spedizione con body: " + JSON.stringify(payloadBox));
+        this.spedizioniBoxService.create(payloadBox).subscribe({
+            next: (spedizione) => {
+              this.isSubmitting.set(false);
+              this.dialogRef.close({ converted: true, ordineId: this.ordine.id, spedizione }); //forse questo va tolto perchè va messo alla fine
+            },
+            error: (err) => {
+              this.isSubmitting.set(false);
+              this.errore.set('Errore durante la creazione della spedizione. Riprova.');
+              console.error(err);
+            },
+          });
+        });
+    
   }
 
   close(): void {

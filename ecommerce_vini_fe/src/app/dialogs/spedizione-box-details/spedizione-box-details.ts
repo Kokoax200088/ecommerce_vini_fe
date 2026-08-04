@@ -7,7 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { SpedizioneBoxServices } from '../../core/services/spedizione-box-services';
-import { spedizioneBox } from '../../core/models/spedizione-box';
+import { SpedizioneBox } from '../../core/models/spedizione-box';
 // import { CantinaServices } from '../../services/cantina-services';
 // import { ClienteServices } from '../../services/cliente-services';
 // import { StatusServices } from '../../services/status-services';
@@ -31,7 +31,7 @@ export class SpedizioneBoxDetails implements OnInit {
   // private readonly ordineBoxS = inject(OrdineBoxServices);
 
   mod: any = signal("");
-  spedizionebox = signal<spedizioneBox | null>(null);
+  spedizionebox = signal<SpedizioneBox | null>(null);
   readonly dialog = inject(MatDialog);
 
   // Liste per popolare le mat-select (per ora vuote, in attesa dei service reali)
