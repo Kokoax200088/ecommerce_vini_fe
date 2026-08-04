@@ -55,52 +55,51 @@
   } @else {
     <p>Nessun dato disponibile per questo ordine.</p>
   }
-
-  @if (ordine && !showSpedizioneForm()) {
-    <div class="button-group spedizione-trigger">
+  @if (canMarkAsDelivered) {
+    @if (ordine && !showSpedizioneForm()) {
       <button
-        mat-stroked-button
+        mat-raised-button
         color="primary"
         type="button"
+        [disabled]="isSubmitting()"
         (click)="apriFormSpedizione()">
-        <mat-icon>local_shipping</mat-icon>
-        Trasforma in spedizione
+        {{ isSubmitting() ? 'Creazione in corso…' : 'Conferma spedizione' }}
       </button>
-    </div>
-  }
+    }
 
-  @if (showSpedizioneForm()) {
-    <div class="spedizione-form">
-      <h3 class="spedizione-form-title">Dati di spedizione</h3>
+    @if (showSpedizioneForm()) {
+      <div class="spedizione-form">
+        <h3 class="spedizione-form-title">Dati di spedizione</h3>
 
-      <mat-form-field appearance="outline" class="spedizione-field">
-        <mat-label>Corriere</mat-label>
-        <input matInput [(ngModel)]="corriere" name="corriere" placeholder="es. BRT, GLS, DHL" />
-      </mat-form-field>
+        <mat-form-field appearance="outline" class="spedizione-field">
+          <mat-label>Corriere</mat-label>
+          <input matInput [(ngModel)]="corriere" name="corriere" placeholder="es. BRT, GLS, DHL" />
+        </mat-form-field>
 
-      <mat-form-field appearance="outline" class="spedizione-field">
-        <mat-label>Codice tracciamento</mat-label>
-        <input matInput [(ngModel)]="codiceTracciamento" name="codiceTracciamento" />
-      </mat-form-field>
+        <mat-form-field appearance="outline" class="spedizione-field">
+          <mat-label>Codice tracciamento</mat-label>
+          <input matInput [(ngModel)]="codiceTracciamento" name="codiceTracciamento" />
+        </mat-form-field>
 
-      @if (errore()) {
-        <p class="spedizione-error">{{ errore() }}</p>
-      }
+        @if (errore()) {
+          <p class="spedizione-error">{{ errore() }}</p>
+        }
 
-      <div class="spedizione-actions">
-        <button mat-button type="button" [disabled]="isSubmitting()" (click)="annullaSpedizione()">
-          Annulla
-        </button>
-        <button
-          mat-raised-button
-          color="primary"
-          type="button"
-          [disabled]="isSubmitting()"
-          (click)="confermaSpedizione()">
-          {{ isSubmitting() ? 'Creazione…' : 'Conferma spedizione' }}
-        </button>
+        <div class="spedizione-actions">
+          <button mat-button type="button" [disabled]="isSubmitting()" (click)="annullaSpedizione()">
+            Annulla
+          </button>
+          <button
+            mat-raised-button
+            color="primary"
+            type="button"
+            [disabled]="isSubmitting()"
+            (click)="confermaSpedizione()">
+            {{ isSubmitting() ? 'Creazione…' : 'Conferma spedizione' }}
+          </button>
+        </div>
       </div>
-    </div>
+    }
   }
 
   <div class="button-group">

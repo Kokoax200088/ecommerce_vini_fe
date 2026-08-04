@@ -1,8 +1,9 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { SpedizioneServices } from '../../core/services/spedizione-alcolico-services';
+import { AuthServices } from '../../core/services/auth-services';
 import { STATUS_SPEDIZIONE } from '../../core/models/status';
 
 @Component({
@@ -19,15 +20,21 @@ export class SpedizioneDetails {
   private readonly data = inject(MAT_DIALOG_DATA);
   private readonly dialogRef = inject(MatDialogRef<SpedizioneDetails>);
   private readonly spedizioniService = inject(SpedizioneServices);
+  private readonly authServices = inject(AuthServices);
 
   readonly mod: string = this.data?.mod ?? 'V';
   readonly spedizione: any = this.data?.spedizione ?? null;
 
   readonly isUpdating = signal(false);
   readonly errore = signal<string | null>(null);
+  readonly isSeller = computed(() => this.authServices.grant().isSeller);
 
   get isConsegnata(): boolean {
     return this.spedizione?.status?.id === STATUS_SPEDIZIONE.CONSEGNATO;
+  }
+
+  get canMarkAsDelivered(): boolean {
+    return this.isSeller() && !this.isConsegnata;
   }
 
   customerName(cliente: any): string {
@@ -47,7 +54,7 @@ export class SpedizioneDetails {
   }
 
   segnaConsegnata(): void {
-    if (!this.spedizione || this.isConsegnata) return;
+    if (!this.spedizione || this.isConsegnata || !this.isSeller()) return;
 
     this.isUpdating.set(true);
     this.errore.set(null);

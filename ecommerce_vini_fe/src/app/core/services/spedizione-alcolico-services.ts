@@ -47,4 +47,8 @@ export class SpedizioneServices {
         return this.http.delete(this.baseUrl+"/spedizionealcolico/delete/" + id)
             .pipe(tap(() => this.list()))
     }
+
+    getById(id: number): Observable<spedizioneAlcolico> {
+        return this.http.get<spedizioneAlcolico>(this.baseUrl+"/spedizionealcolico/getById/" + id);
+    }
 }

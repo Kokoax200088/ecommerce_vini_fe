@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -8,7 +8,8 @@ import { CurrencyPipe, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SpedizioneServices } from '../../core/services/spedizione-alcolico-services';
 import { SpedizioneAlcolicoReq } from '../../core/models/spedizione-alcolico';
-import { STATUS_SPEDIZIONE } from '../../core/models/status';
+import { STATUS_ORDINE, STATUS_SPEDIZIONE } from '../../core/models/status';
+import { AuthServices } from '../../core/services/auth-services';
 @Component({
   selector: 'app-ordine-details',
   imports: [
@@ -28,20 +29,26 @@ export class OrdineDetails {
   private readonly data = inject(MAT_DIALOG_DATA);
   private readonly dialogRef = inject(MatDialogRef<OrdineDetails>);
   private readonly spedizioniService = inject(SpedizioneServices);
-
+  private readonly authServices = inject(AuthServices);
   readonly ordine: any = this.data?.ordine ?? null;
 
   readonly showSpedizioneForm = signal(false);
   readonly isSubmitting = signal(false);
   readonly errore = signal<string | null>(null);
-
+  readonly isSeller = computed(() => this.authServices.grant().isSeller);
   corriere = '';
   codiceTracciamento = '';
 
+  get isConsegnata(): boolean {
+    return this.ordine?.status?.id === STATUS_ORDINE.FINITO;
+  }
+
+  get canMarkAsDelivered(): boolean {
+    return this.isSeller() && !this.isConsegnata;
+  }
   get prodotti(): { nome: string; quantita: number }[] {
     if (!this.ordine) return [];
 
-    // Nomi campo come restituiti realmente da OrdineDTO (backend)
     const righeAlcolico: any[] = this.ordine.ordineAlcolico ?? [];
     const righeBox: any[] = this.ordine.ordineBox ?? [];
     const righeDegustazione: any[] = this.ordine.ordineDeg ?? [];
@@ -104,7 +111,6 @@ confermaSpedizione(): void {
 
     this.isSubmitting.set(true);
     this.errore.set(null);
-
     const payload: SpedizioneAlcolicoReq = {
       id_ordine_alcolico: idOrdineAlcolico,
       id_cantina: idCantina,
@@ -112,7 +118,7 @@ confermaSpedizione(): void {
       corriere: this.corriere.trim(),
       codice_tracciamento: this.codiceTracciamento.trim(),
     };
-    
+    console.log(JSON.stringify(payload));
     this.spedizioniService.create(payload).subscribe({
       next: (spedizione) => {
         this.isSubmitting.set(false);

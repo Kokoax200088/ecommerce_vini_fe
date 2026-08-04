@@ -160,21 +160,6 @@ ngOnInit(): void {
             };
           return this.ordineBoxService.create(body);
         });
-        forkJoin(richiesteDegustazione).subscribe({
-          next: () => console.log('Tutte le degustazioni associate all\'ordine', ordineCreato.id + " JSON ordine creato:" + JSON.stringify(ordineCreato)),
-          error: (err) => console.error('Errore nella creazione di una o più ordine-degustazione', err)
-        });
-
-        forkJoin(richiestaAlcolico).subscribe({
-          next: () => console.log('Tutti gli alcolici associati all\'ordine', ordineCreato.id + " JSON ordine creato:" + JSON.stringify(ordineCreato)),
-          error: (err) => console.error('Errore nella creazione di una o più ordine-alcolico', err)
-        });
-
-        forkJoin(richiestaBox).subscribe({
-          next: () => console.log('Tutti i box associati all\'ordine', ordineCreato.id + " JSON ordine creato:" + JSON.stringify(ordineCreato)),
-          error: (err) => console.error('Errore nella creazione di una o più ordine-box', err)
-        });
-
         forkJoin([
           forkJoin(richiesteDegustazione.length ? richiesteDegustazione : [of(null)]),
           forkJoin(richiestaAlcolico.length ? richiestaAlcolico : [of(null)]),

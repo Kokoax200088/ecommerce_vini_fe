@@ -48,8 +48,8 @@
     @if (errore()) {
       <p class="spedizione-error">{{ errore() }}</p>
     }
-
-    @if (!isConsegnata) {
+    
+    @if (canMarkAsDelivered) {
       <div class="button-group consegna-trigger">
         <button
           mat-stroked-button
@@ -61,7 +61,7 @@
           {{ isUpdating() ? 'Aggiornamento…' : 'Segna come consegnata' }}
         </button>
       </div>
-    } @else {
+    } @else if (isConsegnata) {
       <div class="consegnato-badge">
         <mat-icon>check_circle</mat-icon>
         Spedizione consegnata
