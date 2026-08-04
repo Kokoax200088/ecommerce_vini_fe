@@ -1,0 +1,78 @@
+:host {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.bottone-azione {
+  position: absolute;
+  top: 10px;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  background-color: rgba(59, 13, 24, 0.85);
+  color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  pointer-events: auto;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
+}
+
+.bottone-elimina {
+  left: 10px;
+}
+
+.bottone-elimina:hover {
+  background-color: #8b1120;
+  transform: scale(1.08);
+}
+
+.bottone-modifica {
+  left: 50px;
+}
+
+.bottone-modifica:hover {
+  background-color: #6e0c18;
+  transform: scale(1.08);
+}
+
+.bottone-azione:focus-visible {
+  opacity: 1;
+  transform: scale(1);
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+
+:host-context(.card-badge-wrapper:hover) .bottone-azione {
+  opacity: 1;
+  transform: scale(1);
+}
+
+:host-context(.card-badge-wrapper:hover) .bottone-azione:hover {
+  transform: scale(1.08);
+}
+
+.icona-azione {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  line-height: 18px;
+}
+
+@media (hover: none) {
+  .bottone-azione {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

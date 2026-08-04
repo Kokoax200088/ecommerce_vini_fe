@@ -1,0 +1,17 @@
+@if (auth.grant().isSeller) {
+  <button type="button"
+          class="bottone-azione bottone-elimina"
+          title="Elimina degustazione"
+          aria-label="Elimina degustazione"
+          (click)="apriElimina($event)">
+    <mat-icon class="icona-azione">close</mat-icon>
+  </button>
+
+  <button type="button"
+          class="bottone-azione bottone-modifica"
+          title="Modifica degustazione"
+          aria-label="Modifica degustazione"
+          (click)="apriModifica($event)">
+    <mat-icon class="icona-azione">edit</mat-icon>
+  </button>
+}

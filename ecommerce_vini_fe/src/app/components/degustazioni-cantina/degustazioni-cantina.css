@@ -56,4 +56,18 @@
 .card-degustazione {
   border: 1px solid rgba(128, 0, 32, 0.15);
   border-radius: 0.75rem;
+  overflow: hidden;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.card-degustazione:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.degustazione-img {
+  height: 180px;
+  object-fit: cover;
+  width: 100%;
+  background-color: #f8f9fa;
 }
