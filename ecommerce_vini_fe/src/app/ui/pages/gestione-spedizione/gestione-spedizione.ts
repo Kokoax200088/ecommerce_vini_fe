@@ -34,6 +34,32 @@ export class GestioneSpedizione implements OnInit {
     )
   }
 
+  onSelected(spedizione: any) {
+    this.mostraDettaglio(spedizione);
+  }
+
+  mostraDettaglio(spedizione: any) {
+    let dialogRef = this.util.openDialog(SpedizioneDetails,
+      {
+        mod: 'V',
+        spedizione: spedizione
+      },
+      {
+        width: '1100px',
+        maxWidth: '90vw',
+        height: 'auto',
+        enterAnimationDuration: '500ms',
+        exitAnimationDuration: '500ms'
+      },
+    )
+
+    dialogRef.afterClosed().subscribe((result: any) => {
+      if (result?.updated) {
+        this.SpedizioneService.list();
+      }
+    });
+  }
+
   customerName(cliente: any): string {
     if (!cliente) return 'Cliente sconosciuto';
     const nome = [cliente.nome, cliente.cognome].filter(Boolean).join(' ');

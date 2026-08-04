@@ -96,7 +96,7 @@ confermaSpedizione(): void {
     const idOrdineAlcolico = righeOrdine[0]?.id;
     const idCantina = righeOrdine[0]?.cantina?.id;
     const idCliente = this.ordine.utente?.id;
-    const idStatus = STATUS_SPEDIZIONE.IN_PREPARAZIONE;
+    const idStatus = STATUS_SPEDIZIONE.IN_CORSO;
 
     if (!idOrdineAlcolico || !idCantina || !idCliente) {
       this.errore.set('Dati ordine incompleti: impossibile creare la spedizione (riga ordine, cantina o cliente mancante).');

@@ -106,7 +106,7 @@ ngOnInit(): void {
 
     const ordine = {
       id_utente: utente?.id,
-      id_status: STATUS_ORDINE.IN_ATTESA,
+      id_status: STATUS_ORDINE.IN_CORSO,
       data_ordine: data_ordine,
       totale: this.prezzoTotale(),
       indirizzoDestinazione: utente?.indirizzo,
@@ -129,7 +129,7 @@ ngOnInit(): void {
         const richiesteDegustazione = listaDegustazione.map(d => {
           const body: ordineDegustazioneReq = {
             ordineId: ordineCreato.id,
-            statusId: STATUS_ORDINE_DEGUSTAZIONE.IN_ATTESA,
+            statusId: STATUS_ORDINE_DEGUSTAZIONE.IN_CORSO,
             degustazioneId: d.degustazione.id,
             cantinaId: d.degustazione.id_cantina,
             quantita: d.quantità,
@@ -144,7 +144,7 @@ ngOnInit(): void {
             alcolicoId: p.alcolico.id,
             quantita: p.quantità,
             cantinaId: p.cantina.id,
-            statusId: STATUS_ORDINE.IN_ATTESA,
+            statusId: STATUS_ORDINE.IN_CORSO,
             data_ordine: data_ordine
           };
           return this.ordineAlcolicoService.create(body);
@@ -154,7 +154,7 @@ ngOnInit(): void {
               data_ordine: data_ordine,
               ordineId: ordineCreato.id,
               boxId: b.box.id, 
-              statusId: STATUS_ORDINE.IN_ATTESA,
+              statusId: STATUS_ORDINE.IN_CORSO,
               cantinaId: b.cantina.id, 
               quantita: b.quantità     
             };

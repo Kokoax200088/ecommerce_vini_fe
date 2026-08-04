@@ -1,143 +1,73 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { SpedizioneServices } from '../../core/services/spedizione-alcolico-services';
-import { spedizioneAlcolico } from '../../core/models/spedizione-alcolico';
-// import { CantinaServices } from '../../services/cantina-services';
-// import { ClienteServices } from '../../services/cliente-services';
-// import { StatusServices } from '../../services/status-services';
-// import { OrdineAlcolicoServices } from '../../services/ordine-alcolico-services';
+import { STATUS_SPEDIZIONE } from '../../core/models/status';
 
 @Component({
   selector: 'app-spedizione-details',
-  imports: [MatButtonModule, MatIconModule, MatDialogModule, FormsModule, ReactiveFormsModule, MatFormFieldModule,
-    MatInputModule, MatSelectModule],
+  imports: [
+    MatButtonModule,
+    MatIconModule,
+    MatDialogModule,
+  ],
   templateUrl: './spedizione-details.html',
   styleUrl: './spedizione-details.css',
 })
-export class SpedizioneDetails implements OnInit {
-
+export class SpedizioneDetails {
   private readonly data = inject(MAT_DIALOG_DATA);
   private readonly dialogRef = inject(MatDialogRef<SpedizioneDetails>);
-  private readonly spedizioneS = inject(SpedizioneServices);
-  // private readonly cantinaS = inject(CantinaServices);
-  // private readonly clienteS = inject(ClienteServices);
-  // private readonly statusS = inject(StatusServices);
-  // private readonly ordineAlcolicoS = inject(OrdineAlcolicoServices);
+  private readonly spedizioniService = inject(SpedizioneServices);
 
-  mod: any = signal("");
-  spedizionealc = signal<spedizioneAlcolico | null>(null);
-  readonly dialog = inject(MatDialog);
+  readonly mod: string = this.data?.mod ?? 'V';
+  readonly spedizione: any = this.data?.spedizione ?? null;
 
-  // Liste per popolare le mat-select (per ora vuote, in attesa dei service reali)
-  cantineList = signal<any[]>([]);
-  clientiList = signal<any[]>([]);
-  statusList = signal<any[]>([]);
-  ordiniAlcoliciList = signal<any[]>([]);
+  readonly isUpdating = signal(false);
+  readonly errore = signal<string | null>(null);
 
-  msg = signal("");
-
-  updateForm: FormGroup = new FormGroup({
-    corriere: new FormControl(null, Validators.required),
-    codice_tracciamento: new FormControl(null, Validators.required),
-    cantina: new FormControl(null, Validators.required),
-    cliente: new FormControl(null, Validators.required),
-    status: new FormControl(null, Validators.required),
-    ordine_alcolico: new FormControl(null, Validators.required),
-  })
-
-  constructor() {
-    if (this.data) {
-      this.mod.set(this.data.mod);
-      this.spedizionealc.set(this.data.spedizione);
-    }
+  get isConsegnata(): boolean {
+    return this.spedizione?.status?.id === STATUS_SPEDIZIONE.CONSEGNATO;
   }
 
-  ngOnInit(): void {
-    // da scommentare quando disponibili
-    // this.cantinaS.list().subscribe({
-    //   next: ((r: any) => this.cantineList.set(r)),
-    //   error: ((r: any) => console.log(r.error.msg))
-    // });
-    // this.clienteS.list().subscribe({
-    //   next: ((r: any) => this.clientiList.set(r)),
-    //   error: ((r: any) => console.log(r.error.msg))
-    // });
-    // this.statusS.list().subscribe({
-    //   next: ((r: any) => this.statusList.set(r)),
-    //   error: ((r: any) => console.log(r.error.msg))
-    // });
-    // this.ordineAlcolicoS.list().subscribe({
-    //   next: ((r: any) => this.ordiniAlcoliciList.set(r)),
-    //   error: ((r: any) => console.log(r.error.msg))
-    // });
-
-    if (this.mod() == 'U') {
-      this.updateForm.patchValue({
-        corriere: this.spedizionealc()!.corriere,
-        codice_tracciamento: this.spedizionealc()!.codice_tracciamento,
-        cantina: this.spedizionealc()!.cantina?.id,
-        cliente: this.spedizionealc()!.cliente?.id,
-        status: this.spedizionealc()!.status?.id,
-        ordine_alcolico: this.spedizionealc()!.ordine_alcolico?.id,
-      })
-    }
+  customerName(cliente: any): string {
+    if (!cliente) return 'Cliente sconosciuto';
+    const nome = [cliente.nome, cliente.cognome].filter(Boolean).join(' ');
+    return nome || cliente.email || `Utente #${cliente.id}`;
   }
 
-  onSubmit() {
-    if (this.mod() == 'U') this.onUpdate();
-    if (this.mod() == 'C') this.onCreate();
+  cantinaName(cantina: any): string {
+    if (!cantina) return '—';
+    return cantina.nome ?? cantina.ragione_sociale ?? `Cantina #${cantina.id}`;
   }
 
-  onCreate() {
-    this.spedizioneS.create({
-      corriere: this.updateForm.value.corriere,
-      codice_tracciamento: this.updateForm.value.codice_tracciamento,
-      cantina: this.updateForm.value.cantina,
-      cliente: this.updateForm.value.cliente,
-      status: this.updateForm.value.status,
-      ordine_alcolico: this.updateForm.value.ordine_alcolico,
-    }).subscribe({
-      next: ((r: any) => {
-        this.dialogRef.close()
-      }),
-      error: ((r: any) => {
-        this.msg.set(r.error.msg)
-      })
-    })
+  ordineLabel(ordineAlcolico: any): string {
+    if (!ordineAlcolico) return '—';
+    return `#${ordineAlcolico.id}`;
   }
 
-  onUpdate() {
-    const updateBody: any = { id: this.spedizionealc()!.id }
-    if (this.updateForm.controls['corriere'].dirty)
-      updateBody.corriere = this.updateForm.value.corriere;
-    if (this.updateForm.controls['codice_tracciamento'].dirty)
-      updateBody.codice_tracciamento = this.updateForm.value.codice_tracciamento;
-    if (this.updateForm.controls['cantina'].dirty)
-      updateBody.cantina = this.updateForm.value.cantina;
-    if (this.updateForm.controls['cliente'].dirty)
-      updateBody.cliente = this.updateForm.value.cliente;
-    if (this.updateForm.controls['status'].dirty)
-      updateBody.status = this.updateForm.value.status;
-    if (this.updateForm.controls['ordine_alcolico'].dirty)
-      updateBody.ordine_alcolico = this.updateForm.value.ordine_alcolico;
+  segnaConsegnata(): void {
+    if (!this.spedizione || this.isConsegnata) return;
 
-    this.spedizioneS.update(updateBody)
-      .subscribe({
-        next: ((r: any) => {
-          this.dialogRef.close()
-        }),
-        error: ((r: any) => {
-          this.msg.set(r.error.msg)
-        })
-      })
+    this.isUpdating.set(true);
+    this.errore.set(null);
+
+    // NOTA: assumo che SpedizioneServices esponga un metodo updateStatus(id, idStatus).
+    // Se il service espone invece un update(id, payload) generico, va sostituita questa chiamata.
+    this.spedizioniService.updateStatus(this.spedizione.id, STATUS_SPEDIZIONE.CONSEGNATO).subscribe({
+      next: (spedizioneAggiornata: any) => {
+        this.isUpdating.set(false);
+        this.dialogRef.close({ updated: true, spedizione: spedizioneAggiornata });
+      },
+      error: (err: any) => {
+        this.isUpdating.set(false);
+        this.errore.set('Errore durante l\'aggiornamento dello stato. Riprova.');
+        console.error(err);
+      },
+    });
   }
 
-  remove() {
+  close(): void {
+    this.dialogRef.close();
   }
 }

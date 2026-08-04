@@ -7,7 +7,10 @@
 
 <div class="spedizione-list">
   @for (spedizione of spedizioni(); track spedizione.id) {
-    <article class="spedizione-card" [attr.data-status]="statusSlug(spedizione.status)">
+    <article
+      class="spedizione-card"
+      [attr.data-status]="statusSlug(spedizione.status)"
+      (click)="onSelected(spedizione)">
       <div class="spedizione-id">
         <span class="hash">N°</span>
         <span class="number">{{ spedizione.id }}</span>

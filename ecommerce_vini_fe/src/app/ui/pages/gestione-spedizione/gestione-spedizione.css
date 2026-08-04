@@ -101,6 +101,7 @@
   border-left: 3px solid var(--status-default, var(--gold-300));
   border-radius: 10px;
   padding: 1.1rem 1.4rem;
+  cursor: pointer;
   transition: box-shadow 0.18s ease, transform 0.18s ease, border-color 0.18s ease;
 }
 
