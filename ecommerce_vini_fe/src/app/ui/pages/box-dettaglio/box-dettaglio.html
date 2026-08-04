@@ -86,12 +86,12 @@
         }
         @if (authService.grant().isSeller) {
           <div> 
-          <button type="button"
+          <button type="button" class="btn-edit"
           title="Aggiungi immagine"
           aria-label="Aggiungi una immagine al box"
           (click)="addImage($event)">Aggiungi Immagine
   </button>
-          <button type="button"
+          <button type="button" class="btn-edit"
           title="Rimuovi dalla cantina"
           aria-label="Rimuovi dalla cantina"
           (click)="deleteBox($event)">Cancella Box
