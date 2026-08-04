@@ -129,4 +129,8 @@ export class CantinaDettaglio implements OnInit {
 
     return this.cantina.idVenditore === utenteCorrente.id;
   }
+
+  onRatingEliminato() {
+    this.reloadCantina();
+  }
 }

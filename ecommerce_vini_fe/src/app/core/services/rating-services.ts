@@ -33,4 +33,12 @@ export class RatingServices {
         if (valutazione) params = params.set('valutazione', valutazione);
          return this.http.get<any>(this.baseUrl + '/rating-cantina/list' ,{params});
     }
+
+    deleteRatingCantina(idRating: number) {
+        return this.http.delete<any>(this.baseUrl + '/rating-cantina/delete/' + idRating);
+    }
+
+    deleteRatingAlcolico(idRating: number) {
+        return this.http.delete<any>(this.baseUrl + '/rating-alcolico/delete/' + idRating);
+    }
 }
