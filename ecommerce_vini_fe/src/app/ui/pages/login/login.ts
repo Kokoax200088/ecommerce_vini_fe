@@ -51,8 +51,13 @@ export class Login {
           this.msg.set("");
           this.notification.success("Login effettuato con successo.");
 
-          this.auth.setAuthenticated(resp);
-          this.routing.navigate(['']);
+         this.auth.setAuthenticated(resp);
+
+if(resp.role === 'venditore') {
+  this.routing.navigate(['/catalogo-cantine']);
+} else {
+  this.routing.navigate(['']);
+}
           //stuff about the dialog here, not useful for now
         },
         error: (resp:any) => {
