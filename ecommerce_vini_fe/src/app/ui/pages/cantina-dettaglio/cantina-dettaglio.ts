@@ -118,17 +118,22 @@ export class CantinaDettaglio implements OnInit {
     });
   }
 
-  get isOwner(): boolean {
+ get isOwner(): boolean {
     if (!this.cantina || !this.cantina.idVenditore) return false;
 
     if (!this.auth.grant().isSeller) return false;
 
-    const utenteCorrente = this.utenteService.loggedUtente();
+    const utenteCorrente: any = this.utenteService.loggedUtente();
 
-    if (!utenteCorrente || !utenteCorrente.id) return false;
+    if (!utenteCorrente) return false;
 
-    return this.cantina.idVenditore === utenteCorrente.id;
-  }
+    // Recupera l'ID del venditore dal venditoreDTO dell'utente loggato
+    const idVenditoreLoggato = utenteCorrente.venditoreDTO?.id;
+
+    if (!idVenditoreLoggato) return false;
+
+    return Number(this.cantina.idVenditore) === Number(idVenditoreLoggato);
+}
 
   onRatingEliminato() {
     this.reloadCantina();
