@@ -137,8 +137,11 @@
     @for (rating of alcolico()?.listRatingAlcolico; track rating.id) {
       <app-view-rating
         [idCliente]="rating.id_cliente"
+        [idRating]="rating.id"
         [valutazione]="rating.valutazione"
-        [commento]="rating.commento">
+        [commento]="rating.commento"
+        [type]="'alcolico'"
+        (eliminato)="onRatingEliminato()">
       </app-view-rating>
     }
   </div>

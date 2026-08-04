@@ -9,7 +9,7 @@
 }
 
 .user-avatar {
-  background-color: #4a1525; /* Colore bordeaux del tuo menu */
+  background-color: #4a1525;
   color: #ffffff;
   display: flex;
   align-items: center;
@@ -44,4 +44,37 @@
   color: #4a4a4a;
   font-size: 0.95rem;
   line-height: 1.5;
+}
+mat-card-header {
+  position: relative;
+}
+
+:host ::ng-deep .delete-mini-fab {
+  position: absolute !important;
+  top: 12px !important;
+  right: 12px !important;
+  width: 32px !important;
+  height: 32px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+:host ::ng-deep .delete-mini-fab mat-icon {
+  font-size: 18px !important;
+  width: 18px !important;
+  height: 18px !important;
+  line-height: 18px !important;
+}
+
+:host ::ng-deep .delete-btn-bordeaux {
+  background-color: #4a1525 !important;
+  color: #ffffff !important;
+
+  mat-icon,
+  .mat-icon,
+  mat-icon path {
+    color: #ffffff !important;
+    fill: #ffffff !important;
+  }
 }

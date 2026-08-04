@@ -16,6 +16,11 @@
         </mat-icon>
       }
     </mat-card-subtitle>
+    @if(auth.grant().isAdmin) {
+      <button mat-mini-fab class="delete-mini-fab delete-btn-bordeaux" (click)="onElimina()" aria-label="Elimina recensione">
+        <mat-icon>delete</mat-icon>
+      </button>
+    }
   </mat-card-header>
 
   @if (commento) {

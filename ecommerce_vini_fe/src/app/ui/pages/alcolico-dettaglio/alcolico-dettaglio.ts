@@ -197,9 +197,11 @@ export class AlcolicoDettaglio implements OnInit {
 
 
   reloadRating() {
-  
-        this.caricaAlcolico();
+    this.caricaAlcolico();
   }
 
-  
+  onRatingEliminato() {
+    this.reloadRating();
+  }
+
 }

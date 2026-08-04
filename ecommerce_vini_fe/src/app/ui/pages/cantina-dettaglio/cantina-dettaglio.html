@@ -36,8 +36,11 @@
         @for (rating of cantina?.listRatingCantina; track rating.id) {
           <app-view-rating
             [idCliente]="rating.id_cliente"
+            [idRating]="rating.id"
             [valutazione]="rating.valutazione"
-            [commento]="rating.commento">
+            [commento]="rating.commento"
+            [type]="'cantina'"
+            (eliminato)="onRatingEliminato()">
           </app-view-rating>
         }
       </div>
