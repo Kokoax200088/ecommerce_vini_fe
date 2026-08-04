@@ -22,3 +22,15 @@
     position: relative; /* se ora è fixed/absolute */
   }
 }
+
+.sidebar-custom .nav-pills .nav-link.active,
+.sidebar-custom .nav-pills .show > .nav-link {
+  background-color: #6E0C18 !important;
+  color: white !important;
+}
+
+/* Opzionale: un leggero effetto quando ci passi sopra col mouse per i link non attivi */
+.sidebar-custom .nav-pills .nav-link:hover:not(.active) {
+  background-color: rgba(110, 12, 24, 0.1);
+  color: white !important;
+}

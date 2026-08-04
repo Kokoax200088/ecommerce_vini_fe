@@ -113,7 +113,7 @@ export class UtenteServices {
 }
 
     changePassword(body: {}){
-        return this.http.put(this.getBaseUrlUtente() + "user/changePassword", body); //TODO non c'è il controller ancora
+        return this.http.patch(this.getBaseUrlUtente() + "changePassword", body);
     }
 
     deleteUtente(id: number) {
