@@ -1,0 +1,16 @@
+@if (auth.grant().isSeller) {
+  @if (inline) {
+    <button type="button" class="bottone-inline" (click)="apri($event)">
+      <mat-icon class="icona-inline">photo_camera</mat-icon>
+      Gestisci immagine
+    </button>
+  } @else {
+    <button type="button"
+            class="bottone-immagine"
+            title="Cambia immagine"
+            aria-label="Cambia immagine"
+            (click)="apri($event)">
+      <mat-icon class="icona-immagine">photo_camera</mat-icon>
+    </button>
+  }
+}

@@ -1,0 +1,77 @@
+<h2 mat-dialog-title>{{ inModifica() ? 'Modifica degustazione' : 'Nuova degustazione' }}</h2>
+
+<mat-dialog-content>
+  @if (msg()) {
+    <p class="messaggio-dialog">{{ msg() }}</p>
+  }
+
+  <form [formGroup]="form" class="row g-2">
+    <div class="col-12 col-md-8">
+      <mat-form-field appearance="outline" class="campo-pieno">
+        <mat-label>Nome</mat-label>
+        <input matInput formControlName="nome">
+        <mat-error>Campo obbligatorio</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="col-12 col-md-4">
+      <mat-form-field appearance="outline" class="campo-pieno">
+        <mat-label>Prezzo (€)</mat-label>
+        <input matInput type="number" step="0.01" formControlName="prezzo">
+        <mat-error>Campo obbligatorio</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="col-12 col-md-6">
+      <mat-form-field appearance="outline" class="campo-pieno">
+        <mat-label>Data e ora inizio</mat-label>
+        <input matInput type="datetime-local" step="900" [min]="minInizio" formControlName="dataInizio">
+        <mat-hint>Da quando inizia la degustazione</mat-hint>
+        <mat-error>Campo obbligatorio</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="col-12 col-md-6">
+      <mat-form-field appearance="outline" class="campo-pieno">
+        <mat-label>Data e ora fine</mat-label>
+        <input matInput type="datetime-local" step="900" [min]="minFine" formControlName="dataFine">
+        <mat-hint>Deve essere successiva all'inizio</mat-hint>
+        <mat-error>Campo obbligatorio</mat-error>
+      </mat-form-field>
+    </div>
+
+    @if (intervalloSbagliato) {
+      <div class="col-12">
+        <p class="messaggio-dialog mb-0">La data di fine deve essere successiva a quella di inizio.</p>
+      </div>
+    }
+
+    <div class="col-12">
+      <mat-form-field appearance="outline" class="campo-pieno">
+        <mat-label>Descrizione</mat-label>
+        <textarea matInput rows="3" formControlName="descrizione"></textarea>
+      </mat-form-field>
+    </div>
+  </form>
+
+  <div class="riga-immagine">
+    @if (idDegustazione()) {
+      <app-degustazione-immagine
+        [idDegustazione]="idDegustazione()!"
+        [nome]="nomeDegustazione"
+        [inline]="true">
+      </app-degustazione-immagine>
+    } @else {
+      <p class="nota-immagine mb-0">Dopo la creazione puoi caricare l'immagine dalla fotocamera sulla card.</p>
+    }
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="chiudi()">
+    {{ qualcosaSalvato() ? 'Chiudi' : 'Annulla' }}
+  </button>
+  <button mat-flat-button type="button" class="bottone-salva" [disabled]="salvataggioInCorso()" (click)="salva()">
+    {{ inModifica() ? 'Salva' : 'Crea' }}
+  </button>
+</mat-dialog-actions>

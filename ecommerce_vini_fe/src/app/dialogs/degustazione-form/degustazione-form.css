@@ -1,0 +1,26 @@
+.campo-pieno {
+  width: 100%;
+}
+
+.messaggio-dialog {
+  color: #6e0c18;
+  font-size: 0.9rem;
+}
+
+.bottone-salva {
+  background-color: #6e0c18;
+  color: #ffffff;
+}
+
+.riga-immagine {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid #f0f0f0;
+}
+
+.nota-immagine {
+  font-size: 0.85rem;
+  color: #9a9a9a;
+}
