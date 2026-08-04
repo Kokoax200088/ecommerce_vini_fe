@@ -1,6 +1,5 @@
 <div class="profile-container container py-4">
   <mat-card class="profile-card shadow-sm border-0">
-    
     <!-- Intestazione Card -->
     <mat-card-header class="profile-header">
       <mat-card-title class="fs-3 font-weight-bold">Il mio Profilo</mat-card-title>
@@ -9,13 +8,12 @@
 
     <mat-card-content class="pt-4">
       <div class="row g-4">
-        
         <!-- Colonna Sinistra: Dettagli Utente Attuali -->
         <div class="col-12 col-md-5 profile-info-col border-end-md">
           @if (loggedUtente(); as u) {
             <div class="user-details">
               <h3 class="user-name mb-3">{{ u.nome }} {{ u.cognome }}</h3>
-              
+
               <div class="detail-item mb-2">
                 <span class="detail-label">Email:</span>
                 <span class="detail-value">{{ email() }}</span>
@@ -52,59 +50,94 @@
           }
         </div>
 
-        <!-- Colonna Destra: Form di Modifica -->
+        <!-- Colonna Destra: Form di Modifica / Password -->
         <div class="col-12 col-md-7">
-          <h5 class="mb-3 text-secondary">Modifica Dati</h5>
-          
-          <form [formGroup]="utenteForm" (ngSubmit)="onSubmit()" class="d-flex flex-column gap-3">
-            
-            <div class="row g-3">
-              <div class="col-12 col-sm-6">
-                <mat-form-field appearance="outline" class="w-100">
-                  <mat-label>Nome</mat-label>
-                  <input matInput type="text" name="nome" formControlName="nome">
-                </mat-form-field>
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0 text-secondary">
+              {{ showPasswordForm() ? 'Cambia Password' : 'Modifica Dati' }}
+            </h5>
+
+            <button
+              mat-flat-button class="btn-burgundy"
+              type="button"
+              (click)="showPasswordForm.set(!showPasswordForm())">
+              {{ showPasswordForm() ? 'Torna al profilo' : 'Cambia password' }}
+            </button>
+          </div>
+
+          @if (!showPasswordForm()) {
+            <form [formGroup]="utenteForm" (ngSubmit)="onSubmit()" class="d-flex flex-column gap-3">
+              <div class="row g-3">
+                <div class="col-12 col-sm-6">
+                  <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Nome</mat-label>
+                    <input matInput type="text" name="nome" formControlName="nome">
+                  </mat-form-field>
+                </div>
+
+                <div class="col-12 col-sm-6">
+                  <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Cognome</mat-label>
+                    <input matInput type="text" name="cognome" formControlName="cognome">
+                  </mat-form-field>
+                </div>
               </div>
 
-              <div class="col-12 col-sm-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Data di nascita</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="dataNascita">
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+
+              @if (utenteForm.get('ruolo')?.value === 'cliente') {
                 <mat-form-field appearance="outline" class="w-100">
-                  <mat-label>Cognome</mat-label>
-                  <input matInput type="text" name="cognome" formControlName="cognome">
+                  <mat-label>Indirizzo</mat-label>
+                  <input matInput formControlName="indirizzo">
                 </mat-form-field>
+              }
+
+              @if (utenteForm.get('ruolo')?.value === 'venditore') {
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Partita IVA</mat-label>
+                  <input matInput formControlName="partitaIva">
+                </mat-form-field>
+              }
+
+              <div class="d-flex justify-content-end mt-2">
+                <button mat-flat-button class="btn-burgundy" type="submit">
+                  Modifica Dati
+                </button>
               </div>
-            </div>
+            </form>
+          }
 
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Data di nascita</mat-label>
-              <input matInput [matDatepicker]="picker" formControlName="dataNascita">
-              <mat-hint>MM/DD/YYYY</mat-hint>
-              <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-              <mat-datepicker #picker></mat-datepicker>
-            </mat-form-field>
-
-            @if (utenteForm.get('ruolo')?.value === 'cliente') {
+          @if (showPasswordForm()) {
+            <form [formGroup]="passwordForm" (ngSubmit)="onSubmitPassword()" class="d-flex flex-column gap-3">
               <mat-form-field appearance="outline" class="w-100">
-                <mat-label>Indirizzo</mat-label>
-                <input matInput formControlName="indirizzo">
+                <mat-label>Password attuale</mat-label>
+                <input matInput type="password" formControlName="currentPassword">
               </mat-form-field>
-            }
 
-            @if (utenteForm.get('ruolo')?.value === 'venditore') {
               <mat-form-field appearance="outline" class="w-100">
-                <mat-label>Partita IVA</mat-label>
-                <input matInput formControlName="partitaIva">
+                <mat-label>Nuova password</mat-label>
+                <input matInput type="password" formControlName="newPassword">
               </mat-form-field>
-            }
 
-            <div class="d-flex justify-content-end mt-2">
-              <button mat-flat-button class="btn-burgundy" type="submit">
-                Modifica Dati
-              </button>
-            </div>
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Conferma nuova password</mat-label>
+                <input matInput type="password" formControlName="confirmPassword">
+              </mat-form-field>
 
-          </form>
+              <div class="d-flex justify-content-end mt-2">
+                <button mat-flat-button class="btn-burgundy" type="submit">
+                  Aggiorna password
+                </button>
+              </div>
+            </form>
+          }
         </div>
-
       </div>
     </mat-card-content>
   </mat-card>

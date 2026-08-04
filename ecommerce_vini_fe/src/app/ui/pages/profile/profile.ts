@@ -41,6 +41,14 @@ export class Profile implements OnInit {
   //cliente = signal<Cliente[]>([]);
   
   private notification = inject(NotificationServices);
+  showPasswordForm = signal(false);
+
+  passwordForm = new FormGroup({
+    currentPassword: new FormControl('', [Validators.required]),
+    newPassword: new FormControl('', [Validators.required, Validators.minLength(8)]),
+    confirmPassword: new FormControl('', [Validators.required])
+  });
+
 
   utenteForm: FormGroup = new FormGroup({
       nome: new FormControl(),
@@ -87,7 +95,7 @@ export class Profile implements OnInit {
     }).subscribe({
       next: ((resp:any) => {
         console.log("response post modifica profilo utente: " + resp);
-        this.utenteForm.clearValidators;
+        this.utenteForm.clearValidators();
         this.notification.success("Utente aggiornato correttamente");
         this.utenteService.findLoggedInfos(this.email());
       }),
@@ -97,4 +105,31 @@ export class Profile implements OnInit {
       })
     })
   }
+
+ onSubmitPassword() {
+  if (this.passwordForm.invalid) return;
+
+  if (this.passwordForm.value.newPassword !== this.passwordForm.value.confirmPassword) {
+    this.notification.error('Le nuove password non coincidono');
+    return;
+  }
+
+  const payload = {
+    email: this.email(), 
+    oldPassword: this.passwordForm.value.currentPassword,
+    newPassword: this.passwordForm.value.newPassword
+  };
+
+  this.utenteService.changePassword(payload).subscribe({
+    next: (resp: any) => {
+      this.notification.success('Password cambiata correttamente');
+      this.passwordForm.reset();
+      this.showPasswordForm.set(false);
+    },
+    error: (resp: any) => {
+      console.log(resp);
+      this.notification.error(resp?.error?.msg ?? 'Errore aggiornamento password');
+    }
+  });
+}
 }
