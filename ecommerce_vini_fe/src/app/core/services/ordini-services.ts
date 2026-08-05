@@ -54,8 +54,12 @@ export class OrdiniServices {
     }
     
     update(body: {}) {
-        return this.http.patch(this.baseUrl +"/ordine/update", body)
-        .pipe(tap(() => this.list()))
+    return this.http.patch(this.baseUrl +"/ordine/update", body)
+    .pipe(tap(() => this.list()))
+    }
+
+    updateStatus(id: number, id_status: number) {
+        return this.update({ id, id_status });
     }
     
     delete(id: number) {
