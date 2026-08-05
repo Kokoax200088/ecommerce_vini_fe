@@ -70,7 +70,7 @@ export class SpedizioneDetails {
 
   cantinaName(cantina: any): string {
     if (!cantina) return '—';
-    return cantina.nome ?? cantina.ragione_sociale ?? `Cantina #${cantina.id}`;
+    return cantina.nome  ?? `Cantina #${cantina.id}`;
   }
 
   ordineLabel(ordine: any): string {
