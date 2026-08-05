@@ -83,6 +83,34 @@
   outline-offset: 2px;
 }
 
+/* ---------- Sections ---------- */
+
+.spedizione-section {
+  margin-bottom: 2.5rem;
+  max-width: 880px;
+}
+
+.spedizione-section:last-child {
+  margin-bottom: 0;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.section-title {
+  font-family: 'Fraunces', 'Georgia', serif;
+  font-weight: 600;
+  font-size: 1.15rem;
+  letter-spacing: -0.005em;
+  margin: 0;
+  color: var(--wine-950);
+}
+
 /* ---------- List ---------- */
 
 .spedizione-list {

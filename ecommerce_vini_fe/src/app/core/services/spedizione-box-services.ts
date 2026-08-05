@@ -21,8 +21,8 @@ export class SpedizioneBoxServices {
         if (cantina) params = params.set('cantina', cantina);
         if (cliente) params = params.set('cliente', cliente);
         if (status) params = params.set('status', status);
-        if (box) params = params.set('ordine_alcolico', box);
-        this.http.get(this.baseUrl+"/spedizionealcolico/list", { params })
+        if (box) params = params.set('ordine_box', box);
+        this.http.get(this.baseUrl+"/spedizionebox/list", { params })
             .subscribe({
                 next: ((r: any) => this.spedizioniBox.set(r)),
             })

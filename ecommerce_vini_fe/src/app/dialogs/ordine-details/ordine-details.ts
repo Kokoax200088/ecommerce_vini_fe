@@ -1,4 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
+import { forkJoin, Observable } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -102,35 +103,74 @@ confermaSpedizione(): void {
       return;
     }
 
-    //console.log(JSON.stringify(this.ordine));
     const righeOrdine: any[] = this.ordine.ordineAlcolico ?? [];
-
     const righeOrdineBox: any[] = this.ordine.ordineBox ?? [];
-    //console.log(JSON.stringify(righeOrdineBox));
 
-    const idOrdineAlcolico = righeOrdine[0]?.id;
-    const idCantina = righeOrdine[0]?.cantina?.id;
-    const idStatus = STATUS_SPEDIZIONE.IN_CORSO;
+    const hasAlcolico = righeOrdine.length > 0;
+    const hasBox = righeOrdineBox.length > 0;
 
-    if (!idOrdineAlcolico || !idCantina) {
-      this.errore.set('Dati ordine incompleti: impossibile creare la spedizione (riga ordine o cantina mancante).');
+    if (!hasAlcolico && !hasBox) {
+      this.errore.set('Nessun prodotto alcolico o box presente in questo ordine: impossibile creare una spedizione.');
       return;
+    }
+
+    const idStatus = STATUS_SPEDIZIONE.IN_CORSO;
+    const corriere = this.corriere.trim();
+    const codiceTracciamento = this.codiceTracciamento.trim();
+
+    let payloadAlcolico: SpedizioneAlcolicoReq | null = null;
+    if (hasAlcolico) {
+      const idOrdineAlcolico = righeOrdine[0]?.id;
+      const idCantina = righeOrdine[0]?.cantina?.id;
+
+      if (!idOrdineAlcolico || !idCantina) {
+        this.errore.set('Dati ordine incompleti: impossibile creare la spedizione alcolico (riga ordine o cantina mancante).');
+        return;
+      }
+
+      payloadAlcolico = {
+        id_ordine_alcolico: idOrdineAlcolico,
+        id_cantina: idCantina,
+        id_status: idStatus,
+        corriere,
+        codice_tracciamento: codiceTracciamento,
+      };
+    }
+
+    const payloadsBox: SpedizioneBoxReq[] = [];
+    if (hasBox) {
+      for (const item of righeOrdineBox) {
+        const itemCantinaId: number = item.box?.id_cantina;
+        const itemOrdineBoxId: number = item.id;
+
+        if (!itemCantinaId || !itemOrdineBoxId) {
+          this.errore.set('Dati ordine incompleti: impossibile creare la spedizione box (cantina o riga ordine mancante).');
+          return;
+        }
+
+        payloadsBox.push({
+          corriere,
+          codice_tracciamento: codiceTracciamento,
+          id_cantina: itemCantinaId,
+          id_status: idStatus,
+          id_ordbox: itemOrdineBoxId,
+        });
+      }
     }
 
     this.isSubmitting.set(true);
     this.errore.set(null);
-    const payload: SpedizioneAlcolicoReq = {
-      id_ordine_alcolico: idOrdineAlcolico,
-      id_cantina: idCantina,
-      id_status: idStatus,
-      corriere: this.corriere.trim(),
-      codice_tracciamento: this.codiceTracciamento.trim(),
-    };
-    console.log(JSON.stringify(payload));
-    this.spedizioniService.create(payload).subscribe({
-      next: (spedizione) => {
+
+    const richieste: Observable<any>[] = [];
+    if (payloadAlcolico) {
+      richieste.push(this.spedizioniService.create(payloadAlcolico));
+    }
+    payloadsBox.forEach((payloadBox) => richieste.push(this.spedizioniBoxService.create(payloadBox)));
+
+    forkJoin(richieste).subscribe({
+      next: (spedizioni) => {
         this.isSubmitting.set(false);
-        this.dialogRef.close({ converted: true, ordineId: this.ordine.id, spedizione });
+        this.dialogRef.close({ converted: true, ordineId: this.ordine.id, spedizioni });
       },
       error: (err) => {
         this.isSubmitting.set(false);
@@ -138,34 +178,6 @@ confermaSpedizione(): void {
         console.error(err);
       },
     });
-
-    righeOrdineBox.map(item => {
-
-        const itemCantinaId : number = item.box.id_cantina;
-        const itemBoxId : number = item.box.id;
-        //console.log(itemCantinaId + " " + itemBoxId);
-        const payloadBox: SpedizioneBoxReq = {
-          corriere: this.corriere.trim(),
-          codice_tracciamento: this.codiceTracciamento.trim(),
-          id_cantina: itemCantinaId,
-          id_status: idStatus,
-          id_ordbox: itemBoxId
-        }
-
-        //console.log("Creo spedizione con body: " + JSON.stringify(payloadBox));
-        this.spedizioniBoxService.create(payloadBox).subscribe({
-            next: (spedizione) => {
-              this.isSubmitting.set(false);
-              this.dialogRef.close({ converted: true, ordineId: this.ordine.id, spedizione }); //forse questo va tolto perchè va messo alla fine
-            },
-            error: (err) => {
-              this.isSubmitting.set(false);
-              this.errore.set('Errore durante la creazione della spedizione. Riprova.');
-              console.error(err);
-            },
-          });
-        });
-    
   }
 
   close(): void {
