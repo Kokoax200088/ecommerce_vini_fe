@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, computed, inject, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, computed, inject, Input, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CantinaDegustazione } from '../../core/models/cantina';
 import { CantinaServices } from '../../core/services/cantina-services';
@@ -8,6 +8,7 @@ import { ProdottoDegustazione } from '../../core/models/carrello';
 import { CarrelloService } from '../../core/services/carrello-services';
 import { TokenServices } from '../../core/security/token-services';
 import { MeDTO } from '../../core/models/user';
+import { NotificationServices } from '../../core/services/notification-services';
 import { switchMap } from 'rxjs';
 import { DegustazioneNuova } from "../degustazione-nuova/degustazione-nuova";
 import { DegustazioneAzioni } from "../degustazione-azioni/degustazione-azioni";
@@ -28,6 +29,7 @@ export class DegustazioniCantina {
   public readonly auth = inject(AuthServices);
   private tokenService = inject(TokenServices);
   private cdr = inject(ChangeDetectorRef);
+  private notification = inject(NotificationServices);
   loggedUtente = computed(() => this.utenteService.loggedUtente());
 
   constructor(
@@ -62,7 +64,17 @@ export class DegustazioniCantina {
     }
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['idCantina'] && this.idCantina) {
+      this.cantinaService.listDegustazioni(this.idCantina);
+    }
+  }
+
   ricarica(): void {
+    if (!this.idCantina) {
+      return;
+    }
+
     this.cantinaService.listDegustazioni(this.idCantina);
     this.cdr.markForCheck();
   }
@@ -81,6 +93,7 @@ export class DegustazioniCantina {
     const utente = this.loggedUtente();
     if (!utente) {
       console.error('Impossibile aggiungere al carrello: utente non ancora caricato o non loggato');
+      this.notification.error('Effettua il login per prenotare una degustazione');
       return;
     }
 
@@ -117,9 +130,12 @@ export class DegustazioniCantina {
       })
     ).subscribe({
       next: () => {
-        console.log(`Degustazione "${degustazione.nome}" aggiunta al carrello`);
+        this.notification.success('Degustazione aggiunta al carrello');
       },
-      error: (err) => console.error('Errore durante l\'aggiunta al carrello:', err)
+      error: (err) => {
+        console.error('Errore durante l\'aggiunta al carrello:', err);
+        this.notification.error('Impossibile aggiungere la degustazione al carrello');
+      }
     });
   }
 }
