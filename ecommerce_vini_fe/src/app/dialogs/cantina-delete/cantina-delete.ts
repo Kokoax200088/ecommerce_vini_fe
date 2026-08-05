@@ -27,7 +27,7 @@ export class CantinaDelete {
     this.cantinaService.delete(this.data.idCantina).subscribe({
       next: () => {
         this.dialogRef.close(true); 
-        this.router.navigate(['/home']); 
+        this.router.navigate(['/catalogo-cantine']); 
       },
       error: (err: any) => {
         console.error('Errore durante l\'eliminazione della cantina', err);

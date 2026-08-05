@@ -107,7 +107,6 @@
                   <input matInput formControlName="partitaIva" />
                 </mat-form-field>
               }
-              
 
               <div class="d-flex justify-content-end mt-2">
                 <button mat-flat-button class="btn-burgundy" type="submit">Modifica Dati</button>
@@ -130,12 +129,12 @@
                 <mat-label>Nuova password</mat-label>
                 <input matInput type="password" formControlName="newPassword" />
                 @if (
-                  utenteForm.get('password')?.touched &&
-                  utenteForm.get('password')?.errors?.['pattern']
+                  passwordForm.get('newPassword')?.touched &&
+                  passwordForm.get('newPassword')?.errors?.['passwordDebole']
                 ) {
                   <mat-error>
-                    La password deve contenere almeno 1 maiuscola, 1 numero, 1 carattere speciale e
-                    avere almeno 6 caratteri.
+                    La password deve contenere almeno 1 maiuscola, 1 numero e avere almeno 6
+                    caratteri.
                   </mat-error>
                 }
               </mat-form-field>
@@ -143,6 +142,14 @@
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Conferma nuova password</mat-label>
                 <input matInput type="password" formControlName="confirmPassword" />
+
+                @if (
+                  passwordForm.get('confirmPassword')?.hasError('passwordsMismatch') &&
+                  (passwordForm.get('confirmPassword')?.touched ||
+                    passwordForm.get('confirmPassword')?.dirty)
+                ) {
+                  <mat-error>Le password non coincidono</mat-error>
+                }
               </mat-form-field>
 
               <div class="d-flex justify-content-end mt-2">

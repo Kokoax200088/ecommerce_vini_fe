@@ -40,7 +40,7 @@ export class Registration {
     nome: new FormControl<string | null>(null, Validators.required),
     cognome: new FormControl<string | null>(null, Validators.required),
     email: new FormControl<string | null>(null, [Validators.required, Validators.email]),
-    password: new FormControl<string | null>(null, [Validators.required, Validators.pattern(this.utilities.regex)]),
+    password: new FormControl<string | null>(null, [Validators.required, this.passwordComplexityValidator(this.utilities.regex)]),
     ruolo: new FormControl<number>(1, { nonNullable: true, validators: [Validators.required] }),
     dataNascita: new FormControl<Date | string | null>(null, [Validators.required, this.minEtaValidator(18)]),
     indirizzo: new FormControl<string | null>(null),
@@ -128,4 +128,13 @@ export class Registration {
       return eta >= minEta ? null : { minorenne: { etaAttuale: eta, etaMinima: minEta } };
     };
   }
+
+  passwordComplexityValidator(regex: RegExp): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    if (!control.value) return null; // Se vuoto lascia gestire a Validators.required
+
+    const valid = regex.test(control.value);
+    return valid ? null : { passwordDebole: true };
+  };
+}
 }

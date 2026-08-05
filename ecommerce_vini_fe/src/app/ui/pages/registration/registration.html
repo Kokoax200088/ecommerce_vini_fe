@@ -29,10 +29,10 @@
           <input matInput type="password" formControlName="password" />
           <mat-icon matSuffix>lock</mat-icon>
           @if (
-            utenteForm.get('password')?.touched && utenteForm.get('password')?.errors?.['pattern']
+            utenteForm.get('password')?.touched && utenteForm.get('password')?.errors?.['passwordDebole']
           ) {
             <mat-error>
-              La password deve contenere almeno 1 maiuscola, 1 numero, 1 carattere speciale e avere
+              La password deve contenere almeno 1 maiuscola, 1 numero e avere
               almeno 6 caratteri.
             </mat-error>
           }

@@ -65,6 +65,7 @@ export class AlcolicoElimina {
   private rimuoviDallaCantina(): void {
     this.cantinaService.deleteCantinaAlcolico(this.cantinaAlcolico!.id).subscribe({
       next: () => {
+        this.eliminaDalCatalogo();
         this.cantinaService.listAlcolici(this.idCantina);
         this.notification.success('Alcolico rimosso dalla cantina');
       },

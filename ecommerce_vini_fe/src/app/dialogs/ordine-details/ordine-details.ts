@@ -14,6 +14,7 @@ import { SpedizioneBoxReq } from '../../core/models/spedizione-box';
 import { SpedizioneBoxServices } from '../../core/services/spedizione-box-services';
 import { AuthServices } from '../../core/services/auth-services';
 import { NotificationServices } from '../../core/services/notification-services';
+import { OrdiniServices } from '../../core/services/ordini-services';
 import { DegustazioneServices } from '../../core/services/degustazione-services';
 import { Degustazione } from '../../core/models/degustazione';
 @Component({
@@ -38,6 +39,7 @@ export class OrdineDetails {
   private readonly spedizioniBoxService = inject(SpedizioneBoxServices);
   private readonly authServices = inject(AuthServices);
   private readonly notification = inject(NotificationServices);
+  private readonly ordiniService = inject(OrdiniServices);
   private readonly degService = inject(DegustazioneServices);
 
   readonly ordine: any = this.data?.ordine ?? null;
@@ -200,8 +202,18 @@ confermaSpedizione(): void {
 
     forkJoin(richieste).subscribe({
       next: (spedizioni) => {
-        this.isSubmitting.set(false);
-        this.dialogRef.close({ converted: true, ordineId: this.ordine.id, spedizioni });
+        this.ordiniService.updateStatus(this.ordine.id, STATUS_ORDINE.FINITO).subscribe({
+          next: (ordineAggiornato: any) => {
+            this.isSubmitting.set(false);
+            this.notification.success('Spedizione confermata e ordine completato.');
+            this.dialogRef.close({ converted: true, ordineId: this.ordine.id, spedizioni, ordine: ordineAggiornato });
+          },
+          error: (err: any) => {
+            this.isSubmitting.set(false);
+            this.errore.set('Spedizioni create, ma errore durante l\'aggiornamento dello stato ordine. Riprova.');
+            console.error(err);
+          },
+        });
       },
       error: (err) => {
         this.isSubmitting.set(false);
