@@ -43,7 +43,8 @@ export class UtenteServices {
                         id: result.id, //dovrebbe settarlo in automatico ma per sicurezza lo esplicito
                         indirizzo: result.clienteDTO?.indirizzo ?? result.indirizzo,
                         partitaIva: result.venditoreDTO?.partitaIva ?? result.partitaIva,
-                        idCarrello: result.clienteDTO?.carrello?.id ?? result.carrello?.id ?? null
+                        idCarrello: result.clienteDTO?.carrello?.id ?? result.carrello?.id ?? null,
+                        idVenditore: result.venditoreDTO?.id ?? result.idVenditore ?? null
                     });
                 },
                 error: (resp) =>{

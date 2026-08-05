@@ -3,19 +3,19 @@ import { UtenteServices } from '../../../core/services/utente-services';
 import { TableColumn, TableGeneric } from '../../../components/table-column/table-column';
 import { MatIcon } from "@angular/material/icon";
 import { SearchBar } from "../../../components/search-bar/search-bar";
-import { filter, switchMap } from 'rxjs';
+import { filter } from 'rxjs';
 import { AuthServices } from '../../../core/services/auth-services';
 import { NotificationServices } from '../../../core/services/notification-services';
 import { DeleteUser } from '../../../dialogs/delete-user/delete-user';
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-gestione-venditori',
+  selector: 'app-gestione-utenti',
   imports: [TableGeneric, MatIcon, SearchBar],
-  templateUrl: './gestione-venditori.html',
-  styleUrl: './gestione-venditori.css',
+  templateUrl: './gestione-utenti.html',
+  styleUrl: './gestione-utenti.css',
 })
-export class GestioneVenditori {
+export class GestioneUtenti {
   utenti: any;
 
   
@@ -63,24 +63,45 @@ onDelete(row: any, role: string) {
   ).subscribe(() => this.eseguiDelete(row, role));
 }
 
-private eseguiDelete(row: any, role: string) {
+private eseguiDelete(row: any, role: any) {
   let deleteRoleSpecifico$;
 
-  if (role === 'cliente') {
-    deleteRoleSpecifico$ = this.utenteService.deleteCliente(row.clienteDTO.id);
-  } else if (role === 'venditore') {
-    deleteRoleSpecifico$ = this.utenteService.deleteVenditore(row.venditoreDTO.id);
+  let nomeRuolo = '';
+  if (typeof role === 'string') {
+    nomeRuolo = role;
+  } else if (role && typeof role === 'object' && role.nome) {
+    nomeRuolo = role.nome;
+  }
+
+  const ruoloNormalizzato = nomeRuolo.toLowerCase();
+  console.log('Ruolo normalizzato per eliminazione:', ruoloNormalizzato, row);
+
+  if (ruoloNormalizzato === 'cliente') {
+    const idCliente = row.clienteDTO?.id ?? row.id; // Fallback di sicurezza sull'id utente se il DTO è piatto
+    deleteRoleSpecifico$ = this.utenteService.deleteCliente(idCliente);
+  } else if (ruoloNormalizzato === 'venditore') {
+    const idVenditore = row.venditoreDTO?.id ?? row.id;
+    deleteRoleSpecifico$ = this.utenteService.deleteVenditore(idVenditore);
   } else {
     this.utenteService.deleteUtente(row.id).subscribe({
       next: () => {
         this.notification.success('Utente eliminato correttamente');
         this.utenteService.list();
       },
-      error: () => this.notification.error('Errore durante l\'eliminazione')
+      error: () => this.notification.error("Errore durante l'eliminazione")
     });
     return;
   }
 
+  if (deleteRoleSpecifico$) {
+    deleteRoleSpecifico$.subscribe({
+      next: () => {
+        this.notification.success('Utente eliminato correttamente');
+        this.utenteService.list();
+      },
+      error: () => this.notification.error("Errore durante l'eliminazione")
+    });
+  }
 }
 
 isCurrentUser(rowId: number | string): boolean {
