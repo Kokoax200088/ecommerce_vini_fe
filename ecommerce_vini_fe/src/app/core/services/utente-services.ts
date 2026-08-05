@@ -103,14 +103,32 @@ export class UtenteServices {
             .pipe(tap(() => this.list()));
     }
 
+    updateCliente(body: {}){
+        console.log("update cliente = ", body);
+        return this.http.patch(this.getBaseUrlCliente()+ "update", body)
+            .pipe(tap(() => this.list()));
+    }
+
+    updateVenditore(body: {}){
+        console.log("update venditore = ", body);
+        return this.http.patch(this.getBaseUrlVenditore()+ "update", body)
+            .pipe(tap(() => this.list()));
+    }
+
     findByUsername(id?: string){
         return this.http.get(this.getBaseUrlUtente() + "user/getById");
     }
 
-    getClienteById(id: number) {
+getClienteById(id: number) {
     let params = new HttpParams();
     params = params.set('id', id); 
     return this.http.get(this.getBaseUrlCliente() + "getClienteById", { params });
+}
+
+getVenditoreById(id: number) {
+    let params = new HttpParams();
+    params = params.set('id', id); 
+    return this.http.get(this.getBaseUrlVenditore() + "getVenditoreById", { params });
 }
 
     changePassword(body: {}){

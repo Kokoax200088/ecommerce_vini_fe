@@ -44,6 +44,7 @@ export class Profile implements OnInit {
   private utilities = inject(UtilitiesServices);
   public authService = inject(AuthServices);
   showPasswordForm = signal(false);
+  private payload : {} = {};
 
   passwordForm = new FormGroup({
     currentPassword: new FormControl('', [Validators.required]),
@@ -87,12 +88,16 @@ export class Profile implements OnInit {
   onSubmit() {
     console.log("submit in profile");
 
-    this.utenteService.update({
-      id: this.loggedUtente()?.id,
-      nome: this.utenteForm.value.nome,
-      cognome: this.utenteForm.value.cognome,
-      dataNascita: this.utilities.formatDateToDDMMYYYY(this.utenteForm.value.dataNascita)
-    }).subscribe({
+    if (this.authService.grant().isCustomer){
+      this.payload = {
+        id: this.loggedUtente()?.id,
+        nome: this.utenteForm.value.nome,
+        cognome: this.utenteForm.value.cognome,
+        dataNascita: this.utilities.formatDateToDDMMYYYY(this.utenteForm.value.dataNascita),
+        indirizzo: this.utenteForm.value.indirizzo
+      }
+
+      this.utenteService.updateCliente(this.payload).subscribe({
       next: ((resp:any) => {
         console.log("response post modifica profilo utente: " + resp);
         this.utenteForm.clearValidators();
@@ -105,7 +110,53 @@ export class Profile implements OnInit {
         this.notification.error("Errore aggiornamento");
       })
     })
+    }
+    if (this.authService.grant().isSeller){
+      this.payload = {
+        id: this.loggedUtente()?.id,
+        nome: this.utenteForm.value.nome,
+        cognome: this.utenteForm.value.cognome,
+        dataNascita: this.utilities.formatDateToDDMMYYYY(this.utenteForm.value.dataNascita),
+        partitaIva: this.utenteForm.value.partitaIva
+      }
 
+      this.utenteService.updateVenditore(this.payload).subscribe({
+      next: ((resp:any) => {
+        console.log("response post modifica profilo utente: " + resp);
+        this.utenteForm.clearValidators();
+        this.utenteForm.reset();
+        this.notification.success("Utente aggiornato correttamente");
+        this.utenteService.findLoggedInfos(this.email());
+      }),
+      error: ((resp:any) => {
+        console.log(resp.error.msg);
+        this.notification.error("Errore aggiornamento");
+      })
+    })
+    }
+        
+    if (this.authService.grant().isAdmin){
+      this.payload = {
+        id: this.loggedUtente()?.id,
+        nome: this.utenteForm.value.nome,
+        cognome: this.utenteForm.value.cognome,
+        dataNascita: this.utilities.formatDateToDDMMYYYY(this.utenteForm.value.dataNascita)
+      }
+
+      this.utenteService.update(this.payload).subscribe({
+      next: ((resp:any) => {
+        console.log("response post modifica profilo utente: " + resp);
+        this.utenteForm.clearValidators();
+        this.utenteForm.reset();
+        this.notification.success("Utente aggiornato correttamente");
+        this.utenteService.findLoggedInfos(this.email());
+      }),
+      error: ((resp:any) => {
+        console.log(resp.error.msg);
+        this.notification.error("Errore aggiornamento");
+      })
+    })
+    }
   }
 
  onSubmitPassword() {
