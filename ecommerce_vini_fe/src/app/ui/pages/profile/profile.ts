@@ -1,6 +1,6 @@
 import { Component, computed, effect, inject, OnInit, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterModule } from "@angular/router";
-import { AbstractControl, ReactiveFormsModule, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { AbstractControl, FormGroupDirective, NgForm, ReactiveFormsModule, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { UtenteServices } from '../../../core/services/utente-services';
 import { TokenServices } from '../../../core/security/token-services';
 import { Cliente, MeDTO } from '../../../core/models/user';
@@ -10,7 +10,7 @@ import { MatCardContent, MatCardHeader, MatCardTitle, MatCardModule } from "@ang
 import { MatFormField, MatLabel, MatHint, MatSelect, MatOption } from "@angular/material/select";
 import {  MatDatepickerModule, MatDatepickerToggle, MatDatepicker } from "@angular/material/datepicker";
 import { MatInputModule } from '@angular/material/input';
-import { MatNativeDateModule } from '@angular/material/core';
+import { ErrorStateMatcher, MatNativeDateModule } from '@angular/material/core';
 import { UtilitiesServices } from '../../../core/services/utilities-services';
 import { NotificationServices } from '../../../core/services/notification-services';
 
@@ -44,12 +44,14 @@ export class Profile implements OnInit {
   private utilities = inject(UtilitiesServices);
   public authService = inject(AuthServices);
   showPasswordForm = signal(false);
+  
 
   passwordForm = new FormGroup({
     currentPassword: new FormControl('', [Validators.required]),
-    newPassword: new FormControl('',  [Validators.required, Validators.pattern(this.utilities.regex)]),
+    newPassword: new FormControl('',  [Validators.required, this.passwordComplexityValidator(this.utilities.regex)]),
     confirmPassword: new FormControl('', [Validators.required])
-  });
+  },
+  { validators: this.passwordsMatchValidator.bind(this)});
 
 
   utenteForm: FormGroup = new FormGroup({
@@ -82,6 +84,7 @@ export class Profile implements OnInit {
         console.log("errore in init profile" + resp);
       }
     });
+
   }
 
   onSubmit() {
@@ -95,7 +98,6 @@ export class Profile implements OnInit {
     }).subscribe({
       next: ((resp:any) => {
         console.log("response post modifica profilo utente: " + resp);
-        this.utenteForm.clearValidators();
         this.utenteForm.reset();
         this.notification.success("Utente aggiornato correttamente");
         this.utenteService.findLoggedInfos(this.email());
@@ -153,4 +155,32 @@ export class Profile implements OnInit {
       return eta >= minEta ? null : { minorenne: { etaAttuale: eta, etaMinima: minEta } };
     };
   }
+passwordsMatchValidator(group: AbstractControl): ValidationErrors | null {
+  const newPassword = group.get('newPassword')?.value;
+  const confirmPasswordControl = group.get('confirmPassword');
+
+  if (!newPassword || !confirmPasswordControl?.value) return null;
+
+  if (newPassword !== confirmPasswordControl.value) {
+    // Imposta l'errore direttamente sul controllo del campo
+    confirmPasswordControl.setErrors({ passwordsMismatch: true });
+    return { passwordsMismatch: true };
+  } else {
+    // Rimuove l'errore custom se le password ora coincidono
+    if (confirmPasswordControl.hasError('passwordsMismatch')) {
+      delete confirmPasswordControl.errors?.['passwordsMismatch'];
+      confirmPasswordControl.updateValueAndValidity({ onlySelf: true });
+    }
+    return null;
+  }
+}
+
+passwordComplexityValidator(regex: RegExp): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    if (!control.value) return null; // Se vuoto lascia gestire a Validators.required
+
+    const valid = regex.test(control.value);
+    return valid ? null : { passwordDebole: true };
+  };
+}
 }
