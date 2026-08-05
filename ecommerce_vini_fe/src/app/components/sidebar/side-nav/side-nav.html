@@ -2,9 +2,17 @@
   
 
   <div class="offcanvas-body d-flex flex-column p-3">
-    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none fs-4 d-none d-lg-flex">
+    @if(!auth.grant().isSeller) {
+      <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none fs-4 d-none d-lg-flex">
       <img src="/logo_ecommerce.png" alt="Logo E-commerce Vini" class="logo">
     </a>
+    } 
+    @if(auth.grant().isSeller) {
+      <a href="/catalogo-cantine" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none fs-4 d-none d-lg-flex">
+      <img src="/logo_ecommerce.png" alt="Logo E-commerce Vini" class="logo">
+    </a>
+    }
+    
      @if (!auth.grant().isSeller) {
     <hr class="d-none d-lg-block">
      }
@@ -55,7 +63,7 @@
 
     <ul class="nav nav-pills flex-column mb-auto">
       <li class="nav-item">
-        <a [routerLink]="['/catalogo-cantine']" [queryParams]="{ filtro: 'mie' }" routerLinkActive="active" class="nav-link text-white" style="cursor: pointer;">
+        <a href="/catalogo-cantine" routerLinkActive="active" class="nav-link text-white" style="cursor: pointer;">
           <i class="bi bi-house-door me-2"></i> Le mie cantine
         </a>
       </li>

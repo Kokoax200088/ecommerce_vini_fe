@@ -14,7 +14,7 @@ export const routes: Routes = [
   },
   {
     path: 'gestione-utenti',
-    loadComponent: () => import('./ui/pages/gestione-utenti/gestione-venditori').then((m) => m.GestioneVenditori),
+    loadComponent: () => import('./ui/pages/gestione-utenti/gestione-utenti').then((m) => m.GestioneUtenti),
   },
   {
     path: 'catalogo-cantine',

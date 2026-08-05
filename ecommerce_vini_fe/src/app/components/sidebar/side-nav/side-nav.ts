@@ -14,6 +14,7 @@ export class SideNav {
 
   public readonly auth = inject(AuthServices);
   constructor(private routing: Router, private authService: AuthServices) {
+    console.log("GRANT ATTUALI:", this.auth.grant());
   }
   
   profile(){
