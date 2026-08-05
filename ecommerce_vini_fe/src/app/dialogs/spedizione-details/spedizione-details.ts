@@ -6,6 +6,7 @@ import { SpedizioneServices } from '../../core/services/spedizione-alcolico-serv
 import { SpedizioneBoxServices } from '../../core/services/spedizione-box-services';
 import { AuthServices } from '../../core/services/auth-services';
 import { STATUS_SPEDIZIONE } from '../../core/models/status';
+import { NotificationServices } from '../../core/services/notification-services';
 
 type TipoSpedizione = 'ALCOLICO' | 'BOX';
 
@@ -25,6 +26,7 @@ export class SpedizioneDetails {
   private readonly spedizioniService = inject(SpedizioneServices);
   private readonly spedizioniBoxService = inject(SpedizioneBoxServices);
   private readonly authServices = inject(AuthServices);
+  private readonly notification = inject(NotificationServices);
 
   readonly mod: string = this.data?.mod ?? 'V';
   readonly tipo: TipoSpedizione = this.data?.tipo ?? 'ALCOLICO';
@@ -93,6 +95,7 @@ export class SpedizioneDetails {
 
     richiesta.subscribe({
       next: (spedizioneAggiornata: any) => {
+        this.notification.success("Spedizione confermata.");
         this.isUpdating.set(false);
         this.dialogRef.close({ updated: true, spedizione: spedizioneAggiornata });
       },
