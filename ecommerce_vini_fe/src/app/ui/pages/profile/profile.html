@@ -58,9 +58,11 @@
             </h5>
 
             <button
-              mat-flat-button class="btn-burgundy"
+              mat-flat-button
+              class="btn-burgundy"
               type="button"
-              (click)="showPasswordForm.set(!showPasswordForm())">
+              (click)="showPasswordForm.set(!showPasswordForm())"
+            >
               {{ showPasswordForm() ? 'Torna al profilo' : 'Cambia password' }}
             </button>
           </div>
@@ -71,63 +73,76 @@
                 <div class="col-12 col-sm-6">
                   <mat-form-field appearance="outline" class="w-100">
                     <mat-label>Nome</mat-label>
-                    <input matInput type="text" name="nome" formControlName="nome">
+                    <input matInput type="text" name="nome" formControlName="nome" />
                   </mat-form-field>
                 </div>
 
                 <div class="col-12 col-sm-6">
                   <mat-form-field appearance="outline" class="w-100">
                     <mat-label>Cognome</mat-label>
-                    <input matInput type="text" name="cognome" formControlName="cognome">
+                    <input matInput type="text" name="cognome" formControlName="cognome" />
                   </mat-form-field>
                 </div>
               </div>
 
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Data di nascita</mat-label>
-                <input matInput [matDatepicker]="picker" formControlName="dataNascita">
+                <input matInput [matDatepicker]="picker" formControlName="dataNascita" />
                 <mat-hint>MM/DD/YYYY</mat-hint>
                 <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
+                @if (utenteForm.get('dataNascita')?.hasError('minorenne')) {
+                  <mat-error>Non eri maggiorenne???</mat-error>
+                }
               </mat-form-field>
 
-              @if (utenteForm.get('ruolo')?.value === 'cliente') {
+              @if (authService.grant().isCustomer) {
                 <mat-form-field appearance="outline" class="w-100">
                   <mat-label>Indirizzo</mat-label>
-                  <input matInput formControlName="indirizzo">
+                  <input matInput formControlName="indirizzo" />
                 </mat-form-field>
-              }
-
-              @if (utenteForm.get('ruolo')?.value === 'venditore') {
+              } @else if (authService.grant().isSeller) {
                 <mat-form-field appearance="outline" class="w-100">
                   <mat-label>Partita IVA</mat-label>
-                  <input matInput formControlName="partitaIva">
+                  <input matInput formControlName="partitaIva" />
                 </mat-form-field>
               }
+              
 
               <div class="d-flex justify-content-end mt-2">
-                <button mat-flat-button class="btn-burgundy" type="submit">
-                  Modifica Dati
-                </button>
+                <button mat-flat-button class="btn-burgundy" type="submit">Modifica Dati</button>
               </div>
             </form>
           }
 
           @if (showPasswordForm()) {
-            <form [formGroup]="passwordForm" (ngSubmit)="onSubmitPassword()" class="d-flex flex-column gap-3">
+            <form
+              [formGroup]="passwordForm"
+              (ngSubmit)="onSubmitPassword()"
+              class="d-flex flex-column gap-3"
+            >
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Password attuale</mat-label>
-                <input matInput type="password" formControlName="currentPassword">
+                <input matInput type="password" formControlName="currentPassword" />
               </mat-form-field>
 
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Nuova password</mat-label>
-                <input matInput type="password" formControlName="newPassword">
+                <input matInput type="password" formControlName="newPassword" />
+                @if (
+                  utenteForm.get('password')?.touched &&
+                  utenteForm.get('password')?.errors?.['pattern']
+                ) {
+                  <mat-error>
+                    La password deve contenere almeno 1 maiuscola, 1 numero, 1 carattere speciale e
+                    avere almeno 6 caratteri.
+                  </mat-error>
+                }
               </mat-form-field>
 
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Conferma nuova password</mat-label>
-                <input matInput type="password" formControlName="confirmPassword">
+                <input matInput type="password" formControlName="confirmPassword" />
               </mat-form-field>
 
               <div class="d-flex justify-content-end mt-2">

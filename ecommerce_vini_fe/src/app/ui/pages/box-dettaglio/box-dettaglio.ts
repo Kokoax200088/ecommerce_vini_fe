@@ -20,10 +20,12 @@ import { NotificationServices } from '../../../core/services/notification-servic
 import { DeleteBox } from '../../../dialogs/delete-box/delete-box';
 import { UtilitiesServices } from '../../../core/services/utilities-services';
 import { UploadImage } from '../../../components/upload-image/upload-image';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-box-dettaglio',
-  imports: [QuantitaSelector, DecimalPipe],
+  imports: [QuantitaSelector, DecimalPipe, MatIconModule, MatButtonModule],
   templateUrl: './box-dettaglio.html',
   styleUrl: './box-dettaglio.css',
 })
@@ -57,6 +59,10 @@ export class BoxDettaglio {
     private utenteService: UtenteServices,
     private uploadImageBoxService: UploadImageService,
   ) {}
+
+   tornaIndietro(): void {
+    this.location.back();
+  }
 
   ngOnInit(): void {
     this.id = Number(this.route.snapshot.paramMap.get('id')); //e funziona sta roba?

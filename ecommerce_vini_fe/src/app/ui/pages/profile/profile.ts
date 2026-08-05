@@ -1,6 +1,6 @@
 import { Component, computed, effect, inject, OnInit, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterModule } from "@angular/router";
-import { ReactiveFormsModule } from '@angular/forms';
+import { AbstractControl, ReactiveFormsModule, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { UtenteServices } from '../../../core/services/utente-services';
 import { TokenServices } from '../../../core/security/token-services';
 import { Cliente, MeDTO } from '../../../core/models/user';
@@ -41,11 +41,13 @@ export class Profile implements OnInit {
   //cliente = signal<Cliente[]>([]);
   
   private notification = inject(NotificationServices);
+  private utilities = inject(UtilitiesServices);
+  public authService = inject(AuthServices);
   showPasswordForm = signal(false);
 
   passwordForm = new FormGroup({
     currentPassword: new FormControl('', [Validators.required]),
-    newPassword: new FormControl('', [Validators.required, Validators.minLength(8)]),
+    newPassword: new FormControl('',  [Validators.required, Validators.pattern(this.utilities.regex)]),
     confirmPassword: new FormControl('', [Validators.required])
   });
 
@@ -53,7 +55,7 @@ export class Profile implements OnInit {
   utenteForm: FormGroup = new FormGroup({
       nome: new FormControl(),
       cognome: new FormControl(),
-      dataNascita: new FormControl(),
+      dataNascita: new FormControl<Date | string | null>(null,[this.minEtaValidator(18)]),
       
       indirizzo: new FormControl(), //il check si fa dopo se no li chiede entrambi
       partitaIva: new FormControl()
@@ -62,9 +64,7 @@ export class Profile implements OnInit {
   constructor(
     private routing:Router, 
     private utenteService:UtenteServices,
-    private authService:AuthServices,
-    private tokenService:TokenServices,
-    private utilities:UtilitiesServices
+    private tokenService:TokenServices
     ){}
 
   ngOnInit(): void {
@@ -96,6 +96,7 @@ export class Profile implements OnInit {
       next: ((resp:any) => {
         console.log("response post modifica profilo utente: " + resp);
         this.utenteForm.clearValidators();
+        this.utenteForm.reset();
         this.notification.success("Utente aggiornato correttamente");
         this.utenteService.findLoggedInfos(this.email());
       }),
@@ -104,6 +105,7 @@ export class Profile implements OnInit {
         this.notification.error("Errore aggiornamento");
       })
     })
+
   }
 
  onSubmitPassword() {
@@ -132,4 +134,23 @@ export class Profile implements OnInit {
     }
   });
 }
+
+ private minEtaValidator(minEta: number = 18): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (!control.value) return null;
+
+      const dataNascita = new Date(control.value);
+      if (isNaN(dataNascita.getTime())) return null;
+
+      const oggi = new Date();
+      let eta = oggi.getFullYear() - dataNascita.getFullYear();
+      const diffMesi = oggi.getMonth() - dataNascita.getMonth();
+
+      if (diffMesi < 0 || (diffMesi === 0 && oggi.getDate() < dataNascita.getDate())) {
+        eta--;
+      }
+
+      return eta >= minEta ? null : { minorenne: { etaAttuale: eta, etaMinima: minEta } };
+    };
+  }
 }
