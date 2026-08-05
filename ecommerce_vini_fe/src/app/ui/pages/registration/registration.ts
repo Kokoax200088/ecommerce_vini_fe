@@ -1,10 +1,8 @@
-import { Component, inject, signal, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, NgForm, Validators } from '@angular/forms';
-import { ReactiveFormsModule } from '@angular/forms';
-import {MatSelectModule} from '@angular/material/select';
-import {MatDatepickerModule} from '@angular/material/datepicker';
+import { Component, inject, signal } from '@angular/core';
+import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatCardModule } from '@angular/material/card';
-import {  AuthServices } from '../../../core/services/auth-services';
 import { Router } from '@angular/router';
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
@@ -16,101 +14,127 @@ import { NotificationServices } from '../../../core/services/notification-servic
 
 @Component({
   selector: 'app-registration',
-  imports: [MatSelectModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, MatCardModule, MatIcon, FormsModule, ReactiveFormsModule],
+  standalone: true,
+  imports: [
+    MatSelectModule, 
+    MatFormFieldModule, 
+    MatInputModule, 
+    MatDatepickerModule, 
+    MatCardModule, 
+    MatIcon, 
+    ReactiveFormsModule
+  ],
   templateUrl: './registration.html',
   styleUrl: './registration.css',
 })
 export class Registration {
-  // initialize signal with null to satisfy expected arguments
   account = signal<User | null>(null);
-  msg = signal('');
+  msg = signal<string>('');
 
-  private notification = inject(NotificationServices);
-  //@ViewChild('registrationForm') registrationForm!: NgForm;
+  private readonly notification = inject(NotificationServices);
+  private readonly routing = inject(Router);
+  private readonly utenteService = inject(UtenteServices);
+  private readonly utilities = inject(UtilitiesServices);
 
-  utenteForm: FormGroup = new FormGroup({
-    nome: new FormControl(null, Validators.required),
-    cognome: new FormControl(null, Validators.required),
-    email: new FormControl(null, Validators.required),
-    password: new FormControl(null, Validators.required),
-    ruolo: new FormControl(1, Validators.required),
-    dataNascita: new FormControl(null, Validators.required),
-    
-    indirizzo: new FormControl(null, null), //il check si fa dopo se no li chiede entrambi
-    partitaIva: new FormControl(null, null)
-  })
+  utenteForm = new FormGroup({
+    nome: new FormControl<string | null>(null, Validators.required),
+    cognome: new FormControl<string | null>(null, Validators.required),
+    email: new FormControl<string | null>(null, [Validators.required, Validators.email]),
+    password: new FormControl<string | null>(null, [Validators.required, this.passwordComplexityValidator(this.utilities.regex)]),
+    ruolo: new FormControl<number>(1, { nonNullable: true, validators: [Validators.required] }),
+    dataNascita: new FormControl<Date | string | null>(null, [Validators.required, this.minEtaValidator(18)]),
+    indirizzo: new FormControl<string | null>(null),
+    partitaIva: new FormControl<string | null>(null)
+  });
 
-  constructor(private routing:Router, private utenteService:UtenteServices, private utilities:UtilitiesServices) {}
-  
-  ngOnInit(): void{
-    //qui nella repo c'era il codice se dovessi aggiornare il profilo
-    //non registrarlo, lo qualora dovesse servire in futuro
-  }
-  
-  onSubmit() {
-    console.log("trying to register user with role ", this.utenteForm.value.ruolo);
-    this.msg.set("");
+  onSubmit(): void {
+    this.msg.set('');
 
-    if (this.utenteForm.value.ruolo === 1){
-      this.createClienteForm(this.utenteForm);
+    if (this.utenteForm.invalid) {
+      this.utenteForm.markAllAsTouched();
+      return;
+    }
+
+    if (this.utenteForm.value.ruolo === 1) {
+      this.createClienteForm();
     } else {
-      this.createVenditoreForm(this.utenteForm);
-    }
-  }
-  
-  createClienteForm(form: FormGroup){
-    console.log("creating cliente data: " + this.utilities.formatDateToDDMMYYYY(this.utenteForm.value.dataNascita));
-    if (this.utenteForm.valid) {
-      this.utenteService.createCliente({
-        nome: this.utenteForm.value.nome,
-        cognome: this.utenteForm.value.cognome,
-        email: this.utenteForm.value.email,
-        password: this.utenteForm.value.password,
-        dataNascita: this.utilities.formatDateToDDMMYYYY(this.utenteForm.value.dataNascita),
-        idRuolo: this.utenteForm.value.ruolo,
-
-        indirizzo: this.utenteForm.value.indirizzo,
-      }).subscribe({
-        next: ((resp:any) => {
-          console.log("QUESTA E' LA RESP: " + resp);
-          this.utenteForm.clearValidators;
-          this.notification.success("Creato Account cliente");
-          this.routing.navigate(['/login']);
-        }),
-        error: ((resp:any) => {
-          this.notification.error("Errore durante la registrazione. Riprovare.");
-          console.log(resp.error.msg);
-          this.msg.set(resp.error.msg);
-          })
-      });
+      this.createVenditoreForm();
     }
   }
 
-  createVenditoreForm(form: FormGroup){
-    console.log("creating venditore");
-    if (this.utenteForm.valid) {
-      this.utenteService.createVenditore({
-        nome: this.utenteForm.value.nome,
-        cognome: this.utenteForm.value.cognome,
-        email: this.utenteForm.value.email,
-        password: this.utenteForm.value.password,
-        dataNascita: this.utilities.formatDateToDDMMYYYY(this.utenteForm.value.dataNascita),
-        idRuolo: this.utenteForm.value.ruolo,
+  private createClienteForm(): void {
+    const rawValue = this.utenteForm.getRawValue();
 
-        partitaIva: this.utenteForm.value.partitaIva,
-      }).subscribe({
-        next: ((resp:any) => {
-          this.utenteForm.clearValidators;
-          this.notification.success("Creato Account venditore");
-          this.routing.navigate(['/login']);
-        }),
-        error: ((resp:any) => {
-          this.notification.error("Errore durante la registrazione. Riprovare.");
-          console.log(resp.error.msg);
-          this.msg.set(resp.error.msg);
-          })
-      });
-    }
+    this.utenteService.createCliente({
+      nome: rawValue.nome!,
+      cognome: rawValue.cognome!,
+      email: rawValue.email!,
+      password: rawValue.password!,
+      dataNascita: this.utilities.formatDateToDDMMYYYY(rawValue.dataNascita),
+      idRuolo: rawValue.ruolo,
+      indirizzo: rawValue.indirizzo,
+    }).subscribe({
+      next: () => {
+        this.utenteForm.reset();
+        this.notification.success("Creato Account cliente");
+        this.routing.navigate(['/login']);
+      },
+      error: (resp: any) => {
+        this.notification.error("Errore durante la registrazione. Riprovare.");
+        this.msg.set(resp?.error?.msg || 'Errore di sistema');
+      }
+    });
   }
 
+  private createVenditoreForm(): void {
+    const rawValue = this.utenteForm.getRawValue();
+
+    this.utenteService.createVenditore({
+      nome: rawValue.nome!,
+      cognome: rawValue.cognome!,
+      email: rawValue.email!,
+      password: rawValue.password!,
+      dataNascita: this.utilities.formatDateToDDMMYYYY(rawValue.dataNascita),
+      idRuolo: rawValue.ruolo,
+      partitaIva: rawValue.partitaIva,
+    }).subscribe({
+      next: () => {
+        this.utenteForm.reset();
+        this.notification.success("Creato Account venditore");
+        this.routing.navigate(['/login']);
+      },
+      error: (resp: any) => {
+        this.notification.error("Errore durante la registrazione. Riprovare.");
+        this.msg.set(resp?.error?.msg || 'Errore di sistema');
+      }
+    });
+  }
+
+  private minEtaValidator(minEta: number = 18): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (!control.value) return null;
+
+      const dataNascita = new Date(control.value);
+      if (isNaN(dataNascita.getTime())) return null;
+
+      const oggi = new Date();
+      let eta = oggi.getFullYear() - dataNascita.getFullYear();
+      const diffMesi = oggi.getMonth() - dataNascita.getMonth();
+
+      if (diffMesi < 0 || (diffMesi === 0 && oggi.getDate() < dataNascita.getDate())) {
+        eta--;
+      }
+
+      return eta >= minEta ? null : { minorenne: { etaAttuale: eta, etaMinima: minEta } };
+    };
+  }
+
+  passwordComplexityValidator(regex: RegExp): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    if (!control.value) return null; // Se vuoto lascia gestire a Validators.required
+
+    const valid = regex.test(control.value);
+    return valid ? null : { passwordDebole: true };
+  };
+}
 }

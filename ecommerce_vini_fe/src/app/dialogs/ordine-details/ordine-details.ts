@@ -15,6 +15,8 @@ import { SpedizioneBoxServices } from '../../core/services/spedizione-box-servic
 import { AuthServices } from '../../core/services/auth-services';
 import { NotificationServices } from '../../core/services/notification-services';
 import { OrdiniServices } from '../../core/services/ordini-services';
+import { DegustazioneServices } from '../../core/services/degustazione-services';
+import { Degustazione } from '../../core/models/degustazione';
 @Component({
   selector: 'app-ordine-details',
   imports: [
@@ -38,7 +40,10 @@ export class OrdineDetails {
   private readonly authServices = inject(AuthServices);
   private readonly notification = inject(NotificationServices);
   private readonly ordiniService = inject(OrdiniServices);
+  private readonly degService = inject(DegustazioneServices);
+
   readonly ordine: any = this.data?.ordine ?? null;
+ 
 
   readonly showSpedizioneForm = signal(false);
   readonly isSubmitting = signal(false);
@@ -46,6 +51,7 @@ export class OrdineDetails {
   readonly isSeller = computed(() => this.authServices.grant().isSeller);
   corriere = '';
   codiceTracciamento = '';
+   deg =  signal<Degustazione | undefined>(undefined);;
 
   get isConsegnata(): boolean {
     return this.ordine?.status?.id === STATUS_ORDINE.FINITO;
@@ -71,12 +77,25 @@ export class OrdineDetails {
       quantita: riga.quantita ?? 1,
     }));
 
+
     // OrdineDegustazioneDTO espone solo id_degustazione: Integer (nessun
     // oggetto DegustazioneDTO popolato), quindi non è disponibile un nome.
-    const daDegustazione = righeDegustazione.map((riga: any) => ({
-      nome: `Degustazione #${riga.id_degustazione}`,
-      quantita: riga.quantita ?? 1,
-    }));
+    const daDegustazione = righeDegustazione.map((riga: any) => {
+  
+    this.degService.getById(riga.id_degustazione).subscribe({
+      next: (resp) => {
+        this.deg.set(resp);
+      },
+      error: (err) => {
+        console.error('Errore nel recupero della degustazione:', err);
+      }
+    });
+
+  return {
+    nome: this.deg() ? `Degustazione "${this.deg()?.nome}"` : `Degustazione #${riga.id_degustazione}`,
+    quantita: riga.quantita ?? 1,
+  };
+});
 
     return [...daAlcolico, ...daBox, ...daDegustazione];
   }

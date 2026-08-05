@@ -6,37 +6,50 @@
 
     <mat-card-content>
       <form [formGroup]="utenteForm" (ngSubmit)="onSubmit()" class="form-grid">
-        
         <mat-form-field appearance="outline" class="col-half">
           <mat-label>Nome</mat-label>
-          <input matInput type="text" formControlName="nome">
+          <input matInput type="text" formControlName="nome" />
           <mat-icon matSuffix>person</mat-icon>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="col-half">
           <mat-label>Cognome</mat-label>
-          <input matInput type="text" formControlName="cognome">
+          <input matInput type="text" formControlName="cognome" />
           <mat-icon matSuffix>person_outline</mat-icon>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>E-mail</mat-label>
-          <input matInput type="email" formControlName="email" placeholder="esempio@email.com">
+          <input matInput type="email" formControlName="email" placeholder="esempio@email.com" />
           <mat-icon matSuffix>email</mat-icon>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Password</mat-label>
-          <input matInput type="password" formControlName="password">
+          <input matInput type="password" formControlName="password" />
           <mat-icon matSuffix>lock</mat-icon>
+          @if (
+            utenteForm.get('password')?.touched && utenteForm.get('password')?.errors?.['passwordDebole']
+          ) {
+            <mat-error>
+              La password deve contenere almeno 1 maiuscola, 1 numero e avere
+              almeno 6 caratteri.
+            </mat-error>
+          }
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="col-half">
           <mat-label>Data di nascita</mat-label>
-          <input matInput [matDatepicker]="picker" formControlName="dataNascita">
+          <input matInput [matDatepicker]="picker" formControlName="dataNascita" />
           <mat-hint>MM/GG/AAAA</mat-hint>
           <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
+          @if (utenteForm.get('dataNascita')?.hasError('required')) {
+            <mat-error>La data di nascita è obbligatoria</mat-error>
+          }
+          @if (utenteForm.get('dataNascita')?.hasError('minorenne')) {
+            <mat-error>Devi essere maggiorenne per registrarti</mat-error>
+          }
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="col-half">
@@ -50,7 +63,7 @@
         @if (utenteForm.get('ruolo')?.value === 1) {
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Indirizzo di Spedizione</mat-label>
-            <input matInput type="text" formControlName="indirizzo">
+            <input matInput type="text" formControlName="indirizzo" />
             <mat-icon matSuffix>home</mat-icon>
           </mat-form-field>
         }
@@ -58,7 +71,7 @@
         @if (utenteForm.get('ruolo')?.value === 3) {
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Partita IVA</mat-label>
-            <input matInput type="text" formControlName="partitaIva">
+            <input matInput type="text" formControlName="partitaIva" />
             <mat-icon matSuffix>business</mat-icon>
           </mat-form-field>
         }
@@ -68,7 +81,6 @@
             Registrati
           </button>
         </div>
-
       </form>
     </mat-card-content>
   </mat-card>

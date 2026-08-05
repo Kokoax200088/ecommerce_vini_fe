@@ -3,6 +3,7 @@ import { inject, Service, signal } from '@angular/core';
 import { Degustazione } from '../models/degustazione';
 import { APP_SETTING } from '../../setting/token';
 import { AppSettings } from '../../setting/config-model';
+import { Observable } from 'rxjs';
 
 @Service()
 export class DegustazioneServices {
@@ -13,7 +14,7 @@ export class DegustazioneServices {
 
     baseUrl: string = this.settings.apiUrl;
 
-    getById(id: number) {
+    getById(id: number) : Observable<Degustazione>{
         return this.http.get<Degustazione>(this.baseUrl + '/degustazione/getDegustazioneById', {
             params: new HttpParams().set('id', id)
         });

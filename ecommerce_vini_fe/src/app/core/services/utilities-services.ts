@@ -53,4 +53,6 @@ export class UtilitiesServices {
 
     return `${day}/${month}/${year}`;
   }
+
+  readonly regex = /^(?=.*[A-Z])(?=.*\d).{6,}$/;
 }
