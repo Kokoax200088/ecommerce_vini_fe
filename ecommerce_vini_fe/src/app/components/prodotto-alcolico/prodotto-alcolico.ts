@@ -4,6 +4,7 @@ import { ProdottoAlcolico } from '../../core/models/carrello';
 import { CarrelloService } from '../../core/services/carrello-services';
 import { CantinaServices } from '../../core/services/cantina-services';
 import { switchMap } from 'rxjs';
+import { NotificationServices } from '../../core/services/notification-services';
 
 @Component({
   selector: 'app-prodotto-alcolico',
@@ -17,6 +18,7 @@ export class ProdottoAlcolicoComponent {
 
   private carrelloService = inject(CarrelloService);
   private cantinaService = inject(CantinaServices);
+  private notification = inject(NotificationServices);
   
   diminuisciQuantita(item: any): void {
     const quantitaAttuale = item['quantità'] ?? item.quantità ?? 0;
@@ -41,6 +43,7 @@ export class ProdottoAlcolicoComponent {
         switchMap(() => ripristinaStockCantina$)
       ).subscribe({
         next: () => {
+          this.notification.success("Alcolico rimosso con successo.");
           this.listProdottoAlcolico = this.listProdottoAlcolico.filter(p => p.id !== item.id);
           this.carrelloService.getCartById(this.idCart).subscribe();
         },
@@ -55,6 +58,7 @@ export class ProdottoAlcolicoComponent {
         switchMap(() => ripristinaStockCantina$)
       ).subscribe({
         next: () => {
+          this.notification.success("Alcolico rimosso con successo.");
           item['quantità'] = nuovaQuantita;
           this.carrelloService.getCartById(this.idCart).subscribe();
         },

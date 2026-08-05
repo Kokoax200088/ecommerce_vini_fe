@@ -15,6 +15,7 @@ import { OrdineAlcolicoService } from '../../../core/services/ordine-alcolico-se
 import { ordineAlcolicoReq } from '../../../core/models/ordineAlcolico';
 import { ordineBoxReq } from '../../../core/models/ordineBox';
 import { OrdineBoxServices } from '../../../core/services/ordine-box-service';
+import { NotificationServices } from '../../../core/services/notification-services';
 
 @Component({
   selector: 'app-carrello',
@@ -26,6 +27,7 @@ export class Carrello {
   private cartService = inject(CarrelloService);
   private utenteService = inject(UtenteServices);
   private authService = inject(AuthServices);
+  private notification = inject(NotificationServices);
   private ordineService = inject(OrdiniServices);
   private ordineDegustazioneService = inject(OrdineDegustazioneServices);
   private ordineAlcolicoService = inject(OrdineAlcolicoService);
@@ -169,7 +171,10 @@ ngOnInit(): void {
             const idCarrello = utente?.idCarrello;
             if (idCarrello) {
               this.cartService.svuotaCarrello(idCarrello).subscribe({
-                next: () => console.log('Carrello svuotato con successo'),
+                next: () => {
+                  console.log('Carrello svuotato con successo'); //CHECK forse meglio mettere ordine effettuato con successo?
+                  this.notification.success("Carrello svuotato con successo");
+                },
                 error: (err) => console.error('Errore nello svuotamento del carrello', err)
               });
             } else {

@@ -5,6 +5,7 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { SpedizioneServices } from '../../core/services/spedizione-alcolico-services';
 import { AuthServices } from '../../core/services/auth-services';
 import { STATUS_SPEDIZIONE } from '../../core/models/status';
+import { NotificationServices } from '../../core/services/notification-services';
 
 @Component({
   selector: 'app-spedizione-details',
@@ -21,6 +22,7 @@ export class SpedizioneDetails {
   private readonly dialogRef = inject(MatDialogRef<SpedizioneDetails>);
   private readonly spedizioniService = inject(SpedizioneServices);
   private readonly authServices = inject(AuthServices);
+  private readonly notification = inject(NotificationServices);
 
   readonly mod: string = this.data?.mod ?? 'V';
   readonly spedizione: any = this.data?.spedizione ?? null;
@@ -63,6 +65,7 @@ export class SpedizioneDetails {
     // Se il service espone invece un update(id, payload) generico, va sostituita questa chiamata.
     this.spedizioniService.updateStatus(this.spedizione.id, STATUS_SPEDIZIONE.CONSEGNATO).subscribe({
       next: (spedizioneAggiornata: any) => {
+        this.notification.success("Spedizione confermata.");
         this.isUpdating.set(false);
         this.dialogRef.close({ updated: true, spedizione: spedizioneAggiornata });
       },

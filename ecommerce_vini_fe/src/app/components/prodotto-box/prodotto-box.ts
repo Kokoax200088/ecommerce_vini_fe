@@ -3,6 +3,7 @@ import { CardBox } from '../card-box/card-box';
 import { CarrelloService } from '../../core/services/carrello-services';
 import { CantinaServices } from '../../core/services/cantina-services';
 import { BoxAlcolico } from '../../core/models/box';
+import { NotificationServices } from '../../core/services/notification-services';
 
 @Component({
   selector: 'app-prodotto-box',
@@ -16,6 +17,7 @@ export class ProdottoBox implements OnInit {
 
   private carrelloService = inject(CarrelloService);
   private cantinaService = inject(CantinaServices);
+  private notification = inject(NotificationServices);
 
   constructor() {}
 
@@ -107,12 +109,18 @@ export class ProdottoBox implements OnInit {
     if (this.idCart == null) return;
     if (quantitaNuova === 0) {
       this.carrelloService.deleteProdottoBox(item.id).subscribe({
-        next: () => this.carrelloService.getCartById(this.idCart).subscribe(),
+        next: () => {
+          this.notification.success("Box rimosso con successo.");
+          this.carrelloService.getCartById(this.idCart).subscribe();
+        },
         error: (err:any) => console.error('deleteProdottoBox fallito', err),
       });
     } else {
       this.carrelloService.updateProdottoBox(updateBody).subscribe({
-        next: () => this.carrelloService.getCartById(this.idCart).subscribe(),
+        next: () => {
+          this.notification.success("Box rimosso con successo.");
+          this.carrelloService.getCartById(this.idCart).subscribe()
+        },
         error: (err) => console.error('updateProdottoBox fallito', err),
       });
     }

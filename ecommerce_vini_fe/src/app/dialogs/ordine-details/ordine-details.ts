@@ -13,6 +13,7 @@ import { STATUS_ORDINE, STATUS_SPEDIZIONE } from '../../core/models/status';
 import { SpedizioneBoxReq } from '../../core/models/spedizione-box';
 import { SpedizioneBoxServices } from '../../core/services/spedizione-box-services';
 import { AuthServices } from '../../core/services/auth-services';
+import { NotificationServices } from '../../core/services/notification-services';
 @Component({
   selector: 'app-ordine-details',
   imports: [
@@ -34,6 +35,8 @@ export class OrdineDetails {
   private readonly spedizioniService = inject(SpedizioneServices);
   private readonly spedizioniBoxService = inject(SpedizioneBoxServices);
   private readonly authServices = inject(AuthServices);
+  private readonly notification = inject(NotificationServices);
+
   readonly ordine: any = this.data?.ordine ?? null;
 
   readonly showSpedizioneForm = signal(false);
