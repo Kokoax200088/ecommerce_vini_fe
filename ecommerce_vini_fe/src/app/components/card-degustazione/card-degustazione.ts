@@ -22,12 +22,19 @@ export class CardDegustazione {
     private uploadImageDegustazioneService: UploadImageService
   ) {}
  ngOnInit(): void {
+     if (this.degustazione?.immagini?.length) {
+    const immagine = this.degustazione.immagini[this.degustazione.immagini.length - 1];
+    this.immagineUrl = immagine.url;
+    this.cdr.markForCheck();
+  } else {
     this.caricaImmagine();
+  }
   }
 
 caricaImmagine(): void {
-  this.uploadImageDegustazioneService.getById('degustazione', this.degustazione.id).subscribe({
-    next: (immagine: any) => {
+  this.uploadImageDegustazioneService.list<any>('degustazione', 'idDegustazione', this.degustazione.id).subscribe({
+    next: (immagini: any[]) => {
+      const immagine = immagini?.[immagini.length - 1];
       this.immagineUrl = immagine?.url ?? immagine?.path ?? immagine?.nomeFile ?? '/image-degustazione.png';
       console.log("URL IMMAGINE "+this.immagineUrl);
       this.cdr.markForCheck(); 
@@ -44,7 +51,4 @@ onImageError(event: Event): void {
   target.src = '/image-degustazione.png';
 }
 
-  vaiAlDettaglio(): void {
-    this.router.navigate(['/degustazione', this.degustazione.id]);
-  }
 }

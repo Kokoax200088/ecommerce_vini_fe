@@ -7,4 +7,5 @@ export interface Degustazione {
     dataFine: string;
     id_cantina: number;
     alcolici: any[];
+    immagini: any[];
 }
