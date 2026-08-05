@@ -26,10 +26,11 @@ export class CardBox {
   }
 
   caricaImmagine(): void {
-    this.uploadImageBoxService.getById('box', this.box.id)
+    this.uploadImageBoxService.list<any>('box', 'idBox', this.box.id)
       .subscribe({
-        next: (resp: any) => {
-          this.immagineUrl = resp?.url ?? resp?.path ?? resp?.nomeFile ?? 'image-box.png';
+       next: (immagini: any[]) => {
+      const immagine = immagini?.[immagini.length - 1];
+          this.immagineUrl = immagine?.url ?? immagine?.path ?? immagine?.nomeFile ?? 'image-box.png';
           this.cdr.markForCheck(); //what does this do?
         },
         error: () => {
