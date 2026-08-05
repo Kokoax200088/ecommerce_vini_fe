@@ -39,6 +39,10 @@ export class SpedizioneBoxServices {
             .pipe(tap(() => this.list()))
     }
 
+    updateStatus(id: number, id_status: number) {
+        return this.update({ id, id_status });
+    }
+
     delete(id: number) {
         return this.http.delete(this.baseUrl+"/spedizionebox/delete/" + id)
             .pipe(tap(() => this.list()))

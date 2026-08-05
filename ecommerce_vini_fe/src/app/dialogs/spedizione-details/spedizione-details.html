@@ -26,7 +26,12 @@
 
       <div class="detail-row">
         <span class="detail-label">Ordine</span>
-        <span class="detail-value">{{ ordineLabel(spedizione.ordine_alcolico) }}</span>
+        <span class="detail-value">{{ ordineLabel(ordine) }}</span>
+      </div>
+
+      <div class="detail-row">
+        <span class="detail-label">{{ prodottoLabel }}</span>
+        <span class="detail-value">{{ productName(prodotto) }}</span>
       </div>
 
       <div class="detail-row">

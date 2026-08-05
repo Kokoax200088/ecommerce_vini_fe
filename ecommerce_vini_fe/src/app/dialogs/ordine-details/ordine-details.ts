@@ -118,23 +118,30 @@ confermaSpedizione(): void {
     const corriere = this.corriere.trim();
     const codiceTracciamento = this.codiceTracciamento.trim();
 
-    let payloadAlcolico: SpedizioneAlcolicoReq | null = null;
+    const payloadsAlcolico: SpedizioneAlcolicoReq[] = [];
     if (hasAlcolico) {
-      const idOrdineAlcolico = righeOrdine[0]?.id;
-      const idCantina = righeOrdine[0]?.cantina?.id;
+      for (const riga of righeOrdine) {
+        const idOrdineAlcolico = riga?.id;
+        const idCantina = riga?.cantina?.id;
 
-      if (!idOrdineAlcolico || !idCantina) {
-        this.errore.set('Dati ordine incompleti: impossibile creare la spedizione alcolico (riga ordine o cantina mancante).');
-        return;
+        if (!idOrdineAlcolico || !idCantina) {
+          this.errore.set('Dati ordine incompleti: impossibile creare la spedizione alcolico (riga ordine o cantina mancante).');
+          return;
+        }
+
+        const payloadAlcolico: SpedizioneAlcolicoReq = {
+          id_ordine_alcolico: idOrdineAlcolico,
+          id_cantina: idCantina,
+          id_status: idStatus,
+          corriere,
+          codice_tracciamento: codiceTracciamento,
+        };
+
+        const unita = riga?.quantita ?? 1;
+        for (let i = 0; i < unita; i++) {
+          payloadsAlcolico.push({ ...payloadAlcolico });
+        }
       }
-
-      payloadAlcolico = {
-        id_ordine_alcolico: idOrdineAlcolico,
-        id_cantina: idCantina,
-        id_status: idStatus,
-        corriere,
-        codice_tracciamento: codiceTracciamento,
-      };
     }
 
     const payloadsBox: SpedizioneBoxReq[] = [];
@@ -148,13 +155,18 @@ confermaSpedizione(): void {
           return;
         }
 
-        payloadsBox.push({
+        const payloadBox: SpedizioneBoxReq = {
           corriere,
           codice_tracciamento: codiceTracciamento,
           id_cantina: itemCantinaId,
           id_status: idStatus,
           id_ordbox: itemOrdineBoxId,
-        });
+        };
+
+        const unita = item?.quantita ?? 1;
+        for (let i = 0; i < unita; i++) {
+          payloadsBox.push({ ...payloadBox });
+        }
       }
     }
 
@@ -162,9 +174,7 @@ confermaSpedizione(): void {
     this.errore.set(null);
 
     const richieste: Observable<any>[] = [];
-    if (payloadAlcolico) {
-      richieste.push(this.spedizioniService.create(payloadAlcolico));
-    }
+    payloadsAlcolico.forEach((payloadAlcolico) => richieste.push(this.spedizioniService.create(payloadAlcolico)));
     payloadsBox.forEach((payloadBox) => richieste.push(this.spedizioniBoxService.create(payloadBox)));
 
     forkJoin(richieste).subscribe({

@@ -45,6 +45,7 @@
           @for (prodotto of prodotti; track $index) {
             <li class="product-item">
               <span class="product-name">{{ prodotto.nome }}</span>
+              <span class="product-quantity">× {{ prodotto.quantita }}</span>
             </li>
           } @empty {
             <li class="product-item product-empty">Nessun prodotto associato.</li>
