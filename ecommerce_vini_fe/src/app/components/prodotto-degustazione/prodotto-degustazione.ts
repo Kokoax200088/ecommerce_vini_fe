@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ProdottoDegustazione } from '../../core/models/carrello';
 import { CarrelloService } from '../../core/services/carrello-services';
 import { CardDegustazione } from "../card-degustazione/card-degustazione";
+import { NotificationServices } from '../../core/services/notification-services';
 
 @Component({
   selector: 'app-prodotto-degustazione',
@@ -15,6 +16,7 @@ export class ProdottoDegustazioneComponent {
   @Input() idCart!: number;
 
   private carrelloService = inject(CarrelloService);
+  private notification = inject(NotificationServices);
 
   diminuisciQuantita(item: any): void {
     const quantitaAttuale = item['quantità'] ?? item.quantità ?? 0;
@@ -23,6 +25,7 @@ export class ProdottoDegustazioneComponent {
     if (nuovaQuantita <= 0) {
       this.carrelloService.deleteProdottoDegustazione(item.id).subscribe({
         next: () => {
+          this.notification.success("Degustazione rimossa con successo.");
           this.listProdottoDegustazione = this.listProdottoDegustazione.filter(p => p.id !== item.id);
           this.carrelloService.getCartById(this.idCart).subscribe();
         },
@@ -39,6 +42,7 @@ export class ProdottoDegustazioneComponent {
       };
       this.carrelloService.updateProdottoDegustazione(itemAggiornato).subscribe({
         next: () => {
+          this.notification.success("Degustazione rimossa con successo.");
           item['quantità'] = nuovaQuantita;
           this.carrelloService.getCartById(this.idCart).subscribe();
         },

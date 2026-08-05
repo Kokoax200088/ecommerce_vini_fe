@@ -11,6 +11,7 @@ import { SpedizioneAlcolicoReq } from '../../core/models/spedizione-alcolico';
 import { STATUS_SPEDIZIONE } from '../../core/models/status';
 import { SpedizioneBoxReq } from '../../core/models/spedizione-box';
 import { SpedizioneBoxServices } from '../../core/services/spedizione-box-services';
+import { NotificationServices } from '../../core/services/notification-services';
 @Component({
   selector: 'app-ordine-details',
   imports: [
@@ -31,6 +32,7 @@ export class OrdineDetails {
   private readonly dialogRef = inject(MatDialogRef<OrdineDetails>);
   private readonly spedizioniService = inject(SpedizioneServices);
   private readonly spedizioniBoxService = inject(SpedizioneBoxServices);
+  private readonly notification = inject(NotificationServices);
 
   readonly ordine: any = this.data?.ordine ?? null;
 
@@ -126,6 +128,7 @@ confermaSpedizione(): void {
 
     this.spedizioniService.create(payload).subscribe({
       next: (spedizione) => {
+        this.notification.success("Spedizione creata con successo.");
         this.isSubmitting.set(false);
         this.dialogRef.close({ converted: true, ordineId: this.ordine.id, spedizione });
       },
